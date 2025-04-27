@@ -1,0 +1,16 @@
+@use '../../app/styles/variables/global.scss' as *;
+@use '../../app/styles/themes/light.module.scss' as *;
+
+.link {
+    font-style: normal;
+    font-weight: 500;
+    font-size: var(--font-size-m);
+    text-decoration: none;
+    color: var(--accent);
+    display: inline-block;
+    cursor: pointer;
+}
+
+.link.link_color-white {
+    color: var(--white);
+}

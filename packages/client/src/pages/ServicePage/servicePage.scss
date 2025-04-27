@@ -1,0 +1,19 @@
+@use '../../app/styles/themes/light.module.scss' as *;
+
+.service-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+    background-color: var(--basic);
+    width: 100vw;
+    height: 100vh;
+}
+
+.service-page__button-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 50px 0 0;
+}

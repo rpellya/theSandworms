@@ -1,0 +1,28 @@
+@use '../../app/styles/variables/global.scss' as *;
+
+.textLabel {
+    margin: 5px 0;
+    width: 100%;
+    font-style: normal;
+    color: black;
+}
+
+.textLabel.textLabel_text {
+    font-weight: normal;
+    font-size: var(--font-size-m);
+    text-align: center;
+}
+
+.textLabel.textLabel_title {
+    font-weight: bold;
+    font-size: var(--font-size-xl);
+    text-align: center;
+    margin: 0 0 0.75em 0;
+}
+
+.textLabel.textLabel_subtitle {
+    font-weight: bold;
+    font-size: var(--font-size-l);
+    text-align: center;
+    margin: 0 0 0.5em 0;
+}
