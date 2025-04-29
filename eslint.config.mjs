@@ -4,6 +4,7 @@ import typescriptParser from '@typescript-eslint/parser';
 
 export default [
   {
+    ignores: ['dist/**'], // Не работает
     languageOptions: {
       parser: typescriptParser,
       parserOptions: {
