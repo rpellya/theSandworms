@@ -2,6 +2,7 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import dotenv from 'dotenv';
 import tsconfigPaths from 'vite-tsconfig-paths';
+import * as path from 'node:path';
 
 dotenv.config();
 
@@ -14,4 +15,9 @@ export default defineConfig({
 		__SERVER_PORT__: process.env.SERVER_PORT,
 	},
 	plugins: [react(), tsconfigPaths()],
+	resolve: {
+		alias: {
+			'@': path.resolve(__dirname, 'src'),
+		},
+	},
 });
