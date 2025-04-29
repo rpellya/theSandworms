@@ -1,9 +1,9 @@
-import { ESLint } from 'eslint';
 import typescriptEslintPlugin from '@typescript-eslint/eslint-plugin';
 import typescriptParser from '@typescript-eslint/parser';
 
 export default [
   { ignores: ["**/dist/*"] },
+  { files: ["**/*.{js,mjs,cjs,ts,tsx}"] }, // Кажется не работает
   {
     languageOptions: {
       parser: typescriptParser,
