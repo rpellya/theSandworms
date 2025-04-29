@@ -3,8 +3,8 @@ import typescriptEslintPlugin from '@typescript-eslint/eslint-plugin';
 import typescriptParser from '@typescript-eslint/parser';
 
 export default [
+  { ignores: ["**/dist/*"] },
   {
-    ignores: ['dist/**'], // Не работает
     languageOptions: {
       parser: typescriptParser,
       parserOptions: {
