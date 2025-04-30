@@ -1,3 +1,4 @@
+import { Main } from 'pages/Main';
 import { Profile } from 'pages/Profile';
 import { RouteProps } from 'react-router-dom';
 
@@ -32,7 +33,7 @@ export const RoutePath: Record<AppRoutes, string> = {
 export const routeConfig: Record<AppRoutes, RouteProps> = {
     [AppRoutes.MAIN]: {
         path: RoutePath.main,
-        element: 'Play (example)',
+        element: <Main />,
     },
     [AppRoutes.LOGIN]: {
         path: RoutePath.login,
