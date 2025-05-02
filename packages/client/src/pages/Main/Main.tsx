@@ -1,31 +1,34 @@
 import { memo } from 'react';
-import s from './Main.module.scss';
+import cls from './Main.module.scss';
 import { Snake } from './Components/Snake/Snake';
+import { Link } from 'react-router-dom';
+import { RoutePath } from 'app/providers/router/config/routeConfig';
+import logo from '/src/assets/img/logo.webp';
 
 export const Main = memo(() => {
     return (
-        <div className={s.Main}>
-            <div className={s.mainMenu}>
-                <img width="500px" src="/src/assets/img/logo.webp" alt="" />
+        <div className={cls.Main}>
+            <div className={cls.mainMenu}>
+                <img width="300px" src={logo} alt="Логотип" />
                 <nav>
                     <ul>
                         <li>
-                            <a href="#home">Играть</a>
+                            <Link to="">Играть</Link>
                         </li>
                         <li>
-                            <a href="#about">Настройки</a>
+                            <Link to={RoutePath.about}>Настройки</Link>
                         </li>
                         <li>
-                            <a href="#services">Форум</a>
+                            <Link to={RoutePath.forum}>Форум</Link>
                         </li>
                         <li>
-                            <a href="#contact">Лидеры</a>
+                            <Link to={RoutePath.leaderboard}>Лидеры</Link>
                         </li>
                     </ul>
                 </nav>
             </div>
-            <Snake className={s.snakeLayout} />
-            <div className={s.mainFooter}>created by PixelMasters</div>
+            <Snake className={cls.snakeLayout} />
+            <div className={cls.mainFooter}>created by PixelMasters</div>
         </div>
     );
 });

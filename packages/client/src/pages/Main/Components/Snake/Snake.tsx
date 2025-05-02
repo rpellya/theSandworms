@@ -1,18 +1,15 @@
 import React from 'react';
-import s from './snake.module.scss';
+import cls from './snake.module.scss';
+import snakeLogo from '/src/assets/img/snakeImage.webp';
 
-interface ISnakeProps {
+interface SnakeProps {
     className?: string;
 }
 
-export const Snake: React.FC<ISnakeProps> = ({ className }) => {
+export const Snake: React.FC<SnakeProps> = ({ className }) => {
     return (
-        <div className={`${s.Snake} ${className}`}>
-            <img
-                src="/src/assets/img/snake.webp"
-                alt="Snake"
-                className={s.snake}
-            />
+        <div className={`${cls.Snake} ${className}`}>
+            <img src={snakeLogo} alt="Snake" className={cls.snake} />
         </div>
     );
 };
