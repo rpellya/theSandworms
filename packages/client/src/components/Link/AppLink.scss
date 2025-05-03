@@ -1,7 +1,7 @@
 @use 'src/app/styles/variables/global.scss' as *;
 @use 'src/app/styles/themes/light.module.scss' as *;
 
-.link {
+.app-link {
     font-style: normal;
     font-weight: 500;
     font-size: var(--font-size-m);
@@ -11,6 +11,6 @@
     cursor: pointer;
 }
 
-.link.link_color-white {
+.app-link.app-link_color-white {
     color: var(--white);
 }

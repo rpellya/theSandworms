@@ -64,6 +64,7 @@ export const routeConfig: Record<AppRoutes, RouteProps> = {
         path: RoutePath.server_error,
         element: (
             <CodeError
+                toPath={RoutePath.main}
                 codeError="500"
                 pageSubtitle="Что-то пошло не так..."
                 pageText="Возникла непредвиденная ошибка. Мы уже занимаемся"
@@ -77,6 +78,7 @@ export const routeConfig: Record<AppRoutes, RouteProps> = {
         path: RoutePath.not_found,
         element: (
             <CodeError
+                toPath={RoutePath.main}
                 codeError="404"
                 pageSubtitle="Нет такого адреса..."
                 pageText="Ресурс который был запрошен отсутствует на нашем сайте"
