@@ -1,20 +1,13 @@
-import './textLabel.scss';
-import { PureComponent } from 'react';
+import './TextLabel.scss';
+import { memo } from 'react';
 
-type TextLabelProps = {
+interface TextLabelProps extends React.HTMLAttributes<HTMLParagraphElement> {
     text: string;
     className?: string;
-};
-
-type Props = TextLabelProps;
-
-export class TextLabel extends PureComponent<Props> {
-    constructor(props: Props) {
-        super(props);
-    }
-
-    public render() {
-        const { className, text } = this.props;
-        return <p className={className}>{text}</p>;
-    }
 }
+
+export const TextLabel: React.FC<TextLabelProps> = memo(
+    ({ className, text }) => {
+        return <p className={className}>{text}</p>;
+    },
+);

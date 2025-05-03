@@ -1,6 +1,6 @@
-@use '../../app/styles/themes/light.module.scss' as *;
+@use 'src/app/styles/themes/light.module.scss' as *;
 
-.service-page {
+.code-error-page {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -11,7 +11,7 @@
     height: 100vh;
 }
 
-.service-page__button-container {
+.code-error-page__button-container {
     display: flex;
     flex-direction: column;
     align-items: center;

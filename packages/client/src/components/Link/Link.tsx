@@ -1,26 +1,19 @@
-import './link.scss';
-import { MouseEventHandler } from 'react';
-import { PureComponent } from 'react';
+import './Link.scss';
+import { LinkHTMLAttributes, MouseEventHandler } from 'react';
+import { memo } from 'react';
 
-type LinkProps = {
+interface LinkProps extends LinkHTMLAttributes<HTMLLinkElement> {
     handleClick: MouseEventHandler;
     text: string;
     className?: string;
-};
+}
 
-type Props = LinkProps;
-
-export class Link extends PureComponent<Props> {
-    constructor(props: Props) {
-        super(props);
-    }
-
-    public render() {
-        const { handleClick, className, text } = this.props;
+export const Link: React.FC<LinkProps> = memo(
+    ({ handleClick, className, text }) => {
         return (
             <a className={className} onClick={handleClick}>
                 {text}
             </a>
         );
-    }
-}
+    },
+);

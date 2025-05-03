@@ -1,5 +1,5 @@
 import { Profile } from 'pages/Profile';
-import { ServicePage } from 'pages/ServicePage';
+import { CodeError } from 'pages/CodeError';
 import { RouteProps } from 'react-router-dom';
 
 enum AppRoutes {
@@ -10,7 +10,7 @@ enum AppRoutes {
     PROFILE = 'profile',
     LEADERBOARD = 'leaderboard',
     FORUM = 'forum',
-    SERVER_ERR = 'server_error',
+    SERVER_ERROR = 'server_error',
     // last
     NOT_FOUND = 'not_found',
 }
@@ -23,7 +23,7 @@ export const RoutePath: Record<AppRoutes, string> = {
     [AppRoutes.PROFILE]: '/profile',
     [AppRoutes.LEADERBOARD]: '/leaderboard',
     [AppRoutes.FORUM]: '/forum',
-    [AppRoutes.SERVER_ERR]: '/error',
+    [AppRoutes.SERVER_ERROR]: '/error',
 
     // last
     [AppRoutes.NOT_FOUND]: '*',
@@ -60,13 +60,13 @@ export const routeConfig: Record<AppRoutes, RouteProps> = {
         path: RoutePath.forum,
         element: 'Forum page (example)',
     },
-    [AppRoutes.SERVER_ERR]: {
+    [AppRoutes.SERVER_ERROR]: {
         path: RoutePath.server_error,
         element: (
-            <ServicePage
-                pageTitle="500"
+            <CodeError
+                codeError="500"
                 pageSubtitle="Что-то пошло не так..."
-                pageText="Возникла непредвиденная ошибка. Мы уже занимаемся "
+                pageText="Возникла непредвиденная ошибка. Мы уже занимаемся"
                 linkText="На главную"
             />
         ),
@@ -76,8 +76,8 @@ export const routeConfig: Record<AppRoutes, RouteProps> = {
     [AppRoutes.NOT_FOUND]: {
         path: RoutePath.not_found,
         element: (
-            <ServicePage
-                pageTitle="404"
+            <CodeError
+                codeError="404"
                 pageSubtitle="Нет такого адреса..."
                 pageText="Ресурс который был запрошен отсутствует на нашем сайте"
                 linkText="На главную"
