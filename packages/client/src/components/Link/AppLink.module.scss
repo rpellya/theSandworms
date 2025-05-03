@@ -1,16 +1,10 @@
 @use 'src/app/styles/variables/global.scss' as *;
-@use 'src/app/styles/themes/light.module.scss' as *;
 
-.app-link {
+.applink {
     font-style: normal;
     font-weight: 500;
     font-size: var(--font-size-m);
     text-decoration: none;
-    color: var(--accent);
     display: inline-block;
     cursor: pointer;
-}
-
-.app-link.app-link_color-white {
-    color: var(--white);
 }

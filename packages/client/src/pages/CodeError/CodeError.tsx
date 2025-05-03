@@ -1,4 +1,4 @@
-import './CodeError.scss';
+import cls from './CodeError.module.scss';
 import { memo } from 'react';
 import { TextLabel } from 'components/TextLabel/TextLabel';
 import { AppLink } from 'components/Link/AppLink';
@@ -14,23 +14,17 @@ interface CodeErrorProps {
 export const CodeError: React.FC<CodeErrorProps> = memo(
     ({ toPath, codeError, pageSubtitle, pageText, linkText }) => {
         return (
-            <div className="code-error-page">
+            <div className={cls.codeErrorPage}>
+                <TextLabel className={cls.textLabel_title} text={codeError} />
                 <TextLabel
-                    className="textLabel textLabel_title"
-                    text={codeError}
-                />
-                <TextLabel
-                    className="textLabel textLabel_subtitle"
+                    className={cls.textLabel_subtitle}
                     text={pageSubtitle}
                 />
-                <TextLabel
-                    className="textLabel textLabel_text"
-                    text={pageText}
-                />
-                <div className="code-error-page__button-container">
+                <TextLabel className={cls.textLabel_text} text={pageText} />
+                <div className={cls.codeErrorPage__buttonContainer}>
                     <AppLink
                         to={toPath}
-                        className="app-link app-link_color-white"
+                        className={cls.applink_colorWhite}
                         text={linkText}
                     />
                 </div>
