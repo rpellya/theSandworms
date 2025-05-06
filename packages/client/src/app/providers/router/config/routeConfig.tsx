@@ -3,6 +3,7 @@ import { Profile } from 'pages/Profile';
 import { CodeError } from 'pages/CodeError';
 import { RouteProps } from 'react-router-dom';
 import { Forum } from 'pages/Forum';
+import { ForumTopicPage } from 'pages/Forum/ForumTopicPage';
 
 enum AppRoutes {
     MAIN = 'main',
@@ -15,6 +16,7 @@ enum AppRoutes {
     SERVER_ERROR = 'server_error',
     // last
     NOT_FOUND = 'not_found',
+    FORUM_TOPIC = 'forum_topic',
 }
 
 export const RoutePath: Record<AppRoutes, string> = {
@@ -26,6 +28,7 @@ export const RoutePath: Record<AppRoutes, string> = {
     [AppRoutes.LEADERBOARD]: '/leaderboard',
     [AppRoutes.FORUM]: '/forum',
     [AppRoutes.SERVER_ERROR]: '/error',
+    [AppRoutes.FORUM_TOPIC]: '/forum/:id',
 
     // last
     [AppRoutes.NOT_FOUND]: '*',
@@ -62,6 +65,12 @@ export const routeConfig: Record<AppRoutes, RouteProps> = {
         path: RoutePath.forum,
         element: <Forum />,
     },
+
+    [AppRoutes.FORUM_TOPIC]: {
+        path: RoutePath.forum_topic,
+        element: <ForumTopicPage />,
+    },
+
     [AppRoutes.SERVER_ERROR]: {
         path: RoutePath.server_error,
         element: (

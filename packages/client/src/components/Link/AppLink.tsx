@@ -4,18 +4,19 @@ import { memo } from 'react';
 import { Link, LinkProps } from 'react-router-dom';
 
 interface AppLinkProps extends LinkProps {
-    text: string;
     className?: string;
+    text?: string; // делаем необязательным
+    children?: React.ReactNode; // добавляем поддержку вложенного содержимого
 }
 
 export const AppLink: React.FC<AppLinkProps> = memo(
-    ({ className, text, ...otherProps }) => {
+    ({ className, text, children, ...otherProps }) => {
         return (
             <Link
                 className={classNames(cls.applink, {}, [className])}
                 {...otherProps}
             >
-                {text}
+                {text ?? children}
             </Link>
         );
     },

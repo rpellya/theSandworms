@@ -7,6 +7,7 @@ import { Button } from 'components/Button';
 import { useState } from 'react';
 import { Modal } from 'components/Modal/Modal';
 import { ForumTopicForm } from './CreateForm';
+import { AppLink } from 'components/Link/AppLink';
 
 export const Forum = memo(() => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -28,14 +29,20 @@ export const Forum = memo(() => {
                     <Modal
                         isOpen={isModalOpen}
                         onClose={closeModal}
-                        title="Модальное окно"
+                        title="Создание топика"
                     >
                         <ForumTopicForm />
                     </Modal>
                 </div>
                 <div className={cls.topicsOverlay}>
                     {forumTopicsMock.map((topic) => (
-                        <ForumCell key={topic.id} topic={topic} />
+                        <AppLink
+                            key={topic.id}
+                            to={`/forum/${topic.id}`}
+                            className={cls.topicLink}
+                        >
+                            <ForumCell topic={topic} />
+                        </AppLink>
                     ))}
                 </div>
             </div>

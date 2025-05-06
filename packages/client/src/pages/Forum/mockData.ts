@@ -43,5 +43,18 @@ const forumTopicsMock: TForumTopic[] = Array.from({ length: 20 }, (_, i) => {
 	};
 });
 
-export { forumTopicsMock };
-export const forumMessagesMock: TForumMessage[] = [mockMessage];
+const forumMessagesMock: TForumMessage[] = forumTopicsMock.flatMap(
+	(topic, topicIndex) =>
+		Array.from({ length: 3 }, (_, msgIndex) => {
+			const messageId = `t${topicIndex + 1}_m${msgIndex + 1}`;
+			return {
+				id: messageId,
+				message: `Сообщение ${msgIndex + 1} в теме "${topic.title}"`,
+				author: mockAuthor,
+				dateTime: new Date(2024, 4, 4, 9 + msgIndex, topicIndex * 3),
+				topicId: topic.id,
+			};
+		}),
+);
+
+export { forumTopicsMock, forumMessagesMock };

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { nanoid } from 'nanoid';
-import { TForumTopic, TForumAuthor, TForumMessage } from '../types';
+import { TForumTopic, TForumAuthor } from '../types';
+import cls from './ForumTopicForm.module.scss';
 import { Button } from 'components/Button';
 
 const mockAuthor: TForumAuthor = {
@@ -30,23 +31,32 @@ export const ForumTopicForm = () => {
                 topicId,
             },
         };
-
         console.log('Создан топик:', newTopic);
-        setTitle('');
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <label>
-                Название темы:
-                <input
-                    type="text"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    required
-                />
-            </label>
-            <Button type="submit">Создать тему</Button>
+        <form className={cls.ForumTopicForm} onSubmit={handleSubmit}>
+            <div className={cls.formContent}>
+                <div className={cls.formGroup}>
+                    <label htmlFor="title">Заголовок темы</label>
+                    <input
+                        id="title"
+                        name="title"
+                        type="text"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                    />
+                </div>
+
+                <div className={cls.formGroup}>
+                    <label htmlFor="message">Сообщение</label>
+                    <textarea id="message" name="message" />
+                </div>
+            </div>
+
+            <Button className={cls.submitButton} type="submit">
+                Создать топик
+            </Button>
         </form>
     );
 };
