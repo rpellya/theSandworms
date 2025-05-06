@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import cls from './Main.module.scss';
-import { Snake } from './Components/Snake/Snake';
+import { SnakeImage } from './SnakeImage/SnakeImage';
 import { Link } from 'react-router-dom';
 import { RoutePath } from 'app/providers/router/config/routeConfig';
 import logo from '/src/assets/img/logo.webp';
@@ -27,7 +27,7 @@ export const Main = memo(() => {
                     </ul>
                 </nav>
             </div>
-            <Snake className={cls.snakeLayout} />
+            <SnakeImage className={cls.snakeLayout} />
             <div className={cls.mainFooter}>created by PixelMasters</div>
         </div>
     );
