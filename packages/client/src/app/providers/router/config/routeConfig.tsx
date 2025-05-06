@@ -1,5 +1,6 @@
 import { Main } from 'pages/Main';
 import { Profile } from 'pages/Profile';
+import { CodeError } from 'pages/CodeError';
 import { RouteProps } from 'react-router-dom';
 
 enum AppRoutes {
@@ -10,7 +11,7 @@ enum AppRoutes {
     PROFILE = 'profile',
     LEADERBOARD = 'leaderboard',
     FORUM = 'forum',
-
+    SERVER_ERROR = 'server_error',
     // last
     NOT_FOUND = 'not_found',
 }
@@ -23,6 +24,7 @@ export const RoutePath: Record<AppRoutes, string> = {
     [AppRoutes.PROFILE]: '/profile',
     [AppRoutes.LEADERBOARD]: '/leaderboard',
     [AppRoutes.FORUM]: '/forum',
+    [AppRoutes.SERVER_ERROR]: '/error',
 
     // last
     [AppRoutes.NOT_FOUND]: '*',
@@ -59,10 +61,30 @@ export const routeConfig: Record<AppRoutes, RouteProps> = {
         path: RoutePath.forum,
         element: 'Forum page (example)',
     },
+    [AppRoutes.SERVER_ERROR]: {
+        path: RoutePath.server_error,
+        element: (
+            <CodeError
+                toPath={RoutePath.main}
+                codeError="500"
+                pageSubtitle="Что-то пошло не так..."
+                pageText="Возникла непредвиденная ошибка. Мы уже занимаемся"
+                linkText="На главную"
+            />
+        ),
+    },
 
     // Все маршруты, которые не указаны в routeConfig будут перенаправлены на 404 страницу
     [AppRoutes.NOT_FOUND]: {
         path: RoutePath.not_found,
-        element: 'Not found page (example)',
+        element: (
+            <CodeError
+                toPath={RoutePath.main}
+                codeError="404"
+                pageSubtitle="Нет такого адреса..."
+                pageText="Ресурс который был запрошен отсутствует на нашем сайте"
+                linkText="На главную"
+            />
+        ),
     },
 };
