@@ -6,7 +6,7 @@ import { forumTopicsMock } from './mockData';
 import { Button } from 'components/Button';
 import { useState } from 'react';
 import { Modal } from 'components/Modal/Modal';
-import { ForumTopicForm } from './CreateForm';
+import { ForumTopicForm } from './ForumTopicForm';
 import { AppLink } from 'components/Link/AppLink';
 
 export const Forum = memo(() => {
