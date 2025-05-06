@@ -3,7 +3,9 @@ import cls from './Main.module.scss';
 import { SnakeImage } from './SnakeImage/SnakeImage';
 import { Link } from 'react-router-dom';
 import { RoutePath } from 'app/providers/router/config/routeConfig';
+import { AppLink } from 'components/Link/AppLink';
 import logo from '/src/assets/img/logo.webp';
+import App from 'app/App';
 
 export const Main = memo(() => {
     return (
@@ -13,16 +15,32 @@ export const Main = memo(() => {
                 <nav>
                     <ul>
                         <li>
-                            <Link to="">Играть</Link>
+                            <AppLink
+                                className={cls.appLink}
+                                to="#"
+                                text="Играть"
+                            />
                         </li>
                         <li>
-                            <Link to={RoutePath.about}>Настройки</Link>
+                            <AppLink
+                                className={cls.appLink}
+                                to={RoutePath.about}
+                                text="О нас"
+                            />
                         </li>
                         <li>
-                            <Link to={RoutePath.forum}>Форум</Link>
+                            <AppLink
+                                className={cls.appLink}
+                                to={RoutePath.forum}
+                                text="Форум"
+                            />
                         </li>
                         <li>
-                            <Link to={RoutePath.leaderboard}>Лидеры</Link>
+                            <AppLink
+                                className={cls.appLink}
+                                to={RoutePath.leaderboard}
+                                text="Лидеры"
+                            />
                         </li>
                     </ul>
                 </nav>
