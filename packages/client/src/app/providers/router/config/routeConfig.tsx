@@ -2,6 +2,7 @@ import { Main } from 'pages/Main';
 import { Profile } from 'pages/Profile';
 import { CodeError } from 'pages/CodeError';
 import { RouteProps } from 'react-router-dom';
+import { Forum } from 'pages/Forum';
 
 enum AppRoutes {
     MAIN = 'main',
@@ -59,7 +60,7 @@ export const routeConfig: Record<AppRoutes, RouteProps> = {
     },
     [AppRoutes.FORUM]: {
         path: RoutePath.forum,
-        element: 'Forum page (example)',
+        element: <Forum />,
     },
     [AppRoutes.SERVER_ERROR]: {
         path: RoutePath.server_error,
