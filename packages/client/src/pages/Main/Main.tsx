@@ -1,11 +1,9 @@
 import { memo } from 'react';
 import cls from './Main.module.scss';
 import { SnakeImage } from './SnakeImage/SnakeImage';
-import { Link } from 'react-router-dom';
 import { RoutePath } from 'app/providers/router/config/routeConfig';
 import { AppLink } from 'components/Link/AppLink';
 import logo from '/src/assets/img/logo.webp';
-import App from 'app/App';
 
 export const Main = memo(() => {
     return (
