@@ -6,7 +6,6 @@ import { dictonariesFields } from './dictonariesFields';
 import { profileValuesDict } from './consts/profileValuesDict';
 import { AppLink } from 'components/Link/AppLink';
 import Field from './Fields/Field';
-import { RoutePath } from 'app/providers/router/config/routeConfig';
 import {
     useGetAuthUserQuery,
     useLazyGetAuthUserQuery,
@@ -66,8 +65,9 @@ export const Profile: React.FC = memo(() => {
     useEffect(() => {
         if (data) {
             setProfileValues(data);
+            setIcon(`${baseUrl}/resources${data.avatar}`);
         }
-    }, [data]);
+    }, [data, icon]);
     return (
         <div className={style.profile}>
             <header className={style.profile_header}>
@@ -90,7 +90,7 @@ export const Profile: React.FC = memo(() => {
                 <img
                     onClick={() => updateIconProfile(setIcon, handleUpload)}
                     className={style.profile_container_icon}
-                    src={`${baseUrl}/resources${profileValues.avatar}` || icon}
+                    src={icon}
                     alt="icon"
                 />
                 <form className={style.profile_container_form}>

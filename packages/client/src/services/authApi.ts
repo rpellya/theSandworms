@@ -10,7 +10,6 @@ export const authApi = createApi({
 				url: '/auth/signup',
 				method: 'POST',
 				body,
-				responseHandler: 'text',
 			}),
 		}),
 		loginApi: builder.mutation({
@@ -19,7 +18,6 @@ export const authApi = createApi({
 				method: 'POST',
 				body,
 				credentials: 'include',
-				responseHandler: 'text',
 			}),
 		}),
 		logoutApi: builder.mutation<string, void>({
@@ -35,7 +33,6 @@ export const authApi = createApi({
 				url: '/auth/user',
 				method: 'GET',
 				credentials: 'include',
-				responseHandler: 'text',
 			}),
 		}),
 	}),
