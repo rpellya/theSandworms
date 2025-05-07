@@ -1,8 +1,8 @@
 import React from 'react';
-import style from './field.module.scss';
+import cls from './field.module.scss';
 import { changeInput } from '../helpers/changeInput';
 
-interface IFieldProps {
+interface FieldProps {
     fieldName: string;
     placeholder: string;
     fieldType: string;
@@ -12,7 +12,7 @@ interface IFieldProps {
     disabled: boolean;
 }
 
-const Field: React.FC<IFieldProps> = ({
+export const Field: React.FC<FieldProps> = ({
     fieldName,
     placeholder,
     fieldType,
@@ -22,8 +22,8 @@ const Field: React.FC<IFieldProps> = ({
     fieldKey,
 }) => {
     return (
-        <div className={style.field}>
-            <p className={style.field_name}>{fieldName}</p>
+        <div className={cls.field}>
+            <p className={cls.field_name}>{fieldName}</p>
             <input
                 onChange={(event) =>
                     changeInput(
@@ -32,7 +32,7 @@ const Field: React.FC<IFieldProps> = ({
                     )
                 }
                 disabled={disabled}
-                className={style.field_input}
+                className={cls.field_input}
                 type={fieldType}
                 value={profileValues[fieldKey]}
                 placeholder={placeholder}
@@ -40,5 +40,3 @@ const Field: React.FC<IFieldProps> = ({
         </div>
     );
 };
-
-export default Field;

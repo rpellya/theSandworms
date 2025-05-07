@@ -1,11 +1,11 @@
 import { Button } from 'components/Button';
 import { memo, useEffect, useState } from 'react';
-import style from './Profile.module.scss';
+import cls from './Profile.module.scss';
 import { updateIconProfile } from './helpers/updateIconProfile';
 import { dictonariesFields } from './dictonariesFields';
 import { profileValuesDict } from './consts/profileValuesDict';
 import { AppLink } from 'components/Link/AppLink';
-import Field from './Fields/Field';
+import { Field } from './Fields/Field';
 import {
     useGetAuthUserQuery,
     useLazyGetAuthUserQuery,
@@ -69,32 +69,32 @@ export const Profile: React.FC = memo(() => {
         }
     }, [data, icon]);
     return (
-        <div className={style.profile}>
-            <header className={style.profile_header}>
+        <div className={cls.profile}>
+            <header className={cls.profile_header}>
                 <AppLink
                     text="To home"
                     to="/"
                     // to={RoutePath.main}
-                    className={style.profile_header_homeBtn}
+                    className={cls.profile_header_homeBtn}
                 />
 
                 <p
                     onClick={() => logout(() => logoutApi().unwrap(), navigate)}
-                    className={style.profile_header_logout}
+                    className={cls.profile_header_logout}
                 >
                     Logout
                 </p>
             </header>
-            <div className={style.profile_container}>
+            <div className={cls.profile_container}>
                 <h3>Profile</h3>
                 <img
                     onClick={() => updateIconProfile(setIcon, handleUpload)}
-                    className={style.profile_container_icon}
+                    className={cls.profile_container_icon}
                     src={icon}
                     alt="icon"
                 />
-                <form className={style.profile_container_form}>
-                    <div className={style.profile_container_form_fields}>
+                <form className={cls.profile_container_form}>
+                    <div className={cls.profile_container_form_fields}>
                         {dictonariesFields.map((field) => (
                             <Field
                                 fieldName={field.fieldName}

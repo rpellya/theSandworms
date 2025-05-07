@@ -17,6 +17,7 @@ export const authApi = createApi({
 				url: '/auth/signin',
 				method: 'POST',
 				body,
+				responseHandler: 'text',
 				credentials: 'include',
 			}),
 		}),
