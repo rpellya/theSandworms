@@ -4,7 +4,7 @@ import { FormEventHandler, memo } from 'react';
 import { AppForm } from 'components/Form';
 import { Button } from 'components/Button';
 import { AppLink } from 'components/Link/AppLink';
-import { AppInput } from 'components/Input';
+import { Input } from 'components/Input';
 
 interface LoginProps {
     regPath: string;
@@ -22,10 +22,10 @@ export const Login: React.FC<LoginProps> = memo(({ regPath, onSubmit }) => {
                         text="Вход в систему"
                         key="title"
                     />,
-                    <AppInput
+                    <Input
                         inputLabel="Логин"
                         placeholder="Введите логин"
-                        inputType="text"
+                        type="text"
                         key="login"
                     />,
                     <TextLabel
@@ -33,9 +33,9 @@ export const Login: React.FC<LoginProps> = memo(({ regPath, onSubmit }) => {
                         text="Ошибка"
                         key="loginError"
                     />,
-                    <AppInput
+                    <Input
                         inputLabel="Пароль"
-                        inputType="password"
+                        type="password"
                         placeholder="Введите пароль"
                         key="password"
                     />,
