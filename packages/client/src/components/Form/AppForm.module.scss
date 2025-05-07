@@ -1,0 +1,15 @@
+@use 'src/app/styles/themes/light.module.scss' as *;
+
+.appForm {
+    background-color: var(--white);
+    padding: 1em;
+    width: 340px;
+    border: 1px solid rgb(255 255 255 / 100%);
+    border-radius: 12px;
+    box-shadow: 0 0 6px 0 rgb(0 0 0 / 14%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: auto;
+}
+
