@@ -1,40 +1,40 @@
 import React from 'react';
 import style from './field.module.scss';
-import { useAppDispatch, useAppSelector } from 'hooks/redux-hooks';
-import { changeInput } from 'store/profile/profileSlice';
-import { IFieldType } from '../types';
+import { changeInput } from '../helpers/changeInput';
 
-interface IFieldName {
+interface IFieldProps {
     fieldName: string;
     placeholder: string;
     fieldType: string;
-    value: string;
-    key: string;
+    fieldKey: string;
+    profileValues: Record<string, any>;
+    setProfileValues: (value: any) => void;
     disabled: boolean;
 }
 
-const Field = ({
+const Field: React.FC<IFieldProps> = ({
     fieldName,
     placeholder,
     fieldType,
-    // value,
     disabled,
-    key,
-}: IFieldName) => {
-    const dispatch = useAppDispatch();
-    const { profileState } = useAppSelector((state) => state.profile);
-    const value = profileState.find((item: IFieldType) => item.key === key);
+    profileValues,
+    setProfileValues,
+    fieldKey,
+}) => {
     return (
         <div className={style.field}>
             <p className={style.field_name}>{fieldName}</p>
             <input
                 onChange={(event) =>
-                    dispatch(changeInput({ key, value: event }))
+                    changeInput(
+                        { key: fieldKey, value: event.target.value },
+                        setProfileValues,
+                    )
                 }
                 disabled={disabled}
                 className={style.field_input}
                 type={fieldType}
-                value={value?.value}
+                value={profileValues[fieldKey]}
                 placeholder={placeholder}
             />
         </div>

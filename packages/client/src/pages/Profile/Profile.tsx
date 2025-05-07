@@ -1,38 +1,95 @@
 import { Button } from 'components/Button';
-import { memo, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import style from './Profile.module.scss';
-import Field from './components/field';
-import { dictonariesFields } from './dictonariesFields';
-import { Link } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from 'hooks/redux-hooks';
 import { updateIconProfile } from './helpers/updateIconProfile';
+import { dictonariesFields } from './dictonariesFields';
+import { profileValuesDict } from './consts/profileValuesDict';
+import { AppLink } from 'components/Link/AppLink';
+import Field from './Fields/Field';
+import { RoutePath } from 'app/providers/router/config/routeConfig';
+import {
+    useGetAuthUserQuery,
+    useLazyGetAuthUserQuery,
+    useLogoutApiMutation,
+} from 'services/authApi';
+import { useNavigate } from 'react-router-dom';
+import {
+    usePuthUserMutation,
+    useUpdateAvatarProfileMutation,
+} from 'services/profileApi';
+import { baseUrl } from 'consts/baseUrl';
+import { logout } from './helpers/logout';
 
 /**
  * Оборачиваем в memo, чтобы при рендеринге этого компонента не перерисовывался весь дочерний контент
  */
-export const Profile = memo(() => {
+export const Profile: React.FC = memo(() => {
+    const [logoutApi] = useLogoutApiMutation();
+    const [putUserApi] = usePuthUserMutation();
+    const [updateAvatarProfile] = useUpdateAvatarProfileMutation();
+    const { data } = useGetAuthUserQuery();
+    const [getUserData] = useLazyGetAuthUserQuery();
     const [disabled, setDisabled] = useState(true);
     const [textBtn, setTextBtn] = useState('Изменить');
-    const { icon } = useAppSelector((state) => state.profile);
-    const dispatch = useAppDispatch();
+    const [icon, setIcon] = useState('/avatar.svg');
+    const [profileValues, setProfileValues] = useState(profileValuesDict);
+
+    const navigate = useNavigate();
     const updateFunc = () => {
         setDisabled(!disabled);
-        disabled ? setTextBtn('Сохранить') : setTextBtn('Изменить');
+
+        if (disabled) {
+            setTextBtn('Сохранить');
+        } else {
+            setTextBtn('Изменить');
+        }
+        if (textBtn === 'Сохранить') {
+            updateProfile();
+        }
     };
+
+    const updateProfile = () => {
+        putUserApi(profileValues);
+    };
+
+    const handleUpload = async (file: File) => {
+        const formData = new FormData();
+        formData.append('avatar', file);
+
+        try {
+            await updateAvatarProfile(formData).unwrap();
+            getUserData();
+        } catch (e) {
+            console.error(e);
+        }
+    };
+    useEffect(() => {
+        if (data) {
+            setProfileValues(data);
+        }
+    }, [data]);
     return (
         <div className={style.profile}>
             <header className={style.profile_header}>
-                <Link to="/" className={style.profile_header_homeBtn}>
-                    To home
-                </Link>
-                <p className={style.profile_header_logout}>Logout</p>
+                <AppLink
+                    text="To home"
+                    to={RoutePath.main}
+                    className={style.profile_header_homeBtn}
+                />
+
+                <p
+                    onClick={() => logout(() => logoutApi().unwrap(), navigate)}
+                    className={style.profile_header_logout}
+                >
+                    Logout
+                </p>
             </header>
             <div className={style.profile_container}>
                 <h3>Profile</h3>
                 <img
-                    onClick={() => updateIconProfile(dispatch)}
+                    onClick={() => updateIconProfile(setIcon, handleUpload)}
                     className={style.profile_container_icon}
-                    src={icon}
+                    src={`${baseUrl}/resources${profileValues.avatar}` || icon}
                     alt="icon"
                 />
                 <form className={style.profile_container_form}>
@@ -42,9 +99,11 @@ export const Profile = memo(() => {
                                 fieldName={field.fieldName}
                                 fieldType={field.fieldType}
                                 key={field.key}
+                                fieldKey={field.key}
                                 placeholder={field.placeholder}
-                                value={field.value}
                                 disabled={disabled}
+                                profileValues={profileValues}
+                                setProfileValues={setProfileValues}
                             />
                         ))}
                     </div>
