@@ -73,7 +73,8 @@ export const Profile: React.FC = memo(() => {
             <header className={style.profile_header}>
                 <AppLink
                     text="To home"
-                    to={RoutePath.main}
+                    to="/"
+                    // to={RoutePath.main}
                     className={style.profile_header_homeBtn}
                 />
 
