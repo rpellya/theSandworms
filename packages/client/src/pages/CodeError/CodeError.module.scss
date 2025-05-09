@@ -1,0 +1,48 @@
+@use 'src/app/styles/themes/light.module.scss' as *;
+
+.codeErrorPage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+    background-color: var(--basic);
+    width: 100vw;
+    height: 100vh;
+
+    &__buttonContainer {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 50px 0 0;
+    }
+}
+
+.applink {
+    &_colorWhite {
+        color: var(--white);
+    }
+}
+
+.textLabel {
+    &_text {
+        font-weight: normal;
+        font-size: var(--font-size-m);
+        text-align: center;
+        margin: 5px 0;
+    }
+
+    &_title {
+        font-weight: bold;
+        font-size: var(--font-size-xl);
+        text-align: center;
+        margin: 0 0 0.75em 0;
+    }
+
+    &_subtitle {
+        font-weight: bold;
+        font-size: var(--font-size-l);
+        text-align: center;
+        margin: 0 0 0.5em 0;
+    }
+}
