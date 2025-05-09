@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import cls from './AppInput.module.scss';
+import cls from './Input.module.scss';
 import { classNames } from 'app/lib/classNames';
 import { TextLabel } from 'components/TextLabel';
 

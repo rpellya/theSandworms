@@ -1,1 +1,1 @@
-export { Input } from './AppInput';
+export { Input } from './Input';

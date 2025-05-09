@@ -1,11 +1,11 @@
-import cls from './AppForm.module.scss';
+import cls from './Form.module.scss';
 import { FormHTMLAttributes, memo } from 'react';
 
-interface AppFormProps extends FormHTMLAttributes<HTMLFormElement> {
+interface FormProps extends FormHTMLAttributes<HTMLFormElement> {
     className?: string;
 }
 
-export const AppForm: React.FC<AppFormProps> = memo(
+export const Form: React.FC<FormProps> = memo(
     ({ children, method, ...otherProps }) => {
         return (
             <form className={cls.appForm} {...otherProps} method={method}>
