@@ -3,6 +3,7 @@ import { Profile } from 'pages/Profile';
 import { Register } from 'pages/Register';
 import { CodeError } from 'pages/CodeError';
 import { RouteProps } from 'react-router-dom';
+import { Login } from 'pages/Login';
 
 enum AppRoutes {
     MAIN = 'main',
@@ -40,7 +41,14 @@ export const routeConfig: Record<AppRoutes, RouteProps> = {
     },
     [AppRoutes.LOGIN]: {
         path: RoutePath.login,
-        element: 'Login (example)',
+        element: (
+            <Login
+                regPath={RoutePath.register}
+                onSubmit={() => {
+                    return true;
+                }} //подключем авторизацию здесь
+            />
+        ),
     },
     [AppRoutes.REGISTER]: {
         path: RoutePath.register,
