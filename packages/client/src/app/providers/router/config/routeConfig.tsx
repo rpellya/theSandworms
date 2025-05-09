@@ -1,4 +1,5 @@
 import { Profile } from 'pages/Profile';
+import Register from 'pages/Register/Register';
 import { RouteProps } from 'react-router-dom';
 
 enum AppRoutes {
@@ -40,7 +41,7 @@ export const routeConfig: Record<AppRoutes, RouteProps> = {
     },
     [AppRoutes.REGISTER]: {
         path: RoutePath.register,
-        element: 'Register (example)',
+        element: <Register />,
     },
     [AppRoutes.ABOUT]: {
         path: RoutePath.about,
