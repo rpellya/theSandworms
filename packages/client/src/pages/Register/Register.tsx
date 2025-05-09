@@ -11,7 +11,7 @@ interface IUserData {
     email: string;
 }
 
-const Register = memo(() => {
+export const Register = memo(() => {
     const {
         register,
         handleSubmit,
@@ -116,5 +116,3 @@ const Register = memo(() => {
         </div>
     );
 });
-
-export default Register;
