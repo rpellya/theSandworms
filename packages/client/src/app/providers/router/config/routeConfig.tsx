@@ -1,4 +1,5 @@
 import { Main } from 'pages/Main';
+import { LeaderBoard } from 'pages/LeaderBoard';
 import { Profile } from 'pages/Profile';
 import { CodeError } from 'pages/CodeError';
 import { RouteProps } from 'react-router-dom';
@@ -55,7 +56,7 @@ export const routeConfig: Record<AppRoutes, RouteProps> = {
     },
     [AppRoutes.LEADERBOARD]: {
         path: RoutePath.leaderboard,
-        element: 'Leaderboard (example)',
+        element: <LeaderBoard />,
     },
     [AppRoutes.FORUM]: {
         path: RoutePath.forum,
