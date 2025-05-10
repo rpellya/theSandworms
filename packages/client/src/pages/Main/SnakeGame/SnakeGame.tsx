@@ -16,10 +16,16 @@ export const SnakeGame = memo(() => {
         const center = { x: canvas.width / 2, y: canvas.height / 2 };
         const snake = [{ x: 0, y: 0 }];
         const snakeLength = 30;
-        let speed = 1;
-        let food = spawnFood();
+        let speed = 2;
+        let foods = [spawnFood()];
         let score = 0;
         let bgPattern: HTMLImageElement | null = null;
+
+        // Бот
+        let botSnake = [{ x: 100, y: 100 }];
+        let botDirection = Math.random() * 2 * Math.PI; // угол в радианах
+        const botSpeed = 1;
+        const botLength = 30;
 
         document.addEventListener('mousemove', (e) => {
             mouse.x = e.clientX;
@@ -35,6 +41,79 @@ export const SnakeGame = memo(() => {
             const newY = head.y + Math.sin(angle) * speed;
             snake.unshift({ x: newX, y: newY });
             if (snake.length > snakeLength) snake.pop();
+        }
+
+        // Бот
+        function updateBotSnake() {
+            if (!botSnake.length) return;
+            const head = botSnake[0];
+
+            // случайный шанс немного повернуть
+            if (Math.random() < 0.2) {
+                botDirection += (Math.random() - 0.6) * 0.6; // случайный поворот
+            }
+
+            const newX = head.x + Math.cos(botDirection) * botSpeed;
+            const newY = head.y + Math.sin(botDirection) * botSpeed;
+
+            botSnake.unshift({ x: newX, y: newY });
+            if (botSnake.length > botLength) botSnake.pop();
+        }
+
+        function drawBotSnake() {
+            if (botSnake.length === 0 || !ctx) return;
+            for (let i = botSnake.length - 1; i > 0; i--) {
+                const part = botSnake[i];
+                const screenX = center.x + (part.x - snake[0].x);
+                const screenY = center.y + (part.y - snake[0].y);
+
+                ctx.beginPath();
+                ctx.arc(screenX, screenY, 5, 0, Math.PI * 2);
+                ctx.fillStyle = `hsl(${i * 4}, 80%, 40%)`;
+                ctx.fill();
+            }
+
+            // Голова бота
+            ctx.beginPath();
+            const head = botSnake[0];
+            const headX = center.x + (head.x - snake[0].x);
+            const headY = center.y + (head.y - snake[0].y);
+            ctx.arc(headX, headY, 6, 0, Math.PI * 2);
+            ctx.fillStyle = '#0af';
+            ctx.fill();
+        }
+
+        function checkBotCollisionWithPlayer() {
+            if (!botSnake.length) return;
+            const botHead = botSnake[0];
+
+            // пропускаем первую часть змейки (голова), т.к. это "невозможно" столкнуться с ней
+            for (let i = 5; i < snake.length; i++) {
+                const part = snake[i];
+                const dist = Math.hypot(botHead.x - part.x, botHead.y - part.y);
+                if (dist < 10) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function spawnFoodFromBot() {
+            const count = Math.floor(botSnake.length / 6); // например, 5 точек при длине 30
+
+            const foodItems = [];
+            const step = Math.floor(botSnake.length / count);
+
+            for (
+                let i = 0;
+                i < botSnake.length && foodItems.length < count;
+                i += step
+            ) {
+                foodItems.push({ x: botSnake[i].x, y: botSnake[i].y });
+            }
+
+            // Добавим их в глобальный список еды
+            foodItems.forEach((item) => foods.push(item));
         }
 
         function drawBackground(offsetX: number, offsetY: number) {
@@ -100,13 +179,24 @@ export const SnakeGame = memo(() => {
 
         function drawFood() {
             if (!ctx) return;
-            const screenX = center.x + (food.x - snake[0].x);
-            const screenY = center.y + (food.y - snake[0].y);
+            /*
+			const screenX = center.x + (food.x - snake[0].x)
+			const screenY = center.y + (food.y - snake[0].y)
 
-            ctx.beginPath();
-            ctx.arc(screenX, screenY, 6, 0, Math.PI * 2);
-            ctx.fillStyle = 'blue';
-            ctx.fill();
+			ctx.beginPath()
+			ctx.arc(screenX, screenY, 6, 0, Math.PI * 2)
+			ctx.fillStyle = 'blue'
+			ctx.fill()
+			*/
+            for (const food of foods) {
+                const screenX = center.x + (food.x - snake[0].x);
+                const screenY = center.y + (food.y - snake[0].y);
+
+                ctx.beginPath();
+                ctx.arc(screenX, screenY, 6, 0, Math.PI * 2);
+                ctx.fillStyle = 'blue';
+                ctx.fill();
+            }
         }
 
         function loop() {
@@ -114,20 +204,43 @@ export const SnakeGame = memo(() => {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             updateSnake();
 
+            updateBotSnake();
+
             const head = snake[0];
-            if (Math.hypot(head.x - food.x, head.y - food.y) < 12) {
-                score++;
-                setScore(score);
-                speed += 0.1;
-                food = spawnFood();
-                for (let i = 0; i < 10; i++) {
-                    snake.push({ ...snake[snake.length - 1] });
+            foods = foods.filter((food) => {
+                const dist = Math.hypot(head.x - food.x, head.y - food.y);
+                if (dist < 12) {
+                    score++;
+                    setScore(score);
+                    speed += 0.1;
+
+                    for (let i = 0; i < 10; i++) {
+                        snake.push({ ...snake[snake.length - 1] });
+                    }
+                    return false; // удалить съеденную еду
                 }
+                return true;
+            });
+
+            if (checkBotCollisionWithPlayer()) {
+                spawnFoodFromBot();
+                botSnake = []; // удалить бота
+            }
+
+            if (botSnake.length === 0) {
+                botSnake = [
+                    {
+                        x: Math.random() * 500 - 250,
+                        y: Math.random() * 500 - 250,
+                    },
+                ];
+                botDirection = Math.random() * 2 * Math.PI;
             }
 
             drawBackground(snake[0].x, snake[0].y);
             drawFood();
             drawSnake();
+            drawBotSnake();
             requestAnimationFrame(loop);
         }
 
