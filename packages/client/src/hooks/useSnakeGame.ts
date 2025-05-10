@@ -1,8 +1,24 @@
 import { useEffect, useRef, useState } from 'react';
+import playerFaceUrl from '/src/assets/faces/face-001.webp';
+import botFaceUrl from '/src/assets/faces/face-002.webp';
 
 export const useSnakeGame = () => {
 	const canvasRef = useRef<HTMLCanvasElement | null>(null);
+	const playerFaceRef = useRef<HTMLImageElement | null>(null);
+	const botFaceRef = useRef<HTMLImageElement | null>(null);
 	const [score, setScore] = useState(0);
+	const playerFace = new Image();
+	const botFace = new Image();
+	playerFace.src = playerFaceUrl;
+	botFace.src = botFaceUrl;
+
+	playerFace.onload = () => {
+		playerFaceRef.current = playerFace;
+	};
+
+	botFace.onload = () => {
+		botFaceRef.current = botFace;
+	};
 
 	useEffect(() => {
 		const canvas = canvasRef.current;
@@ -21,7 +37,7 @@ export const useSnakeGame = () => {
 		const mouse = { x: center.x, y: center.y };
 		const snake = [{ x: 0, y: 0 }];
 		const snakeLength = 30;
-		let speed = 2;
+		let speed = 1.5;
 		let foods = [spawnFood()];
 		let localScore = 0;
 		let bgPattern: HTMLImageElement | null = null;
@@ -29,7 +45,7 @@ export const useSnakeGame = () => {
 		let botSnake = [{ x: 100, y: 100 }];
 		let botDirection = Math.random() * 2 * Math.PI;
 		const botSpeed = 1;
-		const botLength = 30;
+		const botLength = 45;
 
 		document.addEventListener('mousemove', (e) => {
 			mouse.x = e.clientX;
@@ -102,19 +118,37 @@ export const useSnakeGame = () => {
 
 		function drawSnake() {
 			if (!ctx) return;
+
 			for (let i = snake.length - 1; i > 0; i--) {
 				const part = snake[i];
 				const screenX = center.x + (part.x - snake[0].x);
 				const screenY = center.y + (part.y - snake[0].y);
 				ctx.beginPath();
-				ctx.arc(screenX, screenY, 6, 0, Math.PI * 2);
+				ctx.arc(screenX, screenY, 12, 0, Math.PI * 2);
 				ctx.fillStyle = `hsl(${i * 3}, 100%, 50%)`;
 				ctx.fill();
 			}
-			ctx.beginPath();
-			ctx.arc(center.x, center.y, 6, 0, Math.PI * 2);
-			ctx.fillStyle = '#a10';
-			ctx.fill();
+
+			// Отрисовка лица и поворот в направлении движения
+			const playerFaceImg = playerFaceRef.current;
+			if (playerFaceImg && playerFaceImg.complete) {
+				const head = snake[0];
+				const neck = snake[1] || head; // Используем вторую точку для направления
+				const dx = head.x - neck.x;
+				const dy = head.y - neck.y;
+				const angle = Math.atan2(dy, dx) - Math.PI / 2;
+
+				ctx.save();
+				ctx.translate(center.x, center.y);
+				ctx.rotate(angle);
+				ctx.drawImage(playerFaceImg, -12, -12, 24, 24); // Рисуем относительно центра
+				ctx.restore();
+			} else {
+				ctx.beginPath();
+				ctx.arc(center.x, center.y, 12, 0, Math.PI * 2);
+				ctx.fillStyle = '#a10';
+				ctx.fill();
+			}
 		}
 
 		function drawBotSnake() {
@@ -124,17 +158,33 @@ export const useSnakeGame = () => {
 				const screenX = center.x + (part.x - snake[0].x);
 				const screenY = center.y + (part.y - snake[0].y);
 				ctx.beginPath();
-				ctx.arc(screenX, screenY, 5, 0, Math.PI * 2);
+				ctx.arc(screenX, screenY, 10, 0, Math.PI * 2);
 				ctx.fillStyle = `hsl(${i * 4}, 80%, 40%)`;
 				ctx.fill();
 			}
 			const head = botSnake[0];
+			const neck = botSnake[1] || head; // Используем вторую точку для направления
 			const headX = center.x + (head.x - snake[0].x);
 			const headY = center.y + (head.y - snake[0].y);
-			ctx.beginPath();
-			ctx.arc(headX, headY, 6, 0, Math.PI * 2);
-			ctx.fillStyle = '#0af';
-			ctx.fill();
+
+			const botFaceImg = botFaceRef.current;
+			if (botFaceImg && botFaceImg.complete) {
+				// Вычисляем угол для головы бота
+				const dx = head.x - neck.x;
+				const dy = head.y - neck.y;
+				const angle = Math.atan2(dy, dx) - Math.PI / 2; // Лицо должно смотреть вперед
+
+				ctx.save();
+				ctx.translate(headX, headY);
+				ctx.rotate(angle); // Поворачиваем в направлении движения
+				ctx.drawImage(botFaceImg, -10, -10, 20, 20); // Рисуем относительно центра
+				ctx.restore();
+			} else {
+				ctx.beginPath();
+				ctx.arc(headX, headY, 12, 0, Math.PI * 2);
+				ctx.fillStyle = '#a10';
+				ctx.fill();
+			}
 		}
 
 		function checkBotCollisionWithPlayer() {
@@ -165,7 +215,7 @@ export const useSnakeGame = () => {
 				const screenX = center.x + (food.x - snake[0].x);
 				const screenY = center.y + (food.y - snake[0].y);
 				ctx.beginPath();
-				ctx.arc(screenX, screenY, 6, 0, Math.PI * 2);
+				ctx.arc(screenX, screenY, 10, 0, Math.PI * 2);
 				ctx.fillStyle = 'blue';
 				ctx.fill();
 			}
