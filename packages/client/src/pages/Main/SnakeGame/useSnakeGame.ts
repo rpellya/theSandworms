@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import playerFaceUrl from '/src/assets/faces/face-001.webp';
 import botFaceUrl from '/src/assets/faces/face-002.webp';
+import bgImgUrl from '/src/assets/bg/bg-004.webp';
 
 export const useSnakeGame = () => {
 	const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -11,6 +12,12 @@ export const useSnakeGame = () => {
 	const botFace = new Image();
 	playerFace.src = playerFaceUrl;
 	botFace.src = botFaceUrl;
+
+	// Настройки
+	const snakeLength = 30;
+	let speed = 1.5;
+	const botSpeed = 1;
+	const botLength = 45;
 
 	playerFace.onload = () => {
 		playerFaceRef.current = playerFace;
@@ -36,22 +43,21 @@ export const useSnakeGame = () => {
 		const center = { x: canvas.width / 2, y: canvas.height / 2 };
 		const mouse = { x: center.x, y: center.y };
 		const snake = [{ x: 0, y: 0 }];
-		const snakeLength = 30;
-		let speed = 1.5;
 		let foods = [spawnFood()];
 		let localScore = 0;
 		let bgPattern: HTMLImageElement | null = null;
 
 		let botSnake = [{ x: 100, y: 100 }];
 		let botDirection = Math.random() * 2 * Math.PI;
-		const botSpeed = 1;
-		const botLength = 45;
 
 		document.addEventListener('mousemove', (e) => {
 			mouse.x = e.clientX;
 			mouse.y = e.clientY;
 		});
 
+		/**
+		 * Генерация еды
+		 */
 		function spawnFood() {
 			const range = 500;
 			return {
@@ -60,6 +66,9 @@ export const useSnakeGame = () => {
 			};
 		}
 
+		/**
+		 * Обновление змейки игрока
+		 */
 		function updateSnake() {
 			const head = snake[0];
 			const dx = mouse.x - center.x;
@@ -71,6 +80,9 @@ export const useSnakeGame = () => {
 			if (snake.length > snakeLength) snake.pop();
 		}
 
+		/**
+		 * Обновление змейки бота
+		 */
 		function updateBotSnake() {
 			if (!botSnake.length) return;
 			const head = botSnake[0];
@@ -83,6 +95,11 @@ export const useSnakeGame = () => {
 			if (botSnake.length > botLength) botSnake.pop();
 		}
 
+		/**
+		 * Отрисовка фона
+		 * @param offsetX
+		 * @param offsetY
+		 */
 		function drawBackground(offsetX: number, offsetY: number) {
 			if (!canvas || !ctx || !bgPattern) return;
 			const patternSize = 256;
@@ -116,6 +133,9 @@ export const useSnakeGame = () => {
 			}
 		}
 
+		/**
+		 * Отрисовка змейки игрока
+		 */
 		function drawSnake() {
 			if (!ctx) return;
 
@@ -151,6 +171,9 @@ export const useSnakeGame = () => {
 			}
 		}
 
+		/**
+		 * Отрисовка змейки бота
+		 */
 		function drawBotSnake() {
 			if (!ctx || botSnake.length === 0) return;
 			for (let i = botSnake.length - 1; i > 0; i--) {
@@ -187,6 +210,9 @@ export const useSnakeGame = () => {
 			}
 		}
 
+		/**
+		 * Логика контакта головы змейки бота и тела змейки игрока
+		 */
 		function checkBotCollisionWithPlayer() {
 			const botHead = botSnake[0];
 			for (let i = 5; i < snake.length; i++) {
@@ -197,6 +223,9 @@ export const useSnakeGame = () => {
 			return false;
 		}
 
+		/**
+		 * При умирании бота вместо его змейки генерируется еда
+		 */
 		function spawnFoodFromBot() {
 			const count = Math.floor(botSnake.length / 6);
 			const step = Math.floor(botSnake.length / count);
@@ -209,6 +238,9 @@ export const useSnakeGame = () => {
 			}
 		}
 
+		/**
+		 * Отрисовка еды
+		 */
 		function drawFood() {
 			if (!ctx) return;
 			for (const food of foods) {
@@ -221,6 +253,9 @@ export const useSnakeGame = () => {
 			}
 		}
 
+		/**
+		 * Главный цикл отрисовки
+		 */
 		function loop() {
 			if (!canvas || !ctx) return;
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -267,7 +302,7 @@ export const useSnakeGame = () => {
 		}
 
 		const bgImg = new Image();
-		bgImg.src = '/src/assets/bg/bg-008.webp';
+		bgImg.src = bgImgUrl;
 		bgImg.onload = () => {
 			bgPattern = bgImg;
 			loop();

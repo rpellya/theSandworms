@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { useSnakeGame } from '/src/hooks/useSnakeGame';
+import { useSnakeGame } from './useSnakeGame';
 import cls from './SnakeGame.module.scss';
 
 export const SnakeGame = memo(() => {
