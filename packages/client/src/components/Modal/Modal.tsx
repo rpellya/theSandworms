@@ -1,4 +1,5 @@
 import React, { memo } from 'react';
+import { Button } from 'components/Button';
 import ReactDOM from 'react-dom';
 import cls from './Modal.module.scss';
 
@@ -21,9 +22,9 @@ export const Modal: React.FC<ModalProps> = memo(
                 >
                     <div className={cls.modalHeader}>
                         <h2>{title}</h2>
-                        <button className={cls.closeButton} onClick={onClose}>
+                        <Button className={cls.closeButton} onClick={onClose}>
                             X
-                        </button>
+                        </Button>
                     </div>
                     <div className={cls.modalBody}>{children}</div>
                 </div>

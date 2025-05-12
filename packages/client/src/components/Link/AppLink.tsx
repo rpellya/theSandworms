@@ -5,8 +5,7 @@ import { Link, LinkProps } from 'react-router-dom';
 
 interface AppLinkProps extends LinkProps {
     className?: string;
-    text?: string; // делаем необязательным
-    children?: React.ReactNode; // добавляем поддержку вложенного содержимого
+    text?: string; // необязательный текст, если не передан — используется children
 }
 
 export const AppLink: React.FC<AppLinkProps> = memo(

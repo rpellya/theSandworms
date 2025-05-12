@@ -1,6 +1,5 @@
 import { AppRouter } from './providers/router';
-import { Suspense, useEffect, useState } from 'react';
-import ReactDOM from 'react-dom';
+import { Suspense, useEffect } from 'react';
 
 const App = () => {
     useEffect(() => {
