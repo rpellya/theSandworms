@@ -10,12 +10,12 @@ import {
     useGetAuthUserQuery,
     useLazyGetAuthUserQuery,
     useLogoutApiMutation,
-} from 'services/authApi';
+} from 'api/services/auth/authApi';
 import { useNavigate } from 'react-router-dom';
 import {
     usePuthUserMutation,
     useUpdateAvatarProfileMutation,
-} from 'services/profileApi';
+} from 'api/services/gameApi/rtk';
 import { baseUrl } from 'consts/baseUrl';
 import { logout } from './helpers/logout';
 import { Form } from 'components/Form';
@@ -73,7 +73,7 @@ export const Profile: React.FC = memo(() => {
         <div className={cls.profile}>
             <header className={cls.profile_header}>
                 <AppLink
-                    text="To home"
+                    text="На главную"
                     to="/"
                     // to={RoutePath.main}
                     className={cls.profile_header_homeBtn}
@@ -83,11 +83,11 @@ export const Profile: React.FC = memo(() => {
                     onClick={() => logout(() => logoutApi().unwrap(), navigate)}
                     className={cls.profile_header_logout}
                 >
-                    Logout
+                    Выход
                 </p>
             </header>
             <div className={cls.profile_container}>
-                <h3>Profile</h3>
+                <h3>Профиль</h3>
                 <img
                     onClick={() => updateIconProfile(setIcon, handleUpload)}
                     className={cls.profile_container_icon}

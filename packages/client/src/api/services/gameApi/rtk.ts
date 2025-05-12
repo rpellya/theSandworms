@@ -1,8 +1,8 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { baseUrl } from 'consts/baseUrl';
 
-export const profileApi = createApi({
-	reducerPath: 'profileApi',
+export const rtkApi = createApi({
+	reducerPath: 'rtkApi',
 	baseQuery: fetchBaseQuery({ baseUrl: baseUrl }),
 	endpoints: (builder) => ({
 		puthUser: builder.mutation<string, any>({
@@ -24,5 +24,4 @@ export const profileApi = createApi({
 	}),
 });
 
-export const { usePuthUserMutation, useUpdateAvatarProfileMutation } =
-	profileApi;
+export const { usePuthUserMutation, useUpdateAvatarProfileMutation } = rtkApi;

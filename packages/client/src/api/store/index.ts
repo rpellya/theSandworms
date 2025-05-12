@@ -1,17 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query';
-import { rootReducer } from 'reducers/rootReduser';
-import { authApi } from 'services/authApi';
-import { profileApi } from 'services/profileApi';
+import { rootReducer } from 'api/reducers/rootReduser';
+import { authApi } from 'api/services/auth/authApi';
+import { rtkApi } from 'api/services/gameApi/rtk';
 
 export const store = configureStore({
 	reducer: rootReducer,
 	middleware: (getDefaultMiddleware) =>
-		getDefaultMiddleware().concat(
-			authApi.middleware,
-			profileApi.middleware,
-			// другие middleware
-		),
+		getDefaultMiddleware().concat(authApi.middleware, rtkApi.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;
