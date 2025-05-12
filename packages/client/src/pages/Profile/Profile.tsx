@@ -18,6 +18,7 @@ import {
 } from 'services/profileApi';
 import { baseUrl } from 'consts/baseUrl';
 import { logout } from './helpers/logout';
+import { Form } from 'components/Form';
 
 /**
  * Оборачиваем в memo, чтобы при рендеринге этого компонента не перерисовывался весь дочерний контент
@@ -93,7 +94,7 @@ export const Profile: React.FC = memo(() => {
                     src={icon}
                     alt="icon"
                 />
-                <form className={cls.profile_container_form}>
+                <Form className={cls.profile_container_form}>
                     <div className={cls.profile_container_form_fields}>
                         {dictonariesFields.map((field) => (
                             <Field
@@ -109,7 +110,7 @@ export const Profile: React.FC = memo(() => {
                         ))}
                     </div>
                     <Button onClick={updateFunc}>{textBtn}</Button>
-                </form>
+                </Form>
             </div>
         </div>
     );
