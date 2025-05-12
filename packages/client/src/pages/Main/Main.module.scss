@@ -1,5 +1,5 @@
 @font-face {
-    font-family: 'FredokaOneFont';
+    font-family: 'MyCustomFont';
     src: url('src/assets/fonts/FredokaOne-Regular.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
@@ -19,7 +19,8 @@
 .mainMenu {
     list-style-type: none;
     width: 300px;
-    font-family: var(--font-family-custom);
+    font-family: 'MyCustomFont', sans-serif;
+
     text-align: center;
     height: 90vh;
     padding-top: 50px;
