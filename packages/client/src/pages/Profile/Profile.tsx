@@ -1,14 +1,117 @@
 import { Button } from 'components/Button';
-import { memo } from 'react';
+import { memo, useEffect, useState } from 'react';
+import cls from './Profile.module.scss';
+import { updateIconProfile } from './helpers/updateIconProfile';
+import { dictonariesFields } from './dictonariesFields';
+import { profileValuesDict } from './consts/profileValuesDict';
+import { AppLink } from 'components/Link/AppLink';
+import { Field } from './Fields/Field';
+import {
+    useGetAuthUserQuery,
+    useLazyGetAuthUserQuery,
+    useLogoutApiMutation,
+} from 'api/services/auth/authApi';
+import { useNavigate } from 'react-router-dom';
+import {
+    usePuthUserMutation,
+    useUpdateAvatarProfileMutation,
+} from 'api/services/gameApi/rtk';
+import { baseUrl } from 'consts/baseUrl';
+import { logout } from './helpers/logout';
+import { Form } from 'components/Form';
 
 /**
  * Оборачиваем в memo, чтобы при рендеринге этого компонента не перерисовывался весь дочерний контент
  */
-export const Profile = memo(() => {
+export const Profile: React.FC = memo(() => {
+    const [logoutApi] = useLogoutApiMutation();
+    const [putUserApi] = usePuthUserMutation();
+    const [updateAvatarProfile] = useUpdateAvatarProfileMutation();
+    const { data } = useGetAuthUserQuery();
+    const [getUserData] = useLazyGetAuthUserQuery();
+    const [disabled, setDisabled] = useState(true);
+    const [textBtn, setTextBtn] = useState('Изменить');
+    const [icon, setIcon] = useState('/avatar.svg');
+    const [profileValues, setProfileValues] = useState(profileValuesDict);
+
+    const navigate = useNavigate();
+    const updateFunc = () => {
+        setDisabled(!disabled);
+
+        if (disabled) {
+            setTextBtn('Сохранить');
+        } else {
+            setTextBtn('Изменить');
+        }
+        if (textBtn === 'Сохранить') {
+            updateProfile();
+        }
+    };
+
+    const updateProfile = () => {
+        putUserApi(profileValues);
+    };
+
+    const handleUpload = async (file: File) => {
+        const formData = new FormData();
+        formData.append('avatar', file);
+
+        try {
+            await updateAvatarProfile(formData).unwrap();
+            getUserData();
+        } catch (e) {
+            console.error(e);
+        }
+    };
+    useEffect(() => {
+        if (data) {
+            setProfileValues(data);
+            setIcon(`${baseUrl}/resources${data.avatar}`);
+        }
+    }, [data, icon]);
     return (
-        <div>
-            Profile
-            <Button>Hello world</Button>
+        <div className={cls.profile}>
+            <header className={cls.profile_header}>
+                <AppLink
+                    text="На главную"
+                    to="/"
+                    // to={RoutePath.main}
+                    className={cls.profile_header_homeBtn}
+                />
+
+                <p
+                    onClick={() => logout(() => logoutApi().unwrap(), navigate)}
+                    className={cls.profile_header_logout}
+                >
+                    Выход
+                </p>
+            </header>
+            <div className={cls.profile_container}>
+                <h3>Профиль</h3>
+                <img
+                    onClick={() => updateIconProfile(setIcon, handleUpload)}
+                    className={cls.profile_container_icon}
+                    src={icon}
+                    alt="icon"
+                />
+                <Form className={cls.profile_container_form}>
+                    <div className={cls.profile_container_form_fields}>
+                        {dictonariesFields.map((field) => (
+                            <Field
+                                fieldName={field.fieldName}
+                                fieldType={field.fieldType}
+                                key={field.key}
+                                fieldKey={field.key}
+                                placeholder={field.placeholder}
+                                disabled={disabled}
+                                profileValues={profileValues}
+                                setProfileValues={setProfileValues}
+                            />
+                        ))}
+                    </div>
+                    <Button onClick={updateFunc}>{textBtn}</Button>
+                </Form>
+            </div>
         </div>
     );
 });
