@@ -12,5 +12,5 @@ test('Profile renders correctly', () => {
             </BrowserRouter>
         </Provider>,
     );
-    expect(screen.getByText('Profile')).toBeDefined();
+    expect(screen.getByText('Профиль')).toBeDefined();
 });
