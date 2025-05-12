@@ -4,6 +4,8 @@ dotenv.config();
 export default {
 	preset: 'ts-jest',
 	testEnvironment: 'jsdom',
+	setupFiles: ['<rootDir>/jest.setup.js'],
+	setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
 	coveragePathIgnorePatterns: ['\\\\node_modules\\\\'],
 	testMatch: ['<rootDir>/src/**/*.test.{ts,tsx}'],
 	moduleFileExtensions: ['js', 'ts', 'tsx', 'json', 'node'],
