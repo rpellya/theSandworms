@@ -9,7 +9,7 @@ interface ModalProps {
     title: string;
     children: React.ReactNode;
 }
-
+//
 export const Modal: React.FC<ModalProps> = memo(
     ({ isOpen, onClose, title, children }) => {
         if (!isOpen) return null;
