@@ -1,3 +1,4 @@
+import { ErrorBoundary } from 'error-boundary/ErrorBoundary';
 import { AppRouter } from './providers/router';
 import { Suspense, useEffect } from 'react';
 
@@ -28,7 +29,9 @@ const App = () => {
                         Вся разработка идет в рамках компонента <AppRouter /> 
                         В который будем складывать все странциы нашего веб-приложения
                         */}
-                    <AppRouter />
+                    <ErrorBoundary>
+                        <AppRouter />
+                    </ErrorBoundary>
                 </div>
             </Suspense>
         </div>

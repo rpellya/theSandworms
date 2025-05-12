@@ -69,6 +69,7 @@ export const Profile: React.FC = memo(() => {
             setIcon(`${baseUrl}/resources${data.avatar}`);
         }
     }, [data, icon]);
+
     return (
         <div className={cls.profile}>
             <header className={cls.profile_header}>
