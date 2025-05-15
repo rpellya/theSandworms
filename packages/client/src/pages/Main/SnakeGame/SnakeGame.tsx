@@ -8,7 +8,7 @@ export const SnakeGame = memo(() => {
     return (
         <div className={cls.snakeGame}>
             <div className={cls.snakeGame__score}>
-                Score:
+                Очки:
                 <span>{score}</span>
             </div>
             <canvas ref={canvasRef} className={cls.snakeGame__canvas} />
