@@ -4,7 +4,7 @@ import { Button } from 'components/Button';
 
 import './Register.module.scss';
 
-interface UserData {
+interface IUserData {
     first_name: string;
     second_name: string;
     login: string;
@@ -20,9 +20,9 @@ export const Register = memo(() => {
         handleSubmit,
         formState: { errors },
         watch,
-    } = useForm<UserData>();
+    } = useForm<IUserData>();
 
-    const onSubmit = (values: UserData) => {
+    const onSubmit = (values: IUserData) => {
         console.log('Form values');
         console.log(values);
         console.log('TODO: call to API');
