@@ -14,8 +14,9 @@
     --font-line-xs: 16px;
     --font-xs: var(--font-size-xs) / var(--font-line-xs) var(--font-family-main);
     --font-size-s: 12px;
-    --font-line-s: 20px;
+    --font-line-sm: 20px;
     --font-s: var(--font-size-s) / var(--font-line-s) var(--font-family-main);
+    --font-sm: var(--font-size-s) / var(--font-line-sm) var(--font-family-main);
     --font-size-m: 16px;
     --font-line-m: 24px;
     --font-m: var(--font-size-m) / var(--font-line-m) var(--font-family-main);
@@ -25,4 +26,15 @@
     --font-size-xl: 32px;
     --font-line-xl: 40px;
     --font-xl: var(--font-size-xl) / var(--font-line-xl) var(--font-family-main);
+
+    --space-xs: 2px;
+    --space-s: 4px;
+    --space-m: 8px;
+    --space-l: 16px;
+    --space-xl: 24px;
+    --space-xxl: 32px;
+
+    --radius-s: 4px;
+    --radius-m: 8px;
+    --radius-l: 16px;
 }

@@ -1,5 +1,6 @@
 import { Main } from 'pages/Main';
 import { Profile } from 'pages/Profile';
+import { Register } from 'pages/Register';
 import { CodeError } from 'pages/CodeError';
 import { RouteProps } from 'react-router-dom';
 import { Forum } from 'pages/Forum';
@@ -55,7 +56,7 @@ export const routeConfig: Record<AppRoutes, RouteProps> = {
     },
     [AppRoutes.REGISTER]: {
         path: RoutePath.register,
-        element: 'Register (example)',
+        element: <Register />,
     },
     [AppRoutes.ABOUT]: {
         path: RoutePath.about,
