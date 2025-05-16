@@ -1,4 +1,3 @@
-// ErrorBoundary.tsx
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 import cls from './ErrorBoundary.module.scss';
 
