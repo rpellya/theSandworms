@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { FieldValues, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { Button } from 'components/Button';
 
 import './Register.module.scss';
