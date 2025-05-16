@@ -2,13 +2,16 @@ import { memo } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
 import { Button } from 'components/Button';
 
-import './Register.scss';
+import './Register.module.scss';
 
-interface IUserData {
+interface UserData {
+    first_name: string;
+    second_name: string;
     login: string;
-    password: string;
-    password2?: string;
     email: string;
+    phone: string;
+    password: string;
+    password2: string;
 }
 
 export const Register = memo(() => {
@@ -17,9 +20,9 @@ export const Register = memo(() => {
         handleSubmit,
         formState: { errors },
         watch,
-    } = useForm();
+    } = useForm<UserData>();
 
-    const onSubmit = (values: IUserData | FieldValues) => {
+    const onSubmit = (values: UserData) => {
         console.log('Form values');
         console.log(values);
         console.log('TODO: call to API');
@@ -32,9 +35,37 @@ export const Register = memo(() => {
     return (
         <div className="register">
             <div className="register_content">
-                <div className="register_content_title">Регистрация</div>
+                <h2 className="register_content_title">Регистрация</h2>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="register_content_fields">
+                        <label htmlFor="first_name" className="label">
+                            Имя
+                            <input
+                                {...register('first_name', { required: true })}
+                                name="first_name"
+                                type="text"
+                                className="input"
+                                placeholder="Имя"
+                            />
+                            {errors.first_name?.type === 'required' && (
+                                <div className="error">Имя обязательно</div>
+                            )}
+                        </label>
+
+                        <label htmlFor="second_name" className="label">
+                            Имя
+                            <input
+                                {...register('second_name', { required: true })}
+                                name="second_name"
+                                type="text"
+                                className="input"
+                                placeholder="Фамилия"
+                            />
+                            {errors.second_name?.type === 'required' && (
+                                <div className="error">Фамилия обязательна</div>
+                            )}
+                        </label>
+
                         <label htmlFor="login" className="label">
                             Логин
                             <input
@@ -43,7 +74,7 @@ export const Register = memo(() => {
                                 type="text"
                                 className="input"
                                 placeholder="Логин"
-                            ></input>
+                            />
                             {errors.login?.type === 'required' && (
                                 <div className="error">Логин обязателен</div>
                             )}
@@ -57,7 +88,7 @@ export const Register = memo(() => {
                                 type="password"
                                 className="input"
                                 placeholder="Пароль"
-                            ></input>
+                            />
                             {errors.password?.type === 'required' && (
                                 <div className="error">Без пароля никуда</div>
                             )}
@@ -78,7 +109,7 @@ export const Register = memo(() => {
                                 type="password"
                                 className="input"
                                 placeholder="Пароль ещё раз"
-                            ></input>
+                            />
                             {errors.password2?.type === 'required' && (
                                 <div className="error">
                                     Пароль надо повторить
@@ -91,6 +122,22 @@ export const Register = memo(() => {
                             )}
                         </label>
 
+                        <label htmlFor="phone" className="label">
+                            Email
+                            <input
+                                {...register('phone', { required: true })}
+                                name="phone"
+                                type="text"
+                                className="input"
+                                placeholder="Телефон"
+                            />
+                            {errors.phone?.type === 'required' && (
+                                <div className="error">
+                                    Без телефона как без рук
+                                </div>
+                            )}
+                        </label>
+
                         <label htmlFor="email" className="label">
                             Email
                             <input
@@ -99,7 +146,7 @@ export const Register = memo(() => {
                                 type="email"
                                 className="input"
                                 placeholder="Почта"
-                            ></input>
+                            />
                             {errors.email?.type === 'required' && (
                                 <div className="error">
                                     Электропочта нужна как воздух
@@ -108,8 +155,12 @@ export const Register = memo(() => {
                         </label>
                     </div>
                     <div className="register_content_buttons">
-                        <Button type="submit">Регистрация</Button>
-                        <Button onClick={doEnter}>Вход</Button>
+                        <Button className="content_button" type="submit">
+                            Регистрация
+                        </Button>
+                        <Button className="content_button" onClick={doEnter}>
+                            Вход
+                        </Button>
                     </div>
                 </form>
             </div>

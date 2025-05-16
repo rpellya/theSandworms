@@ -66,12 +66,9 @@
             align-items: stretch;
             width: calc(var(--space-s) * 90);
 
-            & > Button:first-child {
+            & > .content_button:first-child {
                 margin-bottom: var(--space-m);
             }
         }
-
-
     }
-
 }
