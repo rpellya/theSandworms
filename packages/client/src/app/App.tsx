@@ -1,4 +1,4 @@
-import { ErrorBoundary } from 'error-boundary/ErrorBoundary';
+import { ErrorBoundary } from 'app/providers/error-boundary/ErrorBoundary';
 import { AppRouter } from './providers/router';
 import { Suspense, useEffect } from 'react';
 
