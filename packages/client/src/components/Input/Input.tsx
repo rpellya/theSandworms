@@ -3,7 +3,7 @@ import cls from './Input.module.scss';
 import { classNames } from 'app/lib/classNames';
 import { TextLabel } from 'components/TextLabel';
 
-interface InputProps extends React.HTMLAttributes<HTMLInputElement> {
+interface InputProps extends React.AllHTMLAttributes<HTMLInputElement> {
     labelClassName?: string;
     inputClassName?: string;
     type: string;

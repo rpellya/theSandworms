@@ -1,6 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+@font-face {
+    font-family: 'FredokaOneFont';
+    src: url('src/assets/fonts/FredokaOne-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 :root {
     --font-family-main: 'Roboto', serif;
+    --font-family-custom: 'FredokaOneFont', sans-serif;
     --font-size-xs: 8px;
     --font-line-xs: 16px;
     --font-xs: var(--font-size-xs) / var(--font-line-xs) var(--font-family-main);
