@@ -4,7 +4,7 @@ import {
     LeaderBoardContent,
 } from 'components/LeaderBoardContent/LeaderBoardContent';
 
-import './LeaderBoard.scss';
+import './LeaderBoard.module.scss';
 
 const mockLeaders: ILeaders = {
     list: [
