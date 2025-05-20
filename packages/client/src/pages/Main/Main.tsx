@@ -6,16 +6,36 @@ import { AppLink } from 'components/Link/AppLink';
 import logo from '/src/assets/img/logo.webp';
 import { SnakeGame } from './SnakeGame';
 import { Button } from '../../components/Button';
+import { GameOver } from 'components/GameOver/GameOver';
 
 export const Main = memo(() => {
     const [isPlaying, setIsPlaying] = useState(false);
+    const [isOver, setIsOver] = useState(false);
+
+    const score = 100500;
 
     const handlePlayClick = () => {
+        setIsOver(false);
         setIsPlaying(true);
+    };
+
+    const handleHome = () => {
+        setIsOver(false);
+        setIsPlaying(false);
     };
 
     if (isPlaying) {
         return <SnakeGame />;
+    }
+
+    if (isOver) {
+        return (
+            <GameOver
+                score={score}
+                restart={handlePlayClick}
+                home={handleHome}
+            />
+        );
     }
 
     return (
