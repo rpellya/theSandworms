@@ -27,7 +27,6 @@ export const Register = memo(() => {
     } = useForm<IUserData>();
     const navigate = useNavigate();
     const [funcRegisterApi] = useRegisterApiMutation();
-    console.log('errors', errors);
     const onSubmit = async (values: IUserData) => {
         try {
             const response = await funcRegisterApi(values);
@@ -103,7 +102,9 @@ export const Register = memo(() => {
                                 placeholder="Пароль"
                             />
                             {errors.password?.type === 'required' && (
-                                <div className="error">Без пароля никуда</div>
+                                <div className={cls.error}>
+                                    Без пароля никуда
+                                </div>
                             )}
                         </label>
 
