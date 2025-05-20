@@ -1,5 +1,4 @@
 import { Main } from 'pages/Main';
-import { LeaderBoard } from 'pages/LeaderBoard';
 import { Profile } from 'pages/Profile';
 import { Register } from 'pages/Register';
 import { CodeError } from 'pages/CodeError';
@@ -7,6 +6,7 @@ import { RouteProps } from 'react-router-dom';
 import { Forum } from 'pages/Forum';
 import { ForumTopicPage } from 'pages/Forum/ForumTopicPage';
 import { Login } from 'pages/Login';
+import { LeaderBoard } from 'pages/LeaderBoard';
 
 enum AppRoutes {
     MAIN = 'main',
