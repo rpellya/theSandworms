@@ -12,7 +12,8 @@ export const SnakeGame: React.FC<SnakeGameProps> = memo(({ onExit }) => {
     const [gameState, setGameState] = useState<
         'starting' | 'playing' | 'paused' | 'finished'
     >('starting');
-    const { canvasRef, score } = useSnakeGame(gameState);
+
+    const { canvasRef, score, resetGame } = useSnakeGame(gameState);
     const [countdown, setCountdown] = useState<number | null>(5);
 
     useEffect(() => {
@@ -51,6 +52,14 @@ export const SnakeGame: React.FC<SnakeGameProps> = memo(({ onExit }) => {
         setGameState('playing');
     };
 
+    const handleFinishClick = () => setGameState('finished');
+
+    const handleRestartClick = () => {
+        resetGame();
+        setCountdown(5);
+        setGameState('starting');
+    };
+
     return (
         <div className={cls.snakeGame}>
             <div className={cls.snakeGame__score}>
@@ -64,7 +73,8 @@ export const SnakeGame: React.FC<SnakeGameProps> = memo(({ onExit }) => {
                     <GameMenu>
                         <div className={cls.gameBrief}>
                             <p>Собирай еду и не сдавайся</p>
-                            <h1>{countdown}</h1>
+                            <p>Для вызова меню нажми ESC</p>
+                            <h1 className={cls.countDown}>{countdown}</h1>
                         </div>
                     </GameMenu>
                 </div>
@@ -84,7 +94,10 @@ export const SnakeGame: React.FC<SnakeGameProps> = memo(({ onExit }) => {
                                     </Button>
                                 </li>
                                 <li>
-                                    <Button className={cls.buttons}>
+                                    <Button
+                                        onClick={handleRestartClick}
+                                        className={cls.buttons}
+                                    >
                                         Начать заново
                                     </Button>
                                 </li>
@@ -97,12 +110,44 @@ export const SnakeGame: React.FC<SnakeGameProps> = memo(({ onExit }) => {
                                     </Button>
                                 </li>
                                 <li>
-                                    <Button className={cls.buttons}>
+                                    <Button
+                                        onClick={handleFinishClick}
+                                        className={cls.buttons}
+                                    >
                                         Имитация окончания
                                     </Button>
                                 </li>
                             </ul>
                         </div>
+                    </GameMenu>
+                </div>
+            )}
+
+            {gameState === 'finished' && (
+                <div className={cls.snakeGame__pauseOverlay}>
+                    <GameMenu>
+                        <h1>Игра окончена</h1>
+                        <p className={cls.scoreResult}>
+                            Ты набрал: <strong>{score}</strong> очков
+                        </p>
+                        <ul className={cls.GameList}>
+                            <li>
+                                <Button
+                                    className={cls.buttons}
+                                    onClick={handleRestartClick}
+                                >
+                                    Начать заново
+                                </Button>
+                            </li>
+                            <li>
+                                <Button
+                                    className={cls.buttons}
+                                    onClick={onExit}
+                                >
+                                    В главное меню
+                                </Button>
+                            </li>
+                        </ul>
                     </GameMenu>
                 </div>
             )}

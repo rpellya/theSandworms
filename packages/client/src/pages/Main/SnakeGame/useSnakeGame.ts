@@ -19,6 +19,10 @@ export const useSnakeGame = (
 	const snakeLength = 30;
 	const botLength = 45;
 
+	const initialSnake = [{ x: 0, y: 0 }];
+	const initialBotSnake = [{ x: 100, y: 100 }];
+	const initialSpeed = 1.5;
+
 	// Используем useRef для состояний, которые меняются в игре
 	const snakeRef = useRef([{ x: 0, y: 0 }]);
 	const foodsRef = useRef([{ x: 0, y: 0 }]);
@@ -26,6 +30,16 @@ export const useSnakeGame = (
 	const botSnakeRef = useRef([{ x: 100, y: 100 }]);
 	const botDirectionRef = useRef(Math.random() * 2 * Math.PI);
 	const localScoreRef = useRef(0);
+
+	const resetGame = () => {
+		snakeRef.current = [...initialSnake];
+		botSnakeRef.current = [...initialBotSnake];
+		speedRef.current = initialSpeed;
+		botDirectionRef.current = Math.random() * 2 * Math.PI;
+		foodsRef.current = [];
+		localScoreRef.current = 0;
+		setScore(0);
+	};
 
 	playerFace.onload = () => {
 		playerFaceRef.current = playerFace;
@@ -306,5 +320,5 @@ export const useSnakeGame = (
 		};
 	}, [gameState]);
 
-	return { canvasRef, score };
+	return { canvasRef, score, resetGame };
 };
