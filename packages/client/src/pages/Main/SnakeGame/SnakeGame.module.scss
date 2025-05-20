@@ -1,12 +1,14 @@
 .snakeGame {
     position: relative;
+    width: 100vw;
+    height: 100%;
 
     &__score {
         position: absolute;
         right: 10px;
         top: 10px;
         padding: 5px;
-        background: rgb(0,0,0,0.5);
+        background: rgb(0, 0, 0, 0.5);
         color: orange;
         z-index: 1;
     }
@@ -16,4 +18,62 @@
         position: absolute;
         inset: 0;
     }
+
+    &__countdownOverlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: none;
+        color: rgb(171, 26, 26);
+        z-index: 10;
+    }
+
+    &__pauseOverlay {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10;
+    }
+}
+
+.GameList {
+    list-style-type: none;
+    width: 300px;
+    font-family: var(--font-family-custom);
+    text-align: center;
+    height: 100%;
+    margin-top: 20px;
+   ;
+}
+
+.buttons {
+    background-color: chocolate;
+    color: white;
+    border: none;
+    height: 40px;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-top: 5px;
+    width: 100%;
+
+    &:hover {
+        background-color: #5d450f;
+    }
+}
+
+.gameBrief {
+    color: #5d450f;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
 }

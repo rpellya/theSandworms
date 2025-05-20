@@ -15,7 +15,7 @@ export const Main = memo(() => {
     };
 
     if (isPlaying) {
-        return <SnakeGame />;
+        return <SnakeGame onExit={() => setIsPlaying(false)} />;
     }
 
     return (

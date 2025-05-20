@@ -3,21 +3,29 @@ import playerFaceUrl from '/src/assets/faces/face-001.webp';
 import botFaceUrl from '/src/assets/faces/face-002.webp';
 import bgImgUrl from '/src/assets/bg/bg-004.webp';
 
-export const useSnakeGame = () => {
+export const useSnakeGame = (
+	gameState: 'starting' | 'playing' | 'paused' | 'finished',
+) => {
 	const canvasRef = useRef<HTMLCanvasElement | null>(null);
 	const playerFaceRef = useRef<HTMLImageElement | null>(null);
 	const botFaceRef = useRef<HTMLImageElement | null>(null);
 	const [score, setScore] = useState(0);
+
 	const playerFace = new Image();
 	const botFace = new Image();
 	playerFace.src = playerFaceUrl;
 	botFace.src = botFaceUrl;
 
-	// Настройки
 	const snakeLength = 30;
-	let speed = 1.5;
-	const botSpeed = 1;
 	const botLength = 45;
+
+	// Используем useRef для состояний, которые меняются в игре
+	const snakeRef = useRef([{ x: 0, y: 0 }]);
+	const foodsRef = useRef([{ x: 0, y: 0 }]);
+	const speedRef = useRef(1.5);
+	const botSnakeRef = useRef([{ x: 100, y: 100 }]);
+	const botDirectionRef = useRef(Math.random() * 2 * Math.PI);
+	const localScoreRef = useRef(0);
 
 	playerFace.onload = () => {
 		playerFaceRef.current = playerFace;
@@ -29,6 +37,7 @@ export const useSnakeGame = () => {
 
 	useEffect(() => {
 		const canvas = canvasRef.current;
+		let animationId: number;
 		if (!canvas) return;
 		const ctx = canvas.getContext('2d');
 
@@ -42,64 +51,49 @@ export const useSnakeGame = () => {
 
 		const center = { x: canvas.width / 2, y: canvas.height / 2 };
 		const mouse = { x: center.x, y: center.y };
-		const snake = [{ x: 0, y: 0 }];
-		let foods = [spawnFood()];
-		let localScore = 0;
-		let bgPattern: HTMLImageElement | null = null;
-
-		let botSnake = [{ x: 100, y: 100 }];
-		let botDirection = Math.random() * 2 * Math.PI;
 
 		document.addEventListener('mousemove', (e) => {
 			mouse.x = e.clientX;
 			mouse.y = e.clientY;
 		});
 
-		/**
-		 * Генерация еды
-		 */
 		function spawnFood() {
 			const range = 500;
+			const snake = snakeRef.current;
 			return {
 				x: snake[0].x + (Math.random() - 0.5) * range,
 				y: snake[0].y + (Math.random() - 0.5) * range,
 			};
 		}
 
-		/**
-		 * Обновление змейки игрока
-		 */
+		// Инициализация еды, если пусто
+		if (foodsRef.current.length === 0) foodsRef.current.push(spawnFood());
+
 		function updateSnake() {
+			const snake = snakeRef.current;
 			const head = snake[0];
 			const dx = mouse.x - center.x;
 			const dy = mouse.y - center.y;
 			const angle = Math.atan2(dy, dx);
-			const newX = head.x + Math.cos(angle) * speed;
-			const newY = head.y + Math.sin(angle) * speed;
+			const newX = head.x + Math.cos(angle) * speedRef.current;
+			const newY = head.y + Math.sin(angle) * speedRef.current;
 			snake.unshift({ x: newX, y: newY });
 			if (snake.length > snakeLength) snake.pop();
 		}
 
-		/**
-		 * Обновление змейки бота
-		 */
 		function updateBotSnake() {
+			const botSnake = botSnakeRef.current;
 			if (!botSnake.length) return;
 			const head = botSnake[0];
 			if (Math.random() < 0.2) {
-				botDirection += (Math.random() - 0.6) * 0.6;
+				botDirectionRef.current += (Math.random() - 0.6) * 0.6;
 			}
-			const newX = head.x + Math.cos(botDirection) * botSpeed;
-			const newY = head.y + Math.sin(botDirection) * botSpeed;
+			const newX = head.x + Math.cos(botDirectionRef.current) * 1;
+			const newY = head.y + Math.sin(botDirectionRef.current) * 1;
 			botSnake.unshift({ x: newX, y: newY });
 			if (botSnake.length > botLength) botSnake.pop();
 		}
 
-		/**
-		 * Отрисовка фона
-		 * @param offsetX
-		 * @param offsetY
-		 */
 		function drawBackground(offsetX: number, offsetY: number) {
 			if (!canvas || !ctx || !bgPattern) return;
 			const patternSize = 256;
@@ -133,12 +127,9 @@ export const useSnakeGame = () => {
 			}
 		}
 
-		/**
-		 * Отрисовка змейки игрока
-		 */
 		function drawSnake() {
 			if (!ctx) return;
-
+			const snake = snakeRef.current;
 			for (let i = snake.length - 1; i > 0; i--) {
 				const part = snake[i];
 				const screenX = center.x + (part.x - snake[0].x);
@@ -149,11 +140,10 @@ export const useSnakeGame = () => {
 				ctx.fill();
 			}
 
-			// Отрисовка лица и поворот в направлении движения
 			const playerFaceImg = playerFaceRef.current;
 			if (playerFaceImg && playerFaceImg.complete) {
 				const head = snake[0];
-				const neck = snake[1] || head; // Используем вторую точку для направления
+				const neck = snake[1] || head;
 				const dx = head.x - neck.x;
 				const dy = head.y - neck.y;
 				const angle = Math.atan2(dy, dx) - Math.PI / 2;
@@ -161,7 +151,7 @@ export const useSnakeGame = () => {
 				ctx.save();
 				ctx.translate(center.x, center.y);
 				ctx.rotate(angle);
-				ctx.drawImage(playerFaceImg, -12, -12, 24, 24); // Рисуем относительно центра
+				ctx.drawImage(playerFaceImg, -12, -12, 24, 24);
 				ctx.restore();
 			} else {
 				ctx.beginPath();
@@ -171,11 +161,13 @@ export const useSnakeGame = () => {
 			}
 		}
 
-		/**
-		 * Отрисовка змейки бота
-		 */
 		function drawBotSnake() {
-			if (!ctx || botSnake.length === 0) return;
+			if (!ctx) return;
+			const botSnake = botSnakeRef.current;
+			if (botSnake.length === 0) return;
+
+			const snake = snakeRef.current;
+
 			for (let i = botSnake.length - 1; i > 0; i--) {
 				const part = botSnake[i];
 				const screenX = center.x + (part.x - snake[0].x);
@@ -186,21 +178,20 @@ export const useSnakeGame = () => {
 				ctx.fill();
 			}
 			const head = botSnake[0];
-			const neck = botSnake[1] || head; // Используем вторую точку для направления
+			const neck = botSnake[1] || head;
 			const headX = center.x + (head.x - snake[0].x);
 			const headY = center.y + (head.y - snake[0].y);
 
 			const botFaceImg = botFaceRef.current;
 			if (botFaceImg && botFaceImg.complete) {
-				// Вычисляем угол для головы бота
 				const dx = head.x - neck.x;
 				const dy = head.y - neck.y;
-				const angle = Math.atan2(dy, dx) - Math.PI / 2; // Лицо должно смотреть вперед
+				const angle = Math.atan2(dy, dx) - Math.PI / 2;
 
 				ctx.save();
 				ctx.translate(headX, headY);
-				ctx.rotate(angle); // Поворачиваем в направлении движения
-				ctx.drawImage(botFaceImg, -10, -10, 20, 20); // Рисуем относительно центра
+				ctx.rotate(angle);
+				ctx.drawImage(botFaceImg, -10, -10, 20, 20);
 				ctx.restore();
 			} else {
 				ctx.beginPath();
@@ -210,10 +201,9 @@ export const useSnakeGame = () => {
 			}
 		}
 
-		/**
-		 * Логика контакта головы змейки бота и тела змейки игрока
-		 */
 		function checkBotCollisionWithPlayer() {
+			const botSnake = botSnakeRef.current;
+			const snake = snakeRef.current;
 			const botHead = botSnake[0];
 			for (let i = 5; i < snake.length; i++) {
 				const part = snake[i];
@@ -223,10 +213,9 @@ export const useSnakeGame = () => {
 			return false;
 		}
 
-		/**
-		 * При умирании бота вместо его змейки генерируется еда
-		 */
 		function spawnFoodFromBot() {
+			const botSnake = botSnakeRef.current;
+			const foods = foodsRef.current;
 			const count = Math.floor(botSnake.length / 6);
 			const step = Math.floor(botSnake.length / count);
 			for (
@@ -238,11 +227,10 @@ export const useSnakeGame = () => {
 			}
 		}
 
-		/**
-		 * Отрисовка еды
-		 */
 		function drawFood() {
 			if (!ctx) return;
+			const foods = foodsRef.current;
+			const snake = snakeRef.current;
 			for (const food of foods) {
 				const screenX = center.x + (food.x - snake[0].x);
 				const screenY = center.y + (food.y - snake[0].y);
@@ -253,56 +241,60 @@ export const useSnakeGame = () => {
 			}
 		}
 
-		/**
-		 * Главный цикл отрисовки
-		 */
 		function loop() {
 			if (!canvas || !ctx) return;
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-			updateSnake();
-			updateBotSnake();
+			if (gameState === 'playing') {
+				updateSnake();
+				updateBotSnake();
 
-			const head = snake[0];
-			foods = foods.filter((food) => {
-				const dist = Math.hypot(head.x - food.x, head.y - food.y);
-				if (dist < 12) {
-					localScore++;
-					setScore(localScore);
-					speed += 0.1;
-					for (let i = 0; i < 10; i++) {
-						snake.push({ ...snake[snake.length - 1] });
+				const snake = snakeRef.current;
+				const foods = foodsRef.current;
+
+				const head = snake[0];
+				foodsRef.current = foods.filter((food) => {
+					const dist = Math.hypot(head.x - food.x, head.y - food.y);
+					if (dist < 12) {
+						localScoreRef.current++;
+						setScore(localScoreRef.current);
+						speedRef.current += 0.1;
+						for (let i = 0; i < 10; i++) {
+							snake.push({ ...snake[snake.length - 1] });
+						}
+						return false;
 					}
-					return false;
+					return true;
+				});
+
+				if (checkBotCollisionWithPlayer()) {
+					spawnFoodFromBot();
+					botSnakeRef.current = [];
 				}
-				return true;
-			});
 
-			if (checkBotCollisionWithPlayer()) {
-				spawnFoodFromBot();
-				botSnake = [];
+				if (botSnakeRef.current.length === 0) {
+					botSnakeRef.current = [
+						{
+							x: Math.random() * 500 - 250,
+							y: Math.random() * 500 - 250,
+						},
+					];
+					botDirectionRef.current = Math.random() * 2 * Math.PI;
+				}
 			}
 
-			if (botSnake.length === 0) {
-				botSnake = [
-					{
-						x: Math.random() * 500 - 250,
-						y: Math.random() * 500 - 250,
-					},
-				];
-				botDirection = Math.random() * 2 * Math.PI;
-			}
-
-			drawBackground(snake[0].x, snake[0].y);
+			drawBackground(snakeRef.current[0].x, snakeRef.current[0].y);
 			drawFood();
 			drawSnake();
 			drawBotSnake();
 
-			requestAnimationFrame(loop);
+			animationId = requestAnimationFrame(loop);
 		}
 
 		const bgImg = new Image();
 		bgImg.src = bgImgUrl;
+		let bgPattern: HTMLImageElement | null = null;
+
 		bgImg.onload = () => {
 			bgPattern = bgImg;
 			loop();
@@ -310,8 +302,9 @@ export const useSnakeGame = () => {
 
 		return () => {
 			window.removeEventListener('resize', resizeCanvas);
+			if (animationId) cancelAnimationFrame(animationId);
 		};
-	}, []);
+	}, [gameState]);
 
 	return { canvasRef, score };
 };
