@@ -1,11 +1,23 @@
-import { memo } from 'react';
+import { memo, useState } from 'react';
 import cls from './Main.module.scss';
 import { SnakeImage } from './SnakeImage/SnakeImage';
 import { RoutePath } from 'app/providers/router/config/routeConfig';
 import { AppLink } from 'components/Link/AppLink';
 import logo from '/src/assets/img/logo.webp';
+import { SnakeGame } from './SnakeGame';
+import { Button } from '../../components/Button';
 
 export const Main = memo(() => {
+    const [isPlaying, setIsPlaying] = useState(false);
+
+    const handlePlayClick = () => {
+        setIsPlaying(true);
+    };
+
+    if (isPlaying) {
+        return <SnakeGame />;
+    }
+
     return (
         <div className={cls.Main}>
             <div className={cls.mainMenu}>
@@ -13,11 +25,12 @@ export const Main = memo(() => {
                 <nav>
                     <ul>
                         <li>
-                            <AppLink
+                            <Button
                                 className={cls.appLink}
-                                to="#"
-                                text="Играть"
-                            />
+                                onClick={handlePlayClick}
+                            >
+                                Играть
+                            </Button>
                         </li>
                         <li>
                             <AppLink
