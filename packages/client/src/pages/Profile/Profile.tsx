@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button } from 'components/Button';
 import { memo, useEffect, useState } from 'react';
 import cls from './Profile.module.scss';
@@ -7,7 +8,6 @@ import { profileValuesDict } from './consts/profileValuesDict';
 import { AppLink } from 'components/Link/AppLink';
 import { Field } from './Fields/Field';
 import {
-    useGetAuthUserQuery,
     useLazyGetAuthUserQuery,
     useLogoutApiMutation,
 } from 'api/services/auth/authApi';
@@ -19,6 +19,9 @@ import {
 import { baseUrl } from 'consts/baseUrl';
 import { logout } from './helpers/logout';
 import { Form } from 'components/Form';
+import { useAppDispatch, useAppSelector } from 'api/store/hooks';
+import { setUserInfo } from 'api/services/auth/userInfoSlice';
+import { IUserInfo } from 'api/types';
 
 /**
  * Оборачиваем в memo, чтобы при рендеринге этого компонента не перерисовывался весь дочерний контент
@@ -27,12 +30,15 @@ export const Profile: React.FC = memo(() => {
     const [logoutApi] = useLogoutApiMutation();
     const [putUserApi] = usePuthUserMutation();
     const [updateAvatarProfile] = useUpdateAvatarProfileMutation();
-    const { data } = useGetAuthUserQuery();
     const [getUserData] = useLazyGetAuthUserQuery();
     const [disabled, setDisabled] = useState(true);
     const [textBtn, setTextBtn] = useState('Изменить');
     const [icon, setIcon] = useState('/avatar.svg');
-    const [profileValues, setProfileValues] = useState(profileValuesDict);
+    const [profileValues, setProfileValues] = useState<
+        IUserInfo | Record<string, any>
+    >(profileValuesDict);
+    const { userInfo } = useAppSelector((state) => state.userReducer);
+    const dispatch = useAppDispatch();
 
     const navigate = useNavigate();
     const updateFunc = () => {
@@ -64,12 +70,13 @@ export const Profile: React.FC = memo(() => {
         }
     };
     useEffect(() => {
-        if (data) {
-            setProfileValues(data);
-            setIcon(`${baseUrl}/resources${data.avatar}`);
+        if (userInfo) {
+            dispatch(setUserInfo(userInfo));
+            setIcon(`${baseUrl}/resources${userInfo.avatar}`);
+            setProfileValues(userInfo);
         }
-    }, [data, icon]);
-
+        getUserData().then((res) => dispatch(setUserInfo(res.data)));
+    }, [userInfo, icon]);
     return (
         <div className={cls.profile}>
             <header className={cls.profile_header}>

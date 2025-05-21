@@ -10,6 +10,8 @@ import {
 } from 'api/services/auth/authApi';
 import { Form } from 'components/Form';
 import { useNavigate } from 'react-router-dom';
+import { useAppDispatch } from 'api/store/hooks';
+import { setUserInfo } from 'api/services/auth/userInfoSlice';
 
 interface LoginProps {
     regPath: string;
@@ -23,6 +25,7 @@ export const Login: React.FC<LoginProps> = memo(({ regPath }) => {
     const [getAuthUser] = useLazyGetAuthUserQuery();
     const navigate = useNavigate();
     const [bodyAuth, setBodyAuth] = useState(initialBodyAuth);
+    const dispatch = useAppDispatch();
     const onChange = (
         key: string,
         event: React.ChangeEvent<HTMLInputElement>,
@@ -42,13 +45,13 @@ export const Login: React.FC<LoginProps> = memo(({ regPath }) => {
 
                 if (result.status === 'fulfilled') {
                     navigate('/');
+                    dispatch(setUserInfo(result.data));
                 }
             }
         } catch (err) {
-            console.log('error:', err);
+            console.error('error:', err);
         }
     };
-
     return (
         <div className={cls.loginPage}>
             <Form method="submit">
