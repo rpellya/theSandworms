@@ -4,14 +4,11 @@ import React, { memo, useState } from 'react';
 import { Button } from 'components/Button';
 import { AppLink } from 'components/Link/AppLink';
 import { Input } from 'components/Input';
-import {
-    useLazyGetAuthUserQuery,
-    useLoginApiMutation,
-} from 'store/services/auth/authApi';
+import { useLazyGetAuthUserQuery, useLoginApiMutation } from 'api/auth/authApi';
 import { Form } from 'components/Form';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from 'store/hooks';
-import { setUserInfo } from 'store/services/auth/userInfoSlice';
+import { setUserInfo } from 'store/userInfoSlice';
 
 interface LoginProps {
     regPath: string;

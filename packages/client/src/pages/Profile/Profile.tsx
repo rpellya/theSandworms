@@ -10,17 +10,17 @@ import { Field } from './Fields/Field';
 import {
     useLazyGetAuthUserQuery,
     useLogoutApiMutation,
-} from 'store/services/auth/authApi';
+} from 'api/auth/authApi';
 import { useNavigate } from 'react-router-dom';
 import {
     usePuthUserMutation,
     useUpdateAvatarProfileMutation,
-} from 'store/services/gameApi/rtk';
+} from 'api/gameApi/rtk';
 import { baseUrl } from 'consts/baseUrl';
 import { logout } from './helpers/logout';
 import { Form } from 'components/Form';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
-import { setUserInfo } from 'store/services/auth/userInfoSlice';
+import { setUserInfo } from 'store/userInfoSlice';
 import { IUserInfo } from 'store/types';
 
 /**
@@ -72,11 +72,16 @@ export const Profile: React.FC = memo(() => {
     useEffect(() => {
         if (userInfo) {
             dispatch(setUserInfo(userInfo));
-            setIcon(`${baseUrl}/resources${userInfo.avatar}`);
             setProfileValues(userInfo);
         }
         getUserData().then((res) => dispatch(setUserInfo(res.data)));
+        if (userInfo?.avatar === null) {
+            setIcon('/avatar.svg');
+        } else {
+            setIcon(`${baseUrl}/resources${userInfo?.avatar}`);
+        }
     }, [userInfo, icon]);
+    console.log(userInfo);
     return (
         <div className={cls.profile}>
             <header className={cls.profile_header}>

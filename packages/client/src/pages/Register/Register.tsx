@@ -5,7 +5,7 @@ import { Button } from 'components/Button';
 import cls from './Register.module.scss';
 import { RoutePath } from 'app/providers/router/config/routeConfig';
 import { useNavigate } from 'react-router-dom';
-import { useRegisterApiMutation } from 'store/services/auth/authApi';
+import { useRegisterApiMutation } from 'api/auth/authApi';
 import { AppLink } from 'components/Link/AppLink';
 
 interface IUserData {
