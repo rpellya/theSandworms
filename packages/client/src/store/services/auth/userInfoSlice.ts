@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { IUserInfo } from 'api/types';
+import { IUserInfo } from 'store/types';
 
 interface IInitialState {
 	userInfo: IUserInfo | null;

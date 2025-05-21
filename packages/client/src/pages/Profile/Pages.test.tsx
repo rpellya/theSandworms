@@ -1,8 +1,9 @@
 import { render, screen } from '@testing-library/react';
 import { Profile } from './Profile';
 import { Provider } from 'react-redux';
-import { store } from '../../api/store/index';
+// import { store } from '../../store/store/index';
 import { BrowserRouter } from 'react-router-dom';
+import { store } from 'store';
 
 test('Profile renders correctly', () => {
     render(

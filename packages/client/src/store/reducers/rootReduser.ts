@@ -1,7 +1,7 @@
 import { combineReducers } from '@reduxjs/toolkit';
-import { authApi } from 'api/services/auth/authApi';
-import userReducer from 'api/services/auth/userInfoSlice';
-import { rtkApi } from 'api/services/gameApi/rtk';
+import { authApi } from 'store/services/auth/authApi';
+import userReducer from 'store/services/auth/userInfoSlice';
+import { rtkApi } from 'store/services/gameApi/rtk';
 
 export const rootReducer = combineReducers({
 	[authApi.reducerPath]: authApi.reducer,

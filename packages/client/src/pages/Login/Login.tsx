@@ -7,11 +7,11 @@ import { Input } from 'components/Input';
 import {
     useLazyGetAuthUserQuery,
     useLoginApiMutation,
-} from 'api/services/auth/authApi';
+} from 'store/services/auth/authApi';
 import { Form } from 'components/Form';
 import { useNavigate } from 'react-router-dom';
-import { useAppDispatch } from 'api/store/hooks';
-import { setUserInfo } from 'api/services/auth/userInfoSlice';
+import { useAppDispatch } from 'store/hooks';
+import { setUserInfo } from 'store/services/auth/userInfoSlice';
 
 interface LoginProps {
     regPath: string;

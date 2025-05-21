@@ -10,18 +10,18 @@ import { Field } from './Fields/Field';
 import {
     useLazyGetAuthUserQuery,
     useLogoutApiMutation,
-} from 'api/services/auth/authApi';
+} from 'store/services/auth/authApi';
 import { useNavigate } from 'react-router-dom';
 import {
     usePuthUserMutation,
     useUpdateAvatarProfileMutation,
-} from 'api/services/gameApi/rtk';
+} from 'store/services/gameApi/rtk';
 import { baseUrl } from 'consts/baseUrl';
 import { logout } from './helpers/logout';
 import { Form } from 'components/Form';
-import { useAppDispatch, useAppSelector } from 'api/store/hooks';
-import { setUserInfo } from 'api/services/auth/userInfoSlice';
-import { IUserInfo } from 'api/types';
+import { useAppDispatch, useAppSelector } from 'store/hooks';
+import { setUserInfo } from 'store/services/auth/userInfoSlice';
+import { IUserInfo } from 'store/types';
 
 /**
  * Оборачиваем в memo, чтобы при рендеринге этого компонента не перерисовывался весь дочерний контент
