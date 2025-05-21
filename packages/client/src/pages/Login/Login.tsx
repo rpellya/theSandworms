@@ -1,20 +1,57 @@
 import { TextLabel } from 'components/TextLabel';
 import cls from './Login.module.scss';
-import { FormEventHandler, memo } from 'react';
-import { Form } from 'components/Form';
+import React, { memo, useState } from 'react';
 import { Button } from 'components/Button';
 import { AppLink } from 'components/Link/AppLink';
 import { Input } from 'components/Input';
+import {
+    useLazyGetAuthUserQuery,
+    useLoginApiMutation,
+} from 'api/services/auth/authApi';
+import { Form } from 'components/Form';
+import { useNavigate } from 'react-router-dom';
 
 interface LoginProps {
     regPath: string;
-    onSubmit: FormEventHandler;
 }
+const initialBodyAuth = {
+    login: '',
+    password: '',
+};
+export const Login: React.FC<LoginProps> = memo(({ regPath }) => {
+    const [loginFunc] = useLoginApiMutation();
+    const [getAuthUser] = useLazyGetAuthUserQuery();
+    const navigate = useNavigate();
+    const [bodyAuth, setBodyAuth] = useState(initialBodyAuth);
+    const onChange = (
+        key: string,
+        event: React.ChangeEvent<HTMLInputElement>,
+    ) => {
+        setBodyAuth((prevState) => ({
+            ...prevState,
+            [key]: event.target.value,
+        }));
+    };
+    const onSubmit = async (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+        try {
+            const response = await loginFunc(bodyAuth);
 
-export const Login: React.FC<LoginProps> = memo(({ regPath, onSubmit }) => {
+            if (response.data === 'OK') {
+                const result = await getAuthUser();
+
+                if (result.status === 'fulfilled') {
+                    navigate('/');
+                }
+            }
+        } catch (err) {
+            console.log('error:', err);
+        }
+    };
+
     return (
         <div className={cls.loginPage}>
-            <Form onSubmit={onSubmit} method="submit">
+            <Form method="submit">
                 <TextLabel
                     className={cls.loginPage__title}
                     text="Вход в систему"
@@ -25,6 +62,8 @@ export const Login: React.FC<LoginProps> = memo(({ regPath, onSubmit }) => {
                     placeholder="Введите логин"
                     type="text"
                     key="login"
+                    value={bodyAuth.login}
+                    onChange={(event) => onChange('login', event)}
                 />
                 <TextLabel
                     className={cls.loginPage__errorLabel}
@@ -36,6 +75,8 @@ export const Login: React.FC<LoginProps> = memo(({ regPath, onSubmit }) => {
                     type="password"
                     placeholder="Введите пароль"
                     key="password"
+                    value={bodyAuth.password}
+                    onChange={(event) => onChange('password', event)}
                 />
                 <TextLabel
                     className={cls.loginPage__errorLabel}
@@ -45,7 +86,7 @@ export const Login: React.FC<LoginProps> = memo(({ regPath, onSubmit }) => {
                 <Button
                     className={cls.loginPage__button}
                     key="submit"
-                    onClick={onSubmit}
+                    onClick={(e) => onSubmit(e)}
                 >
                     Войти
                 </Button>
