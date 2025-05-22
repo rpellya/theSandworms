@@ -1,6 +1,6 @@
-import { IFieldType } from './types';
+import { FieldType } from './types';
 
-export const dictonariesFields: IFieldType[] = [
+export const dictonariesFields: FieldType[] = [
 	{
 		fieldName: 'Фамилия',
 		key: 'second_name',

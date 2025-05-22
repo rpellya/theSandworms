@@ -53,6 +53,13 @@ export const Main = memo(() => {
                                 text="Лидеры"
                             />
                         </li>
+                        <li>
+                            <AppLink
+                                className={cls.appLink}
+                                to={RoutePath.profile}
+                                text="Профиль"
+                            />
+                        </li>
                     </ul>
                 </nav>
             </div>
