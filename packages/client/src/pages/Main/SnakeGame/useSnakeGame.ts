@@ -2,10 +2,9 @@ import { useEffect, useRef, useState } from 'react';
 import playerFaceUrl from '/src/assets/faces/face-001.webp';
 import botFaceUrl from '/src/assets/faces/face-002.webp';
 import bgImgUrl from '/src/assets/bg/bg-004.webp';
+import { TGameState } from './types';
 
-export const useSnakeGame = (
-	gameState: 'starting' | 'playing' | 'paused' | 'finished',
-) => {
+export const useSnakeGame = (gameState: TGameState) => {
 	const canvasRef = useRef<HTMLCanvasElement | null>(null);
 	const playerFaceRef = useRef<HTMLImageElement | null>(null);
 	const botFaceRef = useRef<HTMLImageElement | null>(null);

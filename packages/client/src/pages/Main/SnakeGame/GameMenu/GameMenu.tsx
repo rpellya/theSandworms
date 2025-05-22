@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react';
 import cls from './GameMenu.module.scss';
+import { classNames as cn } from 'app/lib/classNames';
 
 interface GameMenuProps {
     className?: string;
@@ -7,5 +8,5 @@ interface GameMenuProps {
 }
 
 export const GameMenu: React.FC<GameMenuProps> = ({ className, children }) => {
-    return <div className={`${cls.GameMenu} ${className}`}>{children}</div>;
+    return <div className={cn(cls.GameMenu, {}, [className])}>{children}</div>;
 };
