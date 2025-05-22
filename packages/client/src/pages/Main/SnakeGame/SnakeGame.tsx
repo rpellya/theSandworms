@@ -3,15 +3,14 @@ import { useSnakeGame } from './useSnakeGame';
 import cls from './SnakeGame.module.scss';
 import { GameMenu } from './GameMenu/GameMenu';
 import { Button } from 'components/Button';
+import { TGameState } from './types';
 
 interface SnakeGameProps {
     onExit: () => void;
 }
 
 export const SnakeGame: React.FC<SnakeGameProps> = memo(({ onExit }) => {
-    const [gameState, setGameState] = useState<
-        'starting' | 'playing' | 'paused' | 'finished'
-    >('starting');
+    const [gameState, setGameState] = useState<TGameState>('starting');
 
     const { canvasRef, score, resetGame } = useSnakeGame(gameState);
     const [countdown, setCountdown] = useState<number | null>(5);
@@ -28,25 +27,6 @@ export const SnakeGame: React.FC<SnakeGameProps> = memo(({ onExit }) => {
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, []);
-
-    useEffect(() => {
-        if (gameState !== 'starting') return;
-        if (countdown === null) return;
-
-        const timer = setInterval(() => {
-            setCountdown((prev) => {
-                if (prev === 1) {
-                    clearInterval(timer);
-                    setCountdown(null);
-                    setGameState('playing');
-                    return null;
-                }
-                return prev ? prev - 1 : null;
-            });
-        }, 1000);
-
-        return () => clearInterval(timer);
-    }, [gameState]);
 
     const handleResumeClick = () => {
         setGameState('playing');
@@ -74,7 +54,12 @@ export const SnakeGame: React.FC<SnakeGameProps> = memo(({ onExit }) => {
                         <div className={cls.gameBrief}>
                             <p>Собирай еду и не сдавайся</p>
                             <p>Для вызова меню нажми ESC</p>
-                            <h1 className={cls.countDown}>{countdown}</h1>
+                            <Button
+                                onClick={handleResumeClick}
+                                className={cls.buttons}
+                            >
+                                Начать
+                            </Button>
                         </div>
                     </GameMenu>
                 </div>
