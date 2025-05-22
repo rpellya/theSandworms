@@ -1,10 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { IUserInfo } from 'store/types';
+import { UserInfo } from 'store/types';
 
-interface IInitialState {
-	userInfo: IUserInfo | null;
+interface InitialState {
+	userInfo: UserInfo | null;
 }
-const initialState: IInitialState = {
+const initialState: InitialState = {
 	userInfo: null,
 };
 

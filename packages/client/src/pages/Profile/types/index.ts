@@ -1,10 +1,10 @@
-export interface IFieldType {
+export interface FieldType {
 	fieldName: string;
 	key: ProfileFieldKey;
 	placeholder: string;
 	fieldType: string;
 }
-export interface IProfileValues {
+export interface ProfileValues {
 	profileValues: {
 		id: number;
 		avatar: string;

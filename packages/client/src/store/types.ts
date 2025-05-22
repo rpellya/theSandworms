@@ -1,4 +1,4 @@
-export interface IUserInfo {
+export interface UserInfo {
 	id: number | null;
 	first_name: string;
 	second_name: string;

@@ -21,7 +21,7 @@ import { logout } from './helpers/logout';
 import { Form } from 'components/Form';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { setUserInfo } from 'store/userInfoSlice';
-import { IUserInfo } from 'store/types';
+import { UserInfo } from 'store/types';
 
 /**
  * Оборачиваем в memo, чтобы при рендеринге этого компонента не перерисовывался весь дочерний контент
@@ -35,7 +35,7 @@ export const Profile: React.FC = memo(() => {
     const [textBtn, setTextBtn] = useState('Изменить');
     const [icon, setIcon] = useState('/avatar.svg');
     const [profileValues, setProfileValues] = useState<
-        IUserInfo | Record<string, any>
+        UserInfo | Record<string, any>
     >(profileValuesDict);
     const { userInfo } = useAppSelector((state) => state.userReducer);
     const dispatch = useAppDispatch();
@@ -81,7 +81,6 @@ export const Profile: React.FC = memo(() => {
             setIcon(`${baseUrl}/resources${userInfo?.avatar}`);
         }
     }, [userInfo, icon]);
-    console.log(userInfo);
     return (
         <div className={cls.profile}>
             <header className={cls.profile_header}>
