@@ -22,6 +22,7 @@ import { Form } from 'components/Form';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { setUserInfo } from 'store/userInfoSlice';
 import { UserInfo } from 'store/types';
+import { ProfileValues } from './types';
 
 /**
  * Оборачиваем в memo, чтобы при рендеринге этого компонента не перерисовывался весь дочерний контент
@@ -34,9 +35,8 @@ export const Profile: React.FC = memo(() => {
     const [disabled, setDisabled] = useState(true);
     const [textBtn, setTextBtn] = useState('Изменить');
     const [icon, setIcon] = useState('/avatar.svg');
-    const [profileValues, setProfileValues] = useState<
-        UserInfo | Record<string, any>
-    >(profileValuesDict);
+    const [profileValues, setProfileValues] =
+        useState<ProfileValues>(profileValuesDict);
     const { userInfo } = useAppSelector((state) => state.userReducer);
     const dispatch = useAppDispatch();
 

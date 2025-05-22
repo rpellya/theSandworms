@@ -5,16 +5,14 @@ export interface FieldType {
 	fieldType: string;
 }
 export interface ProfileValues {
-	profileValues: {
-		id: number;
-		avatar: string;
-		first_name: string;
-		second_name: string;
-		display_name: string;
-		login: string;
-		email: string;
-		phone: string;
-	};
+	id: number | null;
+	avatar: string;
+	first_name: string;
+	second_name: string;
+	display_name: string;
+	login: string;
+	email: string;
+	phone: string;
 }
 
 export type ProfileFieldKey =
