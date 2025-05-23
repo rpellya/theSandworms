@@ -1,5 +1,4 @@
 import { memo } from 'react';
-import { AppLink } from 'components/Link/AppLink';
 import {
     Leaders,
     LeaderBoardContent,
