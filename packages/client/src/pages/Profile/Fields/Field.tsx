@@ -1,14 +1,15 @@
 import React from 'react';
 import cls from './field.module.scss';
 import { changeInput } from '../helpers/changeInput';
+import { ProfileFieldKey, ProfileValues } from '../types';
 
 interface FieldProps {
     fieldName: string;
     placeholder: string;
     fieldType: string;
-    fieldKey: string;
-    profileValues: Record<string, any>;
-    setProfileValues: (value: any) => void;
+    fieldKey: ProfileFieldKey;
+    profileValues: ProfileValues;
+    setProfileValues: React.Dispatch<React.SetStateAction<ProfileValues>>;
     disabled: boolean;
 }
 

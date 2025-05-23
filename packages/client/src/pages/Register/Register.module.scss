@@ -4,7 +4,7 @@
     justify-content: center;
     align-items: center;
 
-    background-color: var(--secondary);
+    background-color: var(--basic);
 
     width: 100%;
     height: 100%;
@@ -14,6 +14,9 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
+        background-color: var(--white);
+        padding: var(--space-l);
+        border-radius: var(--radius-m);
 
         &_title {
             font: var(--font-l);
@@ -51,7 +54,7 @@
                     z-index: 2;
                     background: var(--secondary);
                     border: 1px solid var(--basic);
-                    border-radius: 10px;
+                    border-radius: var(--radius-m);
                     padding: var(--space-xs) var(--space-s);
 
                     font: var(--font-s);
@@ -64,10 +67,16 @@
             flex-direction: column;
             justify-content: flex-start;
             align-items: stretch;
+            gap: var(--space-m);
             width: calc(var(--space-s) * 90);
 
-            & > .content_button:first-child {
-                margin-bottom: var(--space-m);
+            &_btn {
+                border: none;
+                box-shadow: var(--shadow);
+                display: flex;
+                justify-content: center;
+                background-color: none;
+                cursor: pointer;
             }
         }
     }

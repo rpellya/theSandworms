@@ -1,7 +1,7 @@
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 import cls from './ErrorBoundary.module.scss';
 
-interface Props {
+interface ErrorBoundaryProps {
     children: ReactNode;
 }
 
@@ -10,7 +10,7 @@ interface State {
     errorMessage: string | null;
 }
 
-export class ErrorBoundary extends Component<Props, State> {
+export class ErrorBoundary extends Component<ErrorBoundaryProps, State> {
     state: State = {
         hasError: false,
         errorMessage: null,

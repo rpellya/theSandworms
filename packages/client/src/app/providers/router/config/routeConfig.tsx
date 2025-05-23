@@ -46,14 +46,7 @@ export const routeConfig: Record<AppRoutes, RouteProps> = {
     },
     [AppRoutes.LOGIN]: {
         path: RoutePath.login,
-        element: (
-            <Login
-                regPath={RoutePath.register}
-                onSubmit={() => {
-                    return true;
-                }} //подключем авторизацию здесь
-            />
-        ),
+        element: <Login regPath={RoutePath.register} />,
     },
     [AppRoutes.REGISTER]: {
         path: RoutePath.register,
