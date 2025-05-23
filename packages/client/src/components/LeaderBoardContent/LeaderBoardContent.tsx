@@ -15,7 +15,7 @@ export const LeaderBoardContent = memo((leaders: Leaders) => {
     return (
         <div className="list">
             {leaders.list.map((leader) => (
-                <div className="list_item">
+                <div className="list_item" key={leader.login}>
                     <div className="list_item_name" title={leader.login}>
                         {leader.login}
                     </div>
