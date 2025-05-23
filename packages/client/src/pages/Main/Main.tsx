@@ -25,7 +25,7 @@ export const Main = memo(() => {
     };
 
     if (isPlaying) {
-        return <SnakeGame />;
+        return <SnakeGame onExit={() => setIsPlaying(false)} />;
     }
 
     if (isOver) {
@@ -71,6 +71,13 @@ export const Main = memo(() => {
                                 className={cls.appLink}
                                 to={RoutePath.leaderboard}
                                 text="Лидеры"
+                            />
+                        </li>
+                        <li>
+                            <AppLink
+                                className={cls.appLink}
+                                to={RoutePath.profile}
+                                text="Профиль"
                             />
                         </li>
                     </ul>

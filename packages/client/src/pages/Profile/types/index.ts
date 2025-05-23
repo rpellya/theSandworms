@@ -1,20 +1,18 @@
-export interface IFieldType {
+export interface FieldType {
 	fieldName: string;
 	key: ProfileFieldKey;
 	placeholder: string;
 	fieldType: string;
 }
-export interface IProfileValues {
-	profileValues: {
-		id: number;
-		avatar: string;
-		first_name: string;
-		second_name: string;
-		display_name: string;
-		login: string;
-		email: string;
-		phone: string;
-	};
+export interface ProfileValues {
+	id: number | null;
+	avatar: string;
+	first_name: string;
+	second_name: string;
+	display_name: string;
+	login: string;
+	email: string;
+	phone: string;
 }
 
 export type ProfileFieldKey =
