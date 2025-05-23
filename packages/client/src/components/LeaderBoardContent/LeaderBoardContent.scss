@@ -1,0 +1,28 @@
+
+
+.list {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    gap: 4px;
+
+    &_item {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        font: var(--font-l);
+        padding: var(--space-xs) var(--space-s);
+        border: 3px solid var(--basic);
+        border-radius: var(--radius-m);
+
+        &_name {
+            margin-right: var(--space-s);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: block;
+            white-space: nowrap;
+        }
+    }
+}
