@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { LeaderBoard } from './LeaderBoard';
 
-const appContent = 'Leader Board';
+const appContent = 'Лидеры';
 
 test('LeaderBoard', async () => {
     render(<LeaderBoard />);
