@@ -35,7 +35,7 @@ export const LeaderBoard = memo(() => {
                     </div>
                 </div>
             </div>
-            <AppLink className={cls.appLink} to="/" text="На главную" />
+            <a href="/">На главную</a>
         </div>
     );
 });
