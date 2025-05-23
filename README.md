@@ -1,80 +1,87 @@
-### Как запускать?
+<div align='center'>
+
+# The Sandworms
+
+</div>
+
+Реализация игры Slither io использованием Canvas, Typescript и React
+
+Проект создан в учебных целях в рамках курса [Мидл фронтенд разработчик](https://practicum.yandex.ru/middle-frontend/) от Яндекс Практикума
+
+---
+
+## Документация проекта
+
+[Документ с описанием механик и логики игры](docs/Readme.md)
+
+## Технологии
+
+Проект создан на базе:
+
+-   React
+-   React Router
+-   React Hook Form
+-   Redux
+-   RTK Query
+-   Typescript
+-   Vite
+-   SASS/SCSS
+-   Jest
+-   Browser API
+
+## Используемые Web API
+
+-   `Canvas API` - реализация движка игры.
+
+## Реализованный функционал
+
+-   Главная страница.
+-   Страница с игрой.
+-   Форум.
+-   Рейтинг игроков.
+
+## Запуск проекта
+
+Все команды выполняются из корня проекта.
+
+Команды запускают SPA сборку на `3000` порту.
+
+### Первичная настройка
 
 1. Убедитесь что у вас установлен `node`.
 2. Установите `docker` и `docker-compose`.
 3. Установите `yarn` глобально.
 4. Склонируйте репозиторий theSandworms и перейдите в каталог проекта. 
 5. Выполните команду `yarn install`
-6. Выполните команду `yarn bootstrap` (обязательный шаг)
-7. Выполните команду `yarn dev`
-8. Выполните команду `yarn dev --scope=client` чтобы запустить только клиент
-9. Выполните команду `yarn dev --scope=server` чтобы запустить только server
+6. Выполните команду `yarn bootstrap` - обновление всех зависимостей
 
+`yarn bootstrap` - обновление всех зависимостей.
 
-### Как добавить зависимости?
-В этом проекте используется `monorepo` на основе [`lerna`](https://github.com/lerna/lerna)
+### Режим разработки
 
-Чтобы добавить зависимость для клиента 
-```yarn lerna add {your_dep} --scope client```
+`yarn dev:client` - запуск проекта для разработки в dev-режиме.
 
-Для сервера
-```yarn lerna add {your_dep} --scope server```
+### Сборка production
 
-И для клиента и для сервера
-```yarn lerna add {your_dep}```
+`yarn build` - команда выполняет сборку проекта.
 
+### Linters
 
-Если вы хотите добавить dev зависимость, проделайте то же самое, но с флагом `dev`
-```yarn lerna add {your_dep} --dev --scope server```
-
+`yarn lint` - проверка типов и стилей (eslint, stylelint).
 
 ### Тесты
 
-Для клиента используется [`react-testing-library`](https://testing-library.com/docs/react-testing-library/intro/)
+`yarn test` - запуск тестов.
 
-```yarn test```
+### Форматирование кода
 
-### Линтинг
+`yarn format` - форматирование с помощью prettier.
+Данная команда автоматически запускается перед commit изменений в git.
 
-```yarn lint```
+### Добавление зависимостей
 
-### Форматирование prettier
+`yarn lerna add {your_dep} --dev --scope client`
 
-```yarn format```
+Флаг `--dev` для установки dev-зависимости.
 
-### Production build
-
-```yarn build```
-
-И чтобы посмотреть что получилось
-
-
-`yarn preview --scope client`
-`yarn preview --scope server`
-
-## Хуки
-В проекте используется [lefthook](https://github.com/evilmartians/lefthook)
-Если очень-очень нужно пропустить проверки, используйте `--no-verify` (но не злоупотребляйте :)
-
-## Ой, ничего не работает :(
-
-Откройте issue, я приду :)
-
-## Автодеплой статики на vercel
-Зарегистрируйте аккаунт на [vercel](https://vercel.com/)
-Следуйте [инструкции](https://vitejs.dev/guide/static-deploy.html#vercel-for-git)
-В качестве `root directory` укажите `packages/client`
-
-Все ваши PR будут автоматически деплоиться на vercel. URL вам предоставит деплоящий бот
-
-## Production окружение в докере
-Перед первым запуском выполните `node init.js`
-
-
-`docker compose up` - запустит три сервиса
-1. nginx, раздающий клиентскую статику (client)
-2. node, ваш сервер (server)
-3. postgres, вашу базу данных (postgres)
-
-Если вам понадобится только один сервис, просто уточните какой в команде
-`docker compose up {sevice_name}`, например `docker compose up server`
+Флаг `--scope {PACKAGE_NAME}` для выбора пакета (`client` или `server`).

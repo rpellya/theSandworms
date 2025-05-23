@@ -1,0 +1,83 @@
+.register {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    background-color: var(--basic);
+
+    width: 100%;
+    height: 100%;
+
+    &_content {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-color: var(--white);
+        padding: var(--space-l);
+        border-radius: var(--radius-m);
+
+        &_title {
+            font: var(--font-l);
+            margin-bottom: var(--space-xl);
+        }
+
+        &_fields {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-start;
+            margin-bottom: var(--space-xl);
+
+            .label {
+                position: relative;
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 8px;
+
+                font: var(--font-m);
+
+                width: calc(var(--space-s) * 90);
+
+                .field {
+                    margin-left: var(--space-xl);
+                }
+
+                .error {
+                    position: absolute;
+                    color: var(--accent);
+                    right: calc(-1 * var(--space-m));
+                    top: calc(-1 * var(--space-s));
+                    z-index: 2;
+                    background: var(--secondary);
+                    border: 1px solid var(--basic);
+                    border-radius: var(--radius-m);
+                    padding: var(--space-xs) var(--space-s);
+
+                    font: var(--font-sm);
+                }
+            }
+        }
+
+        &_buttons {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: stretch;
+            gap: var(--space-m);
+            width: calc(var(--space-s) * 90);
+
+            &_btn {
+                border: none;
+                box-shadow: var(--shadow);
+                display: flex;
+                justify-content: center;
+                background-color: none;
+                cursor: pointer;
+            }
+        }
+    }
+}

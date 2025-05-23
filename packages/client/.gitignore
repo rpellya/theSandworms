@@ -22,3 +22,18 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Yarn
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+.yarn/cache
+
+# Yarn install state (нужен!)
+.yarn/install-state.gz
+
+# PnP fallback
+.pnp.*
