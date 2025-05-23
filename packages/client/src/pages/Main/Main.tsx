@@ -5,7 +5,7 @@ import { RoutePath } from 'app/providers/router/config/routeConfig';
 import { AppLink } from 'components/Link/AppLink';
 import logo from '/src/assets/img/logo.webp';
 import { SnakeGame } from './SnakeGame';
-import { Button } from '../../components/Button';
+import { Button } from 'components/Button';
 
 export const Main = memo(() => {
     const [isPlaying, setIsPlaying] = useState(false);
@@ -15,7 +15,7 @@ export const Main = memo(() => {
     };
 
     if (isPlaying) {
-        return <SnakeGame />;
+        return <SnakeGame onExit={() => setIsPlaying(false)} />;
     }
 
     return (
