@@ -12,14 +12,13 @@
         flex-direction: row;
         justify-content: space-between;
         align-items: center;
-        font: var(--font-m);
+        font: var(--font-l);
         padding: var(--space-xs) var(--space-s);
-        border: 1px solid var(--basic);
+        border: 3px solid var(--basic);
         border-radius: var(--radius-m);
 
         &_name {
             margin-right: var(--space-s);
-            max-width: 125px;
             overflow: hidden;
             text-overflow: ellipsis;
             display: block;

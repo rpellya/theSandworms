@@ -1,12 +1,13 @@
 import { memo } from 'react';
+import { AppLink } from 'components/Link/AppLink';
 import {
-    ILeaders,
+    Leaders,
     LeaderBoardContent,
 } from 'components/LeaderBoardContent/LeaderBoardContent';
 
-import './LeaderBoard.module.scss';
+import cls from './LeaderBoard.module.scss';
 
-const mockLeaders: ILeaders = {
+const mockLeaders: Leaders = {
     list: [
         { login: 'user A', highScore: 100500900 },
         { login: 'user B', highScore: 100508 },
@@ -23,11 +24,18 @@ const mockLeaders: ILeaders = {
 
 export const LeaderBoard = memo(() => {
     return (
-        <div className="leaderboard">
-            <div className="leaderboard_content">
-                <h1 className="leaderboard_content_title">Leader Board</h1>
-                <LeaderBoardContent {...mockLeaders} />
+        <div className={cls.leaderboard}>
+            <div className={cls.leaderboard_overlay}>
+                <div className={cls.leaderboard_header}>
+                    <h1 className={cls.leaderboard_header_title}>Лидеры</h1>
+                </div>
+                <div className={cls.leaderboard_wrapper}>
+                    <div className={cls.leaderboard_content}>
+                        {<LeaderBoardContent {...mockLeaders} />}
+                    </div>
+                </div>
             </div>
+            <AppLink className={cls.appLink} to="/" text="На главную" />
         </div>
     );
 });

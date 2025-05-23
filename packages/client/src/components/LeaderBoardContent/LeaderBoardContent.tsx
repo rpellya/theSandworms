@@ -2,16 +2,16 @@ import { memo } from 'react';
 
 import './LeaderBoardContent.scss';
 
-export interface IScoreData {
+export interface ScoreData {
     login: string;
     highScore: number;
 }
 
-export interface ILeaders {
-    list: Array<IScoreData>;
+export interface Leaders {
+    list: Array<ScoreData>;
 }
 
-export const LeaderBoardContent = memo((leaders: ILeaders) => {
+export const LeaderBoardContent = memo((leaders: Leaders) => {
     return (
         <div className="list">
             {leaders.list.map((leader) => (
