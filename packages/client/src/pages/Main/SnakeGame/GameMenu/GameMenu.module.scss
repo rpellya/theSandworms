@@ -1,0 +1,13 @@
+.GameMenu {
+    background-color: rgba(250, 235, 215);
+    font-family: var(--font-family-custom);
+    border: 5px solid #ad8321;
+    width: 400px;
+    border-radius: 20px;
+    padding: 20px 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    color: #5d450f;
+}

@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import App from './app/App';
 import './app/styles/index.scss';
-import { store } from './api/store';
 import { Provider } from 'react-redux';
+import { store } from 'store';
 
 function startServiceWorker() {
     if ('serviceWorker' in navigator) {
