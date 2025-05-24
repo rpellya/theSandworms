@@ -1,7 +1,7 @@
+import '@testing-library/jest-dom';
 import {cleanup, render, screen} from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { SnakeGame } from './SnakeGame';
-import '@testing-library/jest-dom';
 
 const resizeWindowWidth = (width : number) => {
     Object.defineProperty(window, 'innerWidth', {

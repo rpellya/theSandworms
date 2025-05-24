@@ -1,7 +1,7 @@
+import '@testing-library/jest-dom';
 import {cleanup, render, screen} from '@testing-library/react';
 import { Login } from './Login';
 import { BrowserRouter } from 'react-router-dom';
-import '@testing-library/jest-dom';
 
 describe('Login page UI test', () => {
 
