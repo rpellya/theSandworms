@@ -1,5 +1,5 @@
 import { Button } from 'components/Button';
-import { memo, useEffect, useState } from 'react';
+import { memo, useCallback, useEffect, useState } from 'react';
 import cls from './Profile.module.scss';
 import { updateIconProfile } from './helpers/updateIconProfile';
 import { dictonariesFields } from './dictonariesFields';
@@ -14,12 +14,14 @@ import {
     usePuthUserMutation,
     useUpdateAvatarProfileMutation,
 } from 'api/gameApi/rtk';
+import defaultIcon from 'assets/img/profileMockImg.webp';
 import { baseUrl } from 'consts/baseUrl';
-import { logout } from './helpers/logout';
 import { Form } from 'components/Form';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
-import { setUserInfo } from 'store/userInfoSlice';
 import { useForm } from 'react-hook-form';
+import { userActions } from 'store/userInfoSlice';
+import { RoutePath } from 'app/providers/router/config/routeConfig';
+import { useAuth } from 'store/useAuth';
 
 /**
  * Оборачиваем в memo, чтобы при рендеринге этого компонента не перерисовывался весь дочерний контент
@@ -50,7 +52,7 @@ export const Profile: React.FC = memo(() => {
 
     const [disabled, setDisabled] = useState(true);
     const [textBtn, setTextBtn] = useState('Изменить');
-    const [icon, setIcon] = useState('/avatar.svg');
+    const [icon, setIcon] = useState(defaultIcon);
 
     const { userInfo } = useAppSelector((state) => state.userReducer);
     const dispatch = useAppDispatch();
@@ -91,34 +93,52 @@ export const Profile: React.FC = memo(() => {
             console.error(e);
         }
     };
+
+    useAuth();
+
+    const onLogout = useCallback(() => {
+        logoutApi()
+            .unwrap()
+            .then((res) => {
+                if (res === 'OK') {
+                    navigate(RoutePath.login);
+                    dispatch(userActions.logout());
+                }
+            })
+            .catch((e) => console.error('Ошибка при выходе:', e));
+    }, [dispatch]);
+
     useEffect(() => {
         if (userInfo) {
-            dispatch(setUserInfo(userInfo));
+            dispatch(userActions.setUserInfo(userInfo));
             reset(userInfo);
         }
-        getUserData().then((res) => dispatch(setUserInfo(res.data)));
+
+        getUserData().then((res) =>
+            dispatch(userActions.setUserInfo(res.data)),
+        );
+
         if (userInfo?.avatar === null) {
-            setIcon('/avatar.svg');
+            setIcon(defaultIcon);
         } else {
             setIcon(`${baseUrl}/resources${userInfo?.avatar}`);
         }
     }, [userInfo, icon]);
+
     return (
         <div className={cls.profile}>
             <header className={cls.profile_header}>
                 <AppLink
                     text="На главную"
-                    to="/"
-                    // to={RoutePath.main}
+                    to={RoutePath.main}
                     className={cls.profile_header_homeBtn}
                 />
-
-                <p
-                    onClick={() => logout(() => logoutApi().unwrap(), navigate)}
+                <Button
+                    onClick={onLogout}
                     className={cls.profile_header_logout}
                 >
                     Выход
-                </p>
+                </Button>
             </header>
             <div className={cls.profile_container}>
                 <h3>Профиль</h3>

@@ -1,8 +1,17 @@
-import { ErrorBoundary } from 'app/providers/error-boundary/ErrorBoundary';
 import { AppRouter } from './providers/router';
 import { Suspense, useEffect } from 'react';
+import { useAppDispatch } from 'store/hooks';
+import { userActions } from 'store/userInfoSlice';
 
 const App = () => {
+    const dispatch = useAppDispatch();
+
+    useEffect(() => {
+        console.log('app');
+
+        dispatch(userActions.initAuthData());
+    }, [dispatch]);
+
     useEffect(() => {
         // Пока оставляем здесь для примера. Будем работать в 7-8 спринте
         const fetchServerData = async () => {
@@ -29,9 +38,7 @@ const App = () => {
                         Вся разработка идет в рамках компонента <AppRouter /> 
                         В который будем складывать все странциы нашего веб-приложения
                         */}
-                    <ErrorBoundary>
-                        <AppRouter />
-                    </ErrorBoundary>
+                    <AppRouter />
                 </div>
             </Suspense>
         </div>
