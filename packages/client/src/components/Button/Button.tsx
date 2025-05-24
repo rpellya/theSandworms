@@ -32,7 +32,11 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 export const Button: React.FC<ButtonProps> = memo(
     ({ children, ...otherProps }) => {
         return (
-            <button className={cls.Button} type="button" {...otherProps}>
+            <button
+                className={cls.Button}
+                type={otherProps.type || 'button'}
+                {...otherProps}
+            >
                 {children}
             </button>
         );
