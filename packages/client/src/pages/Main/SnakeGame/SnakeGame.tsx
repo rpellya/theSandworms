@@ -11,7 +11,7 @@ export const SnakeGame = memo(() => {
                 Очки:
                 <span>{score}</span>
             </div>
-            <canvas ref={canvasRef} className={cls.snakeGame__canvas} />
+            <canvas ref={canvasRef} className={cls.snakeGame__canvas} data-testid='canvas'/>
         </div>
     );
 });

@@ -24,6 +24,8 @@ export const Login: React.FC<LoginProps> = memo(({ regPath, onSubmit }) => {
                     inputLabel="Логин"
                     placeholder="Введите логин"
                     type="text"
+                    name='login'
+                    inputId="login"
                     key="login"
                 />
                 <TextLabel
@@ -35,6 +37,8 @@ export const Login: React.FC<LoginProps> = memo(({ regPath, onSubmit }) => {
                     inputLabel="Пароль"
                     type="password"
                     placeholder="Введите пароль"
+                    name="password"
+                    inputId="password"
                     key="password"
                 />
                 <TextLabel
