@@ -1,13 +1,15 @@
-import { memo } from 'react';
+import { ChangeEvent, InputHTMLAttributes, memo } from 'react';
 import cls from './Input.module.scss';
 import { classNames } from 'app/lib/classNames';
 
-interface InputProps extends React.AllHTMLAttributes<HTMLInputElement> {
+interface InputProps
+    extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
     labelClassName?: string;
     inputClassName?: string;
     type: string;
     inputLabel: string;
     inputId?: string
+    onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
 export const Input: React.FC<InputProps> = memo(

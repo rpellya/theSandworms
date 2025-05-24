@@ -21,8 +21,8 @@ const resizeWindowHeight = (height : number) => {
     window.dispatchEvent(new Event('resize'));
 };
 
-const testWidth = 500;
-const testHeight = 300;
+const testWidth = 450;
+const testHeight = 250;
 
 describe('Game engine tests', () => {
 
@@ -32,6 +32,7 @@ describe('Game engine tests', () => {
         render(
             <BrowserRouter>
                 <SnakeGame
+                    onExit={ () => {return ''} }
                 />
             </BrowserRouter>
         );
@@ -42,7 +43,8 @@ describe('Game engine tests', () => {
         expect(screen.getByText('0')).toBeInTheDocument();
     });
 
-    test('Should window-s width resizing is correct', () => {
+    test('Should window-s resizing is correct', () => {
+
         resizeWindowWidth(testWidth);
         resizeWindowHeight(testHeight);
 
@@ -57,7 +59,7 @@ describe('Game engine tests', () => {
         const moveHandler = jest.fn();
         canvas.addEventListener('mousemove', moveHandler);
 
-        const event = new MouseEvent('mousemove', { clientX: testWidth, clientY: testHeight });
+        const event = new MouseEvent('mousemove', { clientX: testHeight, clientY: testWidth });
         canvas.dispatchEvent(event);
 
         expect(moveHandler).toHaveBeenCalled();
@@ -69,13 +71,13 @@ describe('Game engine tests', () => {
 
         if (context) {
             const draw = (x : number, y : number) => {
-            context.beginPath();
-            context.arc(x, y, 10, 0, 2 * Math.PI);
-            context.fill();
+                context.beginPath();
+                context.arc(x, y, 10, 0, 2 * Math.PI);
+                context.fill();
             };
 
             canvas.addEventListener('mousemove', (event) => {
-            draw(event.clientX, event.clientY);
+                draw(event.clientX, event.clientY);
             });
 
             const event = new MouseEvent('mousemove', { clientX: testWidth, clientY: testHeight });
@@ -91,5 +93,7 @@ describe('Game engine tests', () => {
         }
       });
 
-    afterEach(cleanup);
+    afterEach(() => {
+        cleanup();
+    });
 })

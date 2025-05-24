@@ -6,6 +6,7 @@ import { RouteProps } from 'react-router-dom';
 import { Forum } from 'pages/Forum';
 import { ForumTopicPage } from 'pages/Forum/ForumTopicPage';
 import { Login } from 'pages/Login';
+import { LeaderBoard } from 'pages/LeaderBoard';
 
 enum AppRoutes {
     MAIN = 'main',
@@ -45,14 +46,7 @@ export const routeConfig: Record<AppRoutes, RouteProps> = {
     },
     [AppRoutes.LOGIN]: {
         path: RoutePath.login,
-        element: (
-            <Login
-                regPath={RoutePath.register}
-                onSubmit={() => {
-                    return true;
-                }} //подключем авторизацию здесь
-            />
-        ),
+        element: <Login regPath={RoutePath.register} />,
     },
     [AppRoutes.REGISTER]: {
         path: RoutePath.register,
@@ -68,7 +62,7 @@ export const routeConfig: Record<AppRoutes, RouteProps> = {
     },
     [AppRoutes.LEADERBOARD]: {
         path: RoutePath.leaderboard,
-        element: 'Leaderboard (example)',
+        element: <LeaderBoard />,
     },
     [AppRoutes.FORUM]: {
         path: RoutePath.forum,

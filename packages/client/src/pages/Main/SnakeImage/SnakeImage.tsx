@@ -1,5 +1,5 @@
 import React from 'react';
-import cls from './snake.module.scss';
+import cls from './Snake.module.scss';
 import snakeLogo from '/src/assets/img/snakeImage.webp';
 
 interface SnakeImageProps {

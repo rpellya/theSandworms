@@ -1,8 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query';
-import { rootReducer } from 'api/reducers/rootReduser';
-import { authApi } from 'api/services/auth/authApi';
-import { rtkApi } from 'api/services/gameApi/rtk';
+import { rootReducer } from 'store/rootReduser';
+import { authApi } from 'api/auth/authApi';
+import { rtkApi } from 'api/gameApi/rtk';
 
 export const store = configureStore({
 	reducer: rootReducer,
