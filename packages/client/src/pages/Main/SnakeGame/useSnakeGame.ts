@@ -1,8 +1,63 @@
 import { useEffect, useRef, useState } from 'react';
-import playerFaceUrl from '/src/assets/faces/face-001.webp';
-import botFaceUrl from '/src/assets/faces/face-002.webp';
 import bgImgUrl from '/src/assets/bg/bg-004.webp';
 import { TGameState } from './types';
+
+/**
+ * Генерирует случайную мордочку змейки
+ */
+const totalFaces = 14;
+function getRandomFaceUrl() {
+	const faceNumber = String(
+		Math.floor(Math.random() * totalFaces) + 1,
+	).padStart(3, '0');
+	return `/src/assets/faces/face-${faceNumber}.webp`;
+}
+
+/**
+ * Генерирует случайный паттерн для тела змейки
+ */
+function getRandomSkin() {
+	const snakeSkins = [
+		['#FFD700', '#FF6347'],
+		['#00CED1', '#20B2AA'],
+		['#ADFF2F', '#556B2F'],
+		['#8A2BE2', '#4B0082'],
+		['#FF8C00', '#FF4500'],
+		['#00FF7F', '#2E8B57'],
+		['#1E90FF', '#00008B'],
+		['#DEB887', '#A52A2A'],
+		['#DC143C', '#B22222'],
+		['#F0E68C', '#DAA520'],
+		['#40E0D0', '#5F9EA0'],
+	];
+
+	const colors = snakeSkins[Math.floor(Math.random() * snakeSkins.length)];
+	const stripePattern = colors.map(() => Math.floor(Math.random() * 20) + 4); // длины от 2 до 5
+	const patternLength = stripePattern.reduce((sum, val) => sum + val, 0);
+
+	function getColorForSegment(index: number): string {
+		let i = index % patternLength;
+		for (
+			let patternIndex = 0;
+			patternIndex < stripePattern.length;
+			patternIndex++
+		) {
+			const len = stripePattern[patternIndex];
+			if (i < len) {
+				return colors[patternIndex % colors.length];
+			}
+			i -= len;
+		}
+		return colors[0];
+	}
+
+	return { colors, stripePattern, getColorForSegment };
+}
+
+const playerSkin = getRandomSkin();
+const botSkin = getRandomSkin();
+const playerFaceUrl = getRandomFaceUrl();
+const botFaceUrl = getRandomFaceUrl();
 
 export const useSnakeGame = (gameState: TGameState) => {
 	const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -26,6 +81,8 @@ export const useSnakeGame = (gameState: TGameState) => {
 	const snakeRef = useRef([{ x: 0, y: 0 }]);
 	const foodsRef = useRef([{ x: 0, y: 0 }]);
 	const speedRef = useRef(1.5);
+	const snakeWidthRef = useRef(12);
+	const botSnakeWidthRef = useRef(12);
 	const botSnakeRef = useRef([{ x: 100, y: 100 }]);
 	const botDirectionRef = useRef(Math.random() * 2 * Math.PI);
 	const localScoreRef = useRef(0);
@@ -143,16 +200,27 @@ export const useSnakeGame = (gameState: TGameState) => {
 		function drawSnake() {
 			if (!ctx) return;
 			const snake = snakeRef.current;
+
 			for (let i = snake.length - 1; i > 0; i--) {
 				const part = snake[i];
 				const screenX = center.x + (part.x - snake[0].x);
 				const screenY = center.y + (part.y - snake[0].y);
+
+				const color = playerSkin.getColorForSegment(i);
+
 				ctx.beginPath();
-				ctx.arc(screenX, screenY, 12, 0, Math.PI * 2);
-				ctx.fillStyle = `hsl(${i * 3}, 100%, 50%)`;
+				ctx.arc(
+					screenX,
+					screenY,
+					snakeWidthRef.current,
+					0,
+					Math.PI * 2,
+				);
+				ctx.fillStyle = color;
 				ctx.fill();
 			}
 
+			// Голова змейки — с лицом или запасной круг
 			const playerFaceImg = playerFaceRef.current;
 			if (playerFaceImg && playerFaceImg.complete) {
 				const head = snake[0];
@@ -160,15 +228,28 @@ export const useSnakeGame = (gameState: TGameState) => {
 				const dx = head.x - neck.x;
 				const dy = head.y - neck.y;
 				const angle = Math.atan2(dy, dx) - Math.PI / 2;
+				const faceSize = snakeWidthRef.current * 2;
 
 				ctx.save();
 				ctx.translate(center.x, center.y);
 				ctx.rotate(angle);
-				ctx.drawImage(playerFaceImg, -12, -12, 24, 24);
+				ctx.drawImage(
+					playerFaceImg,
+					-faceSize / 2,
+					-faceSize / 2,
+					faceSize,
+					faceSize,
+				);
 				ctx.restore();
 			} else {
 				ctx.beginPath();
-				ctx.arc(center.x, center.y, 12, 0, Math.PI * 2);
+				ctx.arc(
+					center.x,
+					center.y,
+					snakeWidthRef.current,
+					0,
+					Math.PI * 2,
+				);
 				ctx.fillStyle = '#a10';
 				ctx.fill();
 			}
@@ -185,11 +266,21 @@ export const useSnakeGame = (gameState: TGameState) => {
 				const part = botSnake[i];
 				const screenX = center.x + (part.x - snake[0].x);
 				const screenY = center.y + (part.y - snake[0].y);
+
+				const color = botSkin.getColorForSegment(i);
+
 				ctx.beginPath();
-				ctx.arc(screenX, screenY, 10, 0, Math.PI * 2);
-				ctx.fillStyle = `hsl(${i * 4}, 80%, 40%)`;
+				ctx.arc(
+					screenX,
+					screenY,
+					botSnakeWidthRef.current,
+					0,
+					Math.PI * 2,
+				);
+				ctx.fillStyle = color;
 				ctx.fill();
 			}
+
 			const head = botSnake[0];
 			const neck = botSnake[1] || head;
 			const headX = center.x + (head.x - snake[0].x);
@@ -200,11 +291,18 @@ export const useSnakeGame = (gameState: TGameState) => {
 				const dx = head.x - neck.x;
 				const dy = head.y - neck.y;
 				const angle = Math.atan2(dy, dx) - Math.PI / 2;
+				const faceSize = botSnakeWidthRef.current * 2;
 
 				ctx.save();
 				ctx.translate(headX, headY);
 				ctx.rotate(angle);
-				ctx.drawImage(botFaceImg, -10, -10, 20, 20);
+				ctx.drawImage(
+					botFaceImg,
+					-faceSize / 2,
+					-faceSize / 2,
+					faceSize,
+					faceSize,
+				);
 				ctx.restore();
 			} else {
 				ctx.beginPath();
@@ -272,6 +370,7 @@ export const useSnakeGame = (gameState: TGameState) => {
 						localScoreRef.current++;
 						setScore(localScoreRef.current);
 						speedRef.current += 0.1;
+						snakeWidthRef.current += 0.1;
 						for (let i = 0; i < 10; i++) {
 							snake.push({ ...snake[snake.length - 1] });
 						}
