@@ -319,7 +319,7 @@ export const useSnakeGame = (gameState: TGameState) => {
 			for (let i = 5; i < snake.length; i++) {
 				const part = snake[i];
 				const dist = Math.hypot(botHead.x - part.x, botHead.y - part.y);
-				if (dist < 10) return true;
+				if (dist < snakeWidthRef.current) return true;
 			}
 			return false;
 		}
