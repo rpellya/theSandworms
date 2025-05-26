@@ -76,6 +76,8 @@ export const Login: React.FC<LoginProps> = memo(({ regPath }) => {
                     inputLabel="Логин"
                     placeholder="Введите логин"
                     type="text"
+                    inputId="login"
+                    key="login"
                     {...register('login', {
                         required: 'Логин обязателен',
                         pattern: {
@@ -97,6 +99,8 @@ export const Login: React.FC<LoginProps> = memo(({ regPath }) => {
                     inputLabel="Пароль"
                     type="password"
                     placeholder="Введите пароль"
+                    inputId="password"
+                    key="password"
                     {...register('password', {
                         required: 'Пароль обязателен',
                         pattern: {

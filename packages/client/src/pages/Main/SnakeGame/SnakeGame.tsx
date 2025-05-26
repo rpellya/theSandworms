@@ -45,9 +45,7 @@ export const SnakeGame: React.FC<SnakeGameProps> = memo(({ onExit }) => {
             <div className={cls.snakeGame__score}>
                 Очки: <span>{score}</span>
             </div>
-
-            <canvas ref={canvasRef} className={cls.snakeGame__canvas} />
-
+            <canvas ref={canvasRef} className={cls.snakeGame__canvas} data-testid='canvas'/>
             {gameState === 'starting' && countdown !== null && (
                 <div className={cls.snakeGame__pauseOverlay}>
                     <GameMenu>
