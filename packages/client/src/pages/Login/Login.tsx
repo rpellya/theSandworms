@@ -7,9 +7,11 @@ import { Input } from 'components/Input';
 import { useLazyGetAuthUserQuery, useLoginApiMutation } from 'api/auth/authApi';
 import { Form } from 'components/Form';
 import { useNavigate } from 'react-router-dom';
-import { useAppDispatch } from 'store/hooks';
-import { setUserInfo } from 'store/userInfoSlice';
+import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { useForm } from 'react-hook-form';
+import { USER_LOCALSTORAGE_KEY } from 'app/providers/const/localStorage';
+import { userActions } from 'store/userInfoSlice';
+import { RoutePath } from 'app/providers/router/config/routeConfig';
 
 interface LoginProps {
     regPath: string;
@@ -27,12 +29,19 @@ export const Login: React.FC<LoginProps> = memo(({ regPath }) => {
     } = useForm<LoginData>({
         mode: 'onSubmit',
     });
+    const isAuthenticated = useAppSelector(
+        (state) => state.userReducer.isAuthenticated,
+    );
     const [loginFunc] = useLoginApiMutation();
     const [getAuthUser] = useLazyGetAuthUserQuery();
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
 
     const onSubmit = async (values: LoginData) => {
+        if (isAuthenticated) {
+            navigate(RoutePath.main);
+        }
+
         try {
             const response = await loginFunc(values);
 
@@ -40,14 +49,21 @@ export const Login: React.FC<LoginProps> = memo(({ regPath }) => {
                 const result = await getAuthUser();
 
                 if (result.status === 'fulfilled') {
-                    navigate('/');
-                    dispatch(setUserInfo(result.data));
+                    navigate(RoutePath.main);
+
+                    localStorage.setItem(
+                        USER_LOCALSTORAGE_KEY,
+                        JSON.stringify(result.data),
+                    );
+
+                    dispatch(userActions.setUserInfo(result.data));
                 }
             }
         } catch (err) {
             console.error('error:', err);
         }
     };
+
     return (
         <div className={cls.loginPage}>
             <Form onSubmit={handleSubmit(onSubmit)} method="submit">

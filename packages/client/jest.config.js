@@ -10,7 +10,7 @@ export default {
 	testMatch: ['<rootDir>/src/**/*.test.{ts,tsx}'],
 	moduleFileExtensions: ['js', 'ts', 'tsx', 'json', 'node'],
 	moduleNameMapper: {
-		'\\.(css|less|scss|sass|png|svg|jpg)$': 'identity-obj-proxy',
+		'\\.(css|less|scss|sass|webp|png|svg|jpg)$': 'identity-obj-proxy',
 	},
 	moduleDirectories: ['node_modules', 'src'],
 	globals: {

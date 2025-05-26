@@ -5,6 +5,8 @@ import {
 } from 'components/LeaderBoardContent/LeaderBoardContent';
 
 import cls from './LeaderBoard.module.scss';
+import { AppLink } from 'components/Link/AppLink';
+import { RoutePath } from 'app/providers/router/config/routeConfig';
 
 const mockLeaders: Leaders = {
     list: [
@@ -34,7 +36,7 @@ export const LeaderBoard = memo(() => {
                     </div>
                 </div>
             </div>
-            <a href="/">На главную</a>
+            <AppLink to={RoutePath.main}>На главную</AppLink>
         </div>
     );
 });
