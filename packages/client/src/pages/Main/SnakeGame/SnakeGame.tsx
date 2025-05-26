@@ -1,7 +1,7 @@
 import React, { memo, useEffect, useState } from 'react';
 import { useSnakeGame } from './useSnakeGame';
 import cls from './SnakeGame.module.scss';
-import { GameMenu } from './GameMenu/GameMenu';
+import { GameMenu } from './GameMenu';
 import { Button } from 'components/Button';
 import { TGameState } from './types';
 

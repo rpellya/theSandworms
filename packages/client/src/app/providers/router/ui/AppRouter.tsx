@@ -1,25 +1,34 @@
 import { routeConfig } from '../config/routeConfig';
-import { Suspense, useCallback } from 'react';
-import { Route, RouteProps, Routes } from 'react-router-dom';
+import { memo, Suspense } from 'react';
+import { Route, Routes } from 'react-router-dom';
 
 /**
  * AppRouter - главный роутер, который используется в приложении
  * renderWithWrapper - хелпер для оборачивания элемента в Suspense
  * и подготовки к дальнейшему использованию
  *
- * Все маршруты, которые будем использовать в приложении должны быть описаны в routeConfig
+ * Все маршруты, которые будем использовать в приложении должны быть описаны в routeConfig.
  */
 const AppRouter = () => {
-    const renderWithWrapper = useCallback((route: RouteProps) => {
-        const element = (
-            <Suspense fallback={<div>Loading...</div>}>
-                {route.element}
-            </Suspense>
-        );
-        return <Route key={route.path} path={route.path} element={element} />;
-    }, []);
+    return (
+        <Routes>
+            {Object.values(routeConfig).map((route) => {
+                const element = (
+                    <Suspense fallback={<div>Loading...</div>}>
+                        {route.element}
+                    </Suspense>
+                );
 
-    return <Routes>{Object.values(routeConfig).map(renderWithWrapper)}</Routes>;
+                return (
+                    <Route
+                        key={route.path}
+                        path={route.path}
+                        element={element}
+                    />
+                );
+            })}
+        </Routes>
+    );
 };
 
-export default AppRouter;
+export default memo(AppRouter);
