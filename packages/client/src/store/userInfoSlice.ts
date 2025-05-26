@@ -20,11 +20,9 @@ export const userSlice = createSlice({
 		},
 		initAuthData: (state) => {
 			const user = localStorage.getItem(USER_LOCALSTORAGE_KEY);
-			console.log(user, 'user');
 			if (user) {
 				state.userInfo = JSON.parse(user);
 				state.isAuthenticated = true;
-				console.log(state.isAuthenticated, 'state.isAuthenticated');
 			}
 		},
 		logout: (state) => {

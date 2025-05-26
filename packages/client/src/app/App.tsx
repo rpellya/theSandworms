@@ -7,8 +7,6 @@ const App = () => {
     const dispatch = useAppDispatch();
 
     useEffect(() => {
-        console.log('app');
-
         dispatch(userActions.initAuthData());
     }, [dispatch]);
 

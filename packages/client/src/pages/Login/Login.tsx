@@ -47,7 +47,6 @@ export const Login: React.FC<LoginProps> = memo(({ regPath }) => {
 
             if (response.data === 'OK') {
                 const result = await getAuthUser();
-                console.log('result:', result);
 
                 if (result.status === 'fulfilled') {
                     navigate(RoutePath.main);
