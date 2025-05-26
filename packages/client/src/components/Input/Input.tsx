@@ -1,4 +1,4 @@
-import { ChangeEvent, InputHTMLAttributes, memo } from 'react';
+import { forwardRef, ChangeEvent, InputHTMLAttributes, memo } from 'react';
 import cls from './Input.module.scss';
 import { classNames } from 'app/lib/classNames';
 
@@ -13,24 +13,32 @@ interface InputProps
 }
 
 export const Input: React.FC<InputProps> = memo(
-    ({ labelClassName, inputClassName, inputLabel, type, inputId, ...otherProps }) => {
-        return (
-            <div className={cls.appInput__inputContainer}>
-                <label
-                    className={classNames(cls.appInput__label, {}, [
-                        labelClassName,
-                    ])}
-                    htmlFor={inputId}
-                >
-                    {inputLabel}
-                </label>
-                <input
-                    className={classNames(cls.appInput, {}, [inputClassName])}
-                    type={type}
-                    id={inputId}
-                    {...otherProps}
-                />
-            </div>
-        );
-    },
+    forwardRef<HTMLInputElement, InputProps>(
+        (
+            { labelClassName, inputClassName, inputLabel, type, inputId, ...otherProps },
+            ref,
+        ) => {
+            return (
+                <div className={cls.appInput__inputContainer}>
+                    <label
+                        className={classNames(cls.appInput__label, {}, [
+                            labelClassName,
+                        ])}
+                        htmlFor={inputId}
+                    >
+                        {inputLabel}
+                    </label>
+                    <input
+                        className={classNames(cls.appInput, {}, [
+                            inputClassName,
+                        ])}
+                        ref={ref}
+                        type={type}
+                        name={inputId}
+                        {...otherProps}
+                    />
+                </div>
+            );
+        },
+    ),
 );

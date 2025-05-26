@@ -1,10 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button } from 'components/Button';
 import { memo, useEffect, useState } from 'react';
 import cls from './Profile.module.scss';
 import { updateIconProfile } from './helpers/updateIconProfile';
 import { dictonariesFields } from './dictonariesFields';
-import { profileValuesDict } from './consts/profileValuesDict';
 import { AppLink } from 'components/Link/AppLink';
 import { Field } from './Fields/Field';
 import {
@@ -21,42 +19,66 @@ import { logout } from './helpers/logout';
 import { Form } from 'components/Form';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { setUserInfo } from 'store/userInfoSlice';
-import { UserInfo } from 'store/types';
-import { ProfileValues } from './types';
+import { useForm } from 'react-hook-form';
 
 /**
  * Оборачиваем в memo, чтобы при рендеринге этого компонента не перерисовывался весь дочерний контент
  */
+interface UserData {
+    first_name: string;
+    second_name: string;
+    login: string;
+    email: string;
+    phone: string;
+    password: string;
+    display_name: string;
+}
+
 export const Profile: React.FC = memo(() => {
+    const {
+        handleSubmit,
+        register,
+        formState: { errors },
+        reset,
+    } = useForm<UserData>({
+        mode: 'onChange',
+    });
     const [logoutApi] = useLogoutApiMutation();
     const [putUserApi] = usePuthUserMutation();
     const [updateAvatarProfile] = useUpdateAvatarProfileMutation();
     const [getUserData] = useLazyGetAuthUserQuery();
+
     const [disabled, setDisabled] = useState(true);
     const [textBtn, setTextBtn] = useState('Изменить');
     const [icon, setIcon] = useState('/avatar.svg');
-    const [profileValues, setProfileValues] =
-        useState<ProfileValues>(profileValuesDict);
+
     const { userInfo } = useAppSelector((state) => state.userReducer);
     const dispatch = useAppDispatch();
-
     const navigate = useNavigate();
-    const updateFunc = () => {
-        setDisabled(!disabled);
 
+    const updateFunc = () => {
+        if (Object.keys(errors).length !== 0) {
+            return;
+        }
+        setDisabled(!disabled);
         if (disabled) {
             setTextBtn('Сохранить');
         } else {
             setTextBtn('Изменить');
         }
-        if (textBtn === 'Сохранить') {
-            updateProfile();
+    };
+
+    const updateProfile = async (data: UserData) => {
+        try {
+            await putUserApi(data);
+        } catch (error) {
+            console.error(error);
+        } finally {
+            await getUserData();
         }
     };
 
-    const updateProfile = () => {
-        putUserApi(profileValues);
-    };
+    console.log('errors', errors);
 
     const handleUpload = async (file: File) => {
         const formData = new FormData();
@@ -72,7 +94,7 @@ export const Profile: React.FC = memo(() => {
     useEffect(() => {
         if (userInfo) {
             dispatch(setUserInfo(userInfo));
-            setProfileValues(userInfo);
+            reset(userInfo);
         }
         getUserData().then((res) => dispatch(setUserInfo(res.data)));
         if (userInfo?.avatar === null) {
@@ -106,22 +128,33 @@ export const Profile: React.FC = memo(() => {
                     src={icon}
                     alt="icon"
                 />
-                <Form className={cls.profile_container_form}>
+                <Form
+                    onSubmit={handleSubmit(updateProfile)}
+                    className={cls.profile_container_form}
+                    method="submit"
+                >
                     <div className={cls.profile_container_form_fields}>
                         {dictonariesFields.map((field) => (
                             <Field
                                 fieldName={field.fieldName}
                                 fieldType={field.fieldType}
                                 key={field.key}
-                                fieldKey={field.key}
-                                placeholder={field.placeholder}
                                 disabled={disabled}
-                                profileValues={profileValues}
-                                setProfileValues={setProfileValues}
+                                {...register(field.key, {
+                                    pattern: {
+                                        value: field.regExp,
+                                        message: field.message,
+                                    },
+                                })}
+                                errorMessage={
+                                    (errors[field.key] as any)?.message
+                                }
                             />
                         ))}
                     </div>
-                    <Button onClick={updateFunc}>{textBtn}</Button>
+                    <Button onClick={updateFunc} type="submit">
+                        {textBtn}
+                    </Button>
                 </Form>
             </div>
         </div>

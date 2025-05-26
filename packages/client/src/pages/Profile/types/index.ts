@@ -1,8 +1,9 @@
 export interface FieldType {
 	fieldName: string;
 	key: ProfileFieldKey;
-	placeholder: string;
 	fieldType: string;
+	regExp: RegExp;
+	message: string;
 }
 export interface ProfileValues {
 	id: number | null;
