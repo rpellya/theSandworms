@@ -3,43 +3,11 @@ import {cleanup, render, screen} from '@testing-library/react';
 import { Login } from './Login';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import { createSlice } from '@reduxjs/toolkit';
+import { store } from 'store';
 
 describe('Login page UI test', () => {
 
-    interface UserState {
-        name: string
-        password: string
-    };
-
-    const initialState: UserState = {
-        name: '',
-        password: ''
-    };
-
-    const userSlice = createSlice({
-        name: 'user',
-        initialState,
-        reducers: {},
-    })
-
-    type RootState = ReturnType<typeof rootReducer>;
-
-    const rootReducer = combineReducers({
-        user: userSlice.reducer
-    });
-
-    function setupStore(preloadedState?: Partial<RootState>) {
-        return configureStore({
-            reducer: rootReducer,
-            preloadedState
-        })
-    }
-
     beforeEach(() => {
-        const store = setupStore();
-
         render(
             <BrowserRouter>
                 <Provider store={store}>

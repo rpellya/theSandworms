@@ -34,7 +34,7 @@ export const Input: React.FC<InputProps> = memo(
                         ])}
                         ref={ref}
                         type={type}
-                        name={inputId}
+                        id={inputId}
                         {...otherProps}
                     />
                 </div>
