@@ -58,7 +58,6 @@ async function start() {
 			const appHtml = await render(url);
 
 			const html = template.replace('<!--ssr-outlet-->', appHtml);
-
 			res.status(200).set({ 'Content-Type': 'text/html' }).end(html);
 		} catch (e) {
 			if (e instanceof Error) {
