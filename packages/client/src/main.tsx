@@ -42,10 +42,10 @@ function startServiceWorker() {
                     };
 
                     registration.installing?.postMessage(data);
-                    // console.log(
-                    //     'ServiceWorker registration successful with scope: ',
-                    //     registration.scope,
-                    // );
+                    console.log(
+                        'ServiceWorker registration successful with scope: ',
+                        registration.scope,
+                    );
                 })
                 .catch((error: string) => {
                     console.log('ServiceWorker registration failed: ', error);
