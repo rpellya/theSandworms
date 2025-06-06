@@ -1,5 +1,6 @@
 /* global jest */
 // eslint-disable-next-line @typescript-eslint/no-var-requires
+require('jest-canvas-mock');
 const { TextEncoder, TextDecoder } = require('util');
 
 global.TextEncoder = TextEncoder;
