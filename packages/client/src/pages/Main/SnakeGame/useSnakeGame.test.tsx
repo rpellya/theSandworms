@@ -1,4 +1,5 @@
 import '@testing-library/jest-dom';
+import 'jest-canvas-mock';
 import { cleanup, render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { SnakeGame } from './SnakeGame';
@@ -98,7 +99,7 @@ describe('Game engine tests', () => {
             const mockFill = jest.spyOn(context, 'fill');
 
             expect(mockBeginPath).toHaveBeenCalled();
-            expect(mockArc).toHaveBeenCalledWith(500, 300, 10, 0, 2 * Math.PI);
+            expect(mockArc).toHaveBeenCalledWith(450, 250, 10, 0, 2 * Math.PI);
             expect(mockFill).toHaveBeenCalled();
         }
     });
