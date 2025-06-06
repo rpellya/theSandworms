@@ -9,6 +9,7 @@ import { GameMenu } from './GameMenu';
 import { Button } from 'components/Button';
 import { TGameState } from './types';
 import { useSelector } from 'react-redux';
+import { RootState } from 'store';
 
 interface SnakeGameProps {
     onExit: () => void;
@@ -41,7 +42,8 @@ export const SnakeGame: React.FC<SnakeGameProps> = memo(({ onExit }) => {
     }, [gameState]);
 
     const login = useSelector(
-        (state) => state.userReducer.userInfo?.login ?? 'Anonimous User',
+        (state: RootState) =>
+            state.userReducer.userInfo?.login ?? 'Anonimous User',
     );
     const sendSchore = async (schore: number) => {
         const data = {
