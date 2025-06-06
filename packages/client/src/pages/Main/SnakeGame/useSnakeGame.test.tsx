@@ -1,5 +1,4 @@
 import '@testing-library/jest-dom';
-import 'jest-canvas-mock';
 import { cleanup, render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { SnakeGame } from './SnakeGame';
