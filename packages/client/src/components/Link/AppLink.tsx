@@ -5,17 +5,18 @@ import { Link, LinkProps } from 'react-router-dom';
 
 interface AppLinkProps extends LinkProps {
     className?: string;
-    text?: string; // необязательный текст, если не передан — используется children
+    text?: string; // необязательный текст, если не передан — используется ''. У react-компонента Link нет props-a children
+    to?: string;
 }
 
 export const AppLink: React.FC<AppLinkProps> = memo(
-    ({ className, text, children, ...otherProps }) => {
+    ({ className, text, ...otherProps }) => {
         return (
             <Link
                 className={classNames(cls.applink, {}, [className])}
                 {...otherProps}
             >
-                {text ?? children}
+                {text ?? ''}
             </Link>
         );
     },

@@ -41,9 +41,9 @@ export const Main = memo(() => {
     return (
         <div className={cls.Main}>
             <div className={cls.mainMenu}>
-                <img width="300px" src={logo} alt="Логотип" />
-                <nav>
-                    <ul>
+                <img className={cls.mainMenu_img} src={logo} alt="Логотип" />
+                <nav className={cls.mainMenu_nav}>
+                    <ul className={cls.mainMenu_ul}>
                         <li>
                             <Button
                                 className={cls.appLink}
