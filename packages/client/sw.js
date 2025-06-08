@@ -23,7 +23,7 @@ this.addEventListener('fetch', (event) => {
 		caches.match(event.request).then((response) => {
 			// Если ответ найден, выдаём его
 			if (response) {
-				console.log(`Got from cache: ${event.request.url}`);
+				// console.log(`Got from cache: ${event.request.url}`);
 				return response;
 			}
 
