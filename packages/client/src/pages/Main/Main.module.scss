@@ -17,18 +17,30 @@
 }
 
 .mainMenu {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     list-style-type: none;
-    width: 300px;
     font-family: var(--font-family-custom);
     text-align: center;
-    height: 90vh;
-    padding-top: 50px;
+    padding-top: 40px;
+
+    img {
+        width: 250px;
+    }
+
+    nav {
+        display: flex;
+        flex-direction: column;
+        margin: 0 auto;
+    }
 
     ul {
         list-style-type: none;
         padding-left: 0;
-        display: flex;
-        flex-direction: column;
+        display: grid;
+        grid-template-columns: repeat(2, 300px);
         margin-top: 40px;
     }
 }
@@ -37,7 +49,7 @@
     background: transparent;
     border: none;
     cursor: pointer;
-    font-size: 50px;
+    font-size: 40px;
     line-height: 70px;
     text-decoration: none;
     color: #fff7e0;
@@ -58,5 +70,4 @@
 }
 
 .snakeLayout {
-    margin-bottom: 40px;
 }

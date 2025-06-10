@@ -1,3 +1,4 @@
+import { FullScreenSwitcher } from 'components/FullScreenSwitcher';
 import { AppRouter } from './providers/router';
 import { Suspense, useEffect } from 'react';
 import { useAppDispatch } from 'store/hooks';
@@ -26,6 +27,8 @@ const App = () => {
         <div className="App">
             <Suspense fallback={<div>Loading...</div>}>
                 <div className="content-page">
+                    <FullScreenSwitcher rootElemClassName="content-page"></FullScreenSwitcher>
+                    {/* <img width="250px" src={logo} alt="Логотип" />
                     {/* 
                         Заголовок просто для примера, так как выводится вне зависимости от AppRouter,
                         а значит будет всегда. В будущем вместо заголовка можно поставить любой компонент,
