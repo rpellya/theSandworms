@@ -1,15 +1,22 @@
 import React, { memo, useEffect, useState } from 'react';
+import {
+    RATING_FIELD_NAME,
+    useSendSchoreMutation,
+} from 'api/leaderBoard/leaderBoardApi';
 import { useSnakeGame } from './useSnakeGame';
 import cls from './SnakeGame.module.scss';
 import { GameMenu } from './GameMenu';
 import { Button } from 'components/Button';
 import { TGameState } from './types';
+import { useSelector } from 'react-redux';
+import { RootState } from 'store';
 
 interface SnakeGameProps {
     onExit: () => void;
 }
 
 export const SnakeGame: React.FC<SnakeGameProps> = memo(({ onExit }) => {
+    const [sendSchoreApi] = useSendSchoreMutation();
     const [gameState, setGameState] = useState<TGameState>('starting');
 
     const { canvasRef, score, resetGame } = useSnakeGame(gameState);
@@ -28,6 +35,32 @@ export const SnakeGame: React.FC<SnakeGameProps> = memo(({ onExit }) => {
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, []);
 
+    useEffect(() => {
+        if ('finished' === gameState) {
+            sendSchore(score);
+        }
+    }, [gameState]);
+
+    const login = useSelector(
+        (state: RootState) =>
+            state.userReducer.userInfo?.login ?? 'Anonimous User',
+    );
+    const sendSchore = async (schore: number) => {
+        const data = {
+            data: {
+                [RATING_FIELD_NAME]: schore,
+                login: login,
+            },
+            ratingFieldName: RATING_FIELD_NAME,
+        };
+
+        try {
+            await sendSchoreApi(data);
+        } catch (error) {
+            console.log(`ERROR: ${error}`);
+        }
+    };
+
     const handleResumeClick = () => {
         setGameState('playing');
     };
@@ -45,7 +78,11 @@ export const SnakeGame: React.FC<SnakeGameProps> = memo(({ onExit }) => {
             <div className={cls.snakeGame__score}>
                 Очки: <span>{score}</span>
             </div>
-            <canvas ref={canvasRef} className={cls.snakeGame__canvas} data-testid='canvas'/>
+            <canvas
+                ref={canvasRef}
+                className={cls.snakeGame__canvas}
+                data-testid="canvas"
+            />
             {gameState === 'starting' && countdown !== null && (
                 <div className={cls.snakeGame__pauseOverlay}>
                     <GameMenu>
