@@ -80,8 +80,6 @@ export const Profile: React.FC = memo(() => {
         }
     };
 
-    console.log('errors', errors);
-
     const handleUpload = async (file: File) => {
         const formData = new FormData();
         formData.append('avatar', file);

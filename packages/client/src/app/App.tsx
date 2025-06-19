@@ -1,20 +1,20 @@
 import { FullScreenSwitcher } from 'components/FullScreenSwitcher';
 import { AppRouter } from './providers/router';
 import { Suspense, useEffect } from 'react';
-import { useAppDispatch } from 'store/hooks';
-import { userActions } from 'store/userInfoSlice';
+// import { useAppDispatch } from 'store/hooks';
+// import { userActions } from 'store/userInfoSlice';
 
 const App = () => {
-    const dispatch = useAppDispatch();
+    // const dispatch = useAppDispatch();
 
-    useEffect(() => {
-        dispatch(userActions.initAuthData());
-    }, [dispatch]);
+    // useEffect(() => {
+    //     dispatch(userActions.initAuthData());
+    // }, [dispatch]);
 
     useEffect(() => {
         // Пока оставляем здесь для примера. Будем работать в 7-8 спринте
         const fetchServerData = async () => {
-            const url = `http://localhost:${__SERVER_PORT__}`;
+            const url = `http://localhost:${3000}`;
             const response = await fetch(url);
             const data = await response.json();
             console.log(data);

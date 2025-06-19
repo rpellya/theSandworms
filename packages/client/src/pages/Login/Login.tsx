@@ -1,6 +1,6 @@
 import { TextLabel } from 'components/TextLabel';
 import cls from './Login.module.scss';
-import React, { memo } from 'react';
+import React, { memo, useEffect } from 'react';
 import { Button } from 'components/Button';
 import { AppLink } from 'components/Link/AppLink';
 import { Input } from 'components/Input';
@@ -64,6 +64,27 @@ export const Login: React.FC<LoginProps> = memo(({ regPath }) => {
         }
     };
 
+    const authorizationUsingYandex = async () => {
+        try {
+            const response = await fetch('http://localhost:3001/oauth/yandex', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/JSON',
+                },
+                credentials: 'include',
+                body: JSON.stringify({
+                    redirectUri: window.location.origin,
+                }),
+            }).then((val) => val.text());
+            const clientId = JSON.parse(response).clientId;
+            // eslint-disable-next-line max-len
+            const URL = `https://oauth.yandex.ru/authorize?response_type=code&client_id=${clientId}&redirect_uri=${window.location.origin}/oauth`;
+            window.location.href = URL;
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     return (
         <div className={cls.loginPage}>
             <Form onSubmit={handleSubmit(onSubmit)} method="submit">
@@ -121,6 +142,12 @@ export const Login: React.FC<LoginProps> = memo(({ regPath }) => {
                 )}
                 <Button className={cls.loginPage__button} type="submit">
                     Войти
+                </Button>
+                <Button
+                    className={cls.loginPage__button}
+                    onClick={authorizationUsingYandex}
+                >
+                    Войти через Яндекс
                 </Button>
                 <AppLink
                     to={regPath}
