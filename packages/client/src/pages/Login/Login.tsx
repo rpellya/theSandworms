@@ -1,6 +1,6 @@
 import { TextLabel } from 'components/TextLabel';
 import cls from './Login.module.scss';
-import React, { memo, useEffect } from 'react';
+import React, { memo } from 'react';
 import { Button } from 'components/Button';
 import { AppLink } from 'components/Link/AppLink';
 import { Input } from 'components/Input';
@@ -12,6 +12,7 @@ import { useForm } from 'react-hook-form';
 import { USER_LOCALSTORAGE_KEY } from 'app/providers/const/localStorage';
 import { userActions } from 'store/userInfoSlice';
 import { RoutePath } from 'app/providers/router/config/routeConfig';
+import { useLazyGetYandexServiceIdQuery } from 'api/auth/oAuthApi';
 
 interface LoginProps {
     regPath: string;
@@ -64,22 +65,18 @@ export const Login: React.FC<LoginProps> = memo(({ regPath }) => {
         }
     };
 
+    const [getServiceId] = useLazyGetYandexServiceIdQuery();
+
     const authorizationUsingYandex = async () => {
         try {
-            const response = await fetch('http://localhost:3001/oauth/yandex', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/JSON',
-                },
-                credentials: 'include',
-                body: JSON.stringify({
-                    redirectUri: window.location.origin,
-                }),
-            }).then((val) => val.text());
-            const clientId = JSON.parse(response).clientId;
-            // eslint-disable-next-line max-len
-            const URL = `https://oauth.yandex.ru/authorize?response_type=code&client_id=${clientId}&redirect_uri=${window.location.origin}/oauth`;
-            window.location.href = URL;
+            const { data } = await getServiceId({
+                redirectUri: window.location.origin,
+            });
+            if (data?.clientId) {
+                // eslint-disable-next-line max-len
+                const URL = `https://oauth.yandex.ru/authorize?response_type=code&client_id=${data.clientId}&redirect_uri=${window.location.origin}/oauth`;
+                window.location.href = URL;
+            }
         } catch (error) {
             console.error(error);
         }

@@ -1,4 +1,5 @@
 import { useLazyGetAuthUserQuery } from 'api/auth/authApi';
+import { useSendYandexCodeMutation } from 'api/auth/oAuthApi';
 import { USER_LOCALSTORAGE_KEY } from 'app/providers/const/localStorage';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -9,40 +10,48 @@ export const Auth = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const [getUserInfo] = useLazyGetAuthUserQuery();
-    const sendCodeToBff = async (code: string) => {
+
+    const [sendCode] = useSendYandexCodeMutation();
+
+    const handleSendCode = async (code: string) => {
         try {
-            let response: any = '';
-            await fetch('https://ya-praktikum.tech/api/v2/oauth/yandex', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    accept: 'application/json',
-                },
-                credentials: 'include',
-                body: JSON.stringify({
-                    code,
-                    redirect_uri: window.location.origin,
-                }),
-            }).then(async (val) => (response = await val.text()));
-            if (response) {
+            const response = await sendCode({
+                code,
+                redirect_uri: window.location.origin,
+            }).unwrap();
+            console.log('response', response);
+            if (response === 'OK') {
+                await getUserInfo().then((res) => {
+                    dispatch(userActions.setUserInfo(res.data));
+                    localStorage.setItem(
+                        USER_LOCALSTORAGE_KEY,
+                        JSON.stringify(res.data),
+                    );
+                });
+                navigate('/');
+            }
+        } catch (error) {
+            const { reason } = JSON.parse((error as any)?.data || '{}');
+
+            console.log('error', reason);
+            if (reason === 'User already in system') {
                 getUserInfo().then((res) => {
                     dispatch(userActions.setUserInfo(res.data));
                     localStorage.setItem(
                         USER_LOCALSTORAGE_KEY,
                         JSON.stringify(res.data),
                     );
-                    dispatch(userActions.initAuthData());
                 });
                 navigate('/');
+            } else {
+                console.error(error);
             }
-        } catch (error) {
-            console.error(error);
         }
     };
     useEffect(() => {
         const code = new URLSearchParams(window.location.search).get('code');
         if (code) {
-            sendCodeToBff(code);
+            handleSendCode(code);
         }
     }, []);
     return <></>;
