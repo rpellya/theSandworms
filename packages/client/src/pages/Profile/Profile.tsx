@@ -21,7 +21,6 @@ import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { useForm } from 'react-hook-form';
 import { userActions } from 'store/userInfoSlice';
 import { RoutePath } from 'app/providers/router/config/routeConfig';
-import { useAuth } from 'store/useAuth';
 
 /**
  * Оборачиваем в memo, чтобы при рендеринге этого компонента не перерисовывался весь дочерний контент
@@ -91,8 +90,6 @@ export const Profile: React.FC = memo(() => {
             console.error(e);
         }
     };
-
-    useAuth();
 
     const onLogout = useCallback(() => {
         logoutApi()

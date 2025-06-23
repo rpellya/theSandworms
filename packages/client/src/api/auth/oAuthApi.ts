@@ -24,6 +24,7 @@ export const oAuthApi = createApi({
 			query: ({ redirectUri }) => ({
 				url: 'http://localhost:3001/oauth/yandex',
 				method: 'POST',
+				credentials: 'include',
 				headers: {
 					'Content-Type': 'application/json',
 				},
@@ -35,6 +36,7 @@ export const oAuthApi = createApi({
 			query: (body) => ({
 				url: 'https://ya-praktikum.tech/api/v2/oauth/yandex',
 				method: 'POST',
+				credentials: 'include',
 				headers: {
 					'Content-Type': 'application/json',
 					Accept: 'application/json',

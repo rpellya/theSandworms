@@ -19,28 +19,30 @@ export const Auth = () => {
                 code,
                 redirect_uri: window.location.origin,
             }).unwrap();
-            console.log('response', response);
             if (response === 'OK') {
                 await getUserInfo().then((res) => {
-                    dispatch(userActions.setUserInfo(res.data));
-                    localStorage.setItem(
-                        USER_LOCALSTORAGE_KEY,
-                        JSON.stringify(res.data),
-                    );
+                    if (res.data) {
+                        dispatch(userActions.setUserInfo(res.data));
+                        localStorage.setItem(
+                            USER_LOCALSTORAGE_KEY,
+                            JSON.stringify(res.data),
+                        );
+                    }
                 });
                 navigate('/');
             }
         } catch (error) {
             const { reason } = JSON.parse((error as any)?.data || '{}');
 
-            console.log('error', reason);
             if (reason === 'User already in system') {
                 getUserInfo().then((res) => {
-                    dispatch(userActions.setUserInfo(res.data));
-                    localStorage.setItem(
-                        USER_LOCALSTORAGE_KEY,
-                        JSON.stringify(res.data),
-                    );
+                    if (res.data) {
+                        dispatch(userActions.setUserInfo(res.data));
+                        localStorage.setItem(
+                            USER_LOCALSTORAGE_KEY,
+                            JSON.stringify(res.data),
+                        );
+                    }
                 });
                 navigate('/');
             } else {
