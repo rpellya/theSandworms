@@ -1,16 +1,17 @@
 import { TextLabel } from 'components/TextLabel';
 import cls from './Login.module.scss';
-import React, { memo } from 'react';
+import React, { memo, useEffect } from 'react';
 import { Button } from 'components/Button';
 import { AppLink } from 'components/Link/AppLink';
 import { Input } from 'components/Input';
 import { useLoginApiMutation } from 'api/auth/authApi';
 import { Form } from 'components/Form';
 import { useNavigate } from 'react-router-dom';
-import { useAppSelector } from 'store/hooks';
+import { useAppSelector } from 'store/hooksStore';
 import { useForm } from 'react-hook-form';
 import { RoutePath } from 'app/providers/router/config/routeConfig';
 import { useLazyGetYandexServiceIdQuery } from 'api/auth/oAuthApi';
+import { useAuth } from 'hooks/useAuth';
 
 interface LoginProps {
     regPath: string;
@@ -28,9 +29,7 @@ export const Login: React.FC<LoginProps> = memo(({ regPath }) => {
     } = useForm<LoginData>({
         mode: 'onSubmit',
     });
-    const isAuthenticated = useAppSelector(
-        (state) => state.userReducer.isAuthenticated,
-    );
+    const { isAuthenticated } = useAppSelector((state) => state.userReducer);
     const [loginFunc] = useLoginApiMutation();
     const navigate = useNavigate();
 
@@ -66,7 +65,11 @@ export const Login: React.FC<LoginProps> = memo(({ regPath }) => {
             console.error(error);
         }
     };
-
+    useEffect(() => {
+        if (isAuthenticated) {
+            navigate(-1);
+        }
+    }, [isAuthenticated]);
     return (
         <div className={cls.loginPage}>
             <Form onSubmit={handleSubmit(onSubmit)} method="submit">

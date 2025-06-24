@@ -7,7 +7,6 @@ import { Forum } from 'pages/Forum';
 import { ForumTopicPage } from 'pages/Forum/ForumTopicPage';
 import { Login } from 'pages/Login';
 import { LeaderBoard } from 'pages/LeaderBoard';
-import { Auth } from 'pages/Auth/Auth';
 
 enum AppRoutes {
     MAIN = 'main',
@@ -91,7 +90,7 @@ export const routeConfig: Record<AppRoutes, RouteProps> = {
     },
     [AppRoutes.AUTH]: {
         path: RoutePath.auth,
-        element: <Auth />,
+        element: <></>,
     },
 
     // Все маршруты, которые не указаны в routeConfig будут перенаправлены на 404 страницу

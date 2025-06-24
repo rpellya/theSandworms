@@ -17,10 +17,11 @@ import {
 import defaultIcon from 'assets/img/profileMockImg.webp';
 import { baseUrl } from 'consts/baseUrl';
 import { Form } from 'components/Form';
-import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { useForm } from 'react-hook-form';
 import { userActions } from 'store/userInfoSlice';
 import { RoutePath } from 'app/providers/router/config/routeConfig';
+import { useAuth } from 'hooks/useAuth';
+import { useAppDispatch, useAppSelector } from 'store/hooksStore';
 
 /**
  * Оборачиваем в memo, чтобы при рендеринге этого компонента не перерисовывался весь дочерний контент
@@ -53,9 +54,14 @@ export const Profile: React.FC = memo(() => {
     const [textBtn, setTextBtn] = useState('Изменить');
     const [icon, setIcon] = useState(defaultIcon);
 
-    const { userInfo } = useAppSelector((state) => state.userReducer);
+    const { userInfo, isAuthenticated } = useAppSelector(
+        (state) => state.userReducer,
+    );
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
+    useEffect(() => {
+        dispatch(userActions.initAuthData());
+    }, [dispatch]);
 
     const updateFunc = () => {
         if (Object.keys(errors).length !== 0) {
@@ -119,7 +125,12 @@ export const Profile: React.FC = memo(() => {
             setIcon(`${baseUrl}/resources${userInfo?.avatar}`);
         }
     }, [userInfo, icon]);
-
+    // useAuth();
+    useEffect(() => {
+        if (!isAuthenticated) {
+            navigate('/login');
+        }
+    }, [isAuthenticated]);
     return (
         <div className={cls.profile}>
             <header className={cls.profile_header}>

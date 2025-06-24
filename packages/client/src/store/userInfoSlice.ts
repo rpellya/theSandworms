@@ -23,6 +23,8 @@ export const userSlice = createSlice({
 			if (user) {
 				state.userInfo = JSON.parse(user);
 				state.isAuthenticated = true;
+			} else {
+				state.isAuthenticated = false;
 			}
 		},
 		logout: (state) => {
