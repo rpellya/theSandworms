@@ -3,6 +3,7 @@ import cls from './ForumCommentCell.module.scss';
 import { TextLabel } from 'components/TextLabel';
 import { TForumMessage } from '../../types';
 import profileImgMock from '/src/assets/img/profileMockImg.webp';
+import { EmojiButton } from './EmojiButton';
 
 interface ForumCommentCellProps {
     message: TForumMessage;
@@ -37,6 +38,7 @@ export const ForumCommentCell = memo(({ message }: ForumCommentCellProps) => {
             </div>
             <div className={cls.commentBody}>
                 <TextLabel text={message.message} />
+                <EmojiButton />
             </div>
         </div>
     );
