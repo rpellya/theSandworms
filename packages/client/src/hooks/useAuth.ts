@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
-import { useAppSelector } from './hooks';
 import { useEffect } from 'react';
 import { RoutePath } from 'app/providers/router/config/routeConfig';
+import { useAppSelector } from 'store/hooksStore';
 
 export const useAuth = (redirectPath = RoutePath.login) => {
 	const isAuthenticated = useAppSelector(

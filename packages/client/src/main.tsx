@@ -29,6 +29,18 @@ function startServiceWorker() {
                         '/src/assets/bg/bg-008.webp',
                         '/src/assets/faces/face-001.webp',
                         '/src/assets/faces/face-002.webp',
+                        '/src/assets/faces/face-003.webp',
+                        '/src/assets/faces/face-004.webp',
+                        '/src/assets/faces/face-005.webp',
+                        '/src/assets/faces/face-006.webp',
+                        '/src/assets/faces/face-007.webp',
+                        '/src/assets/faces/face-008.webp',
+                        '/src/assets/faces/face-009.webp',
+                        '/src/assets/faces/face-010.webp',
+                        '/src/assets/faces/face-011.webp',
+                        '/src/assets/faces/face-012.webp',
+                        '/src/assets/faces/face-013.webp',
+                        '/src/assets/faces/face-014.webp',
                         '/src/assets/img/profileMockImg.webp',
                     ];
 
@@ -54,7 +66,7 @@ function startServiceWorker() {
     }
 }
 
-//startServiceWorker();
+startServiceWorker();
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <React.StrictMode>
