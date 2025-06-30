@@ -66,7 +66,7 @@ function startServiceWorker() {
     }
 }
 
-//startServiceWorker();
+startServiceWorker();
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <React.StrictMode>
