@@ -4,15 +4,23 @@ import { Suspense, useEffect } from 'react';
 import { useAppDispatch } from 'store/hooksStore';
 import { userActions } from 'store/userInfoSlice';
 import { useSendCode } from 'hooks/useSendCode';
+import { useLazySetUserQuery } from 'api/auth/oAuthApi';
 
 const App = () => {
     const dispatch = useAppDispatch();
+    const [sendUserToBff] = useLazySetUserQuery();
 
     useEffect(() => {
         dispatch(userActions.initAuthData());
     }, [dispatch]);
 
     useSendCode();
+    useEffect(() => {
+        const currentUser = localStorage.getItem('user');
+        if (currentUser) {
+            sendUserToBff(currentUser);
+        }
+    }, []);
 
     return (
         <div className="App">

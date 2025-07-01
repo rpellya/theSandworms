@@ -2,7 +2,7 @@
     "compilerOptions": {
         "composite": true,
         "target": "es2019",
-        "module": "CommonJS", 
+        "module": "CommonJS",
         "moduleResolution": "node",
         "esModuleInterop": true,
         "sourceMap": true,
@@ -23,6 +23,8 @@
         "paths": {
             "*": ["types/*"]
         },
-        "outDir": "dist"
+        "outDir": "dist",
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true
     }
 }

@@ -8,6 +8,7 @@ interface ForumCellProps {
 }
 
 export const ForumCell = memo(({ topic }: ForumCellProps) => {
+    console.log(topic);
     return (
         <div className={cls.ForumCell}>
             <TextLabel className={cls.title} text={topic.title} />
