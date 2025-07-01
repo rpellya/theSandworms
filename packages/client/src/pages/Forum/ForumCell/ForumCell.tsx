@@ -11,7 +11,10 @@ export const ForumCell = memo(({ topic }: ForumCellProps) => {
     console.log(topic);
     return (
         <div className={cls.ForumCell}>
-            <TextLabel className={cls.title} text={topic.title} />
+            <div>
+                <TextLabel className={cls.title} text={topic.title} />
+            </div>
+
             <TextLabel
                 className={cls.date}
                 text={topic.dateTime.toLocaleDateString()}

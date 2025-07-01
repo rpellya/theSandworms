@@ -8,9 +8,11 @@ import { useState } from 'react';
 import { Modal } from 'components/Modal/Modal';
 import { ForumTopicForm } from './ForumTopicForm';
 import { AppLink } from 'components/Link/AppLink';
+import { TForumTopic } from './types';
 
 export const Forum = memo(() => {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [topics, setTopics] = useState<TForumTopic[]>(forumTopicsMock);
 
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
@@ -36,7 +38,7 @@ export const Forum = memo(() => {
                     </Modal>
                 </div>
                 <div className={cls.topicsOverlay}>
-                    {forumTopicsMock.map((topic) => (
+                    {topics.map((topic) => (
                         <AppLink
                             key={topic.id}
                             to={`/forum/${topic.id}`}
