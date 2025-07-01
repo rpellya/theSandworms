@@ -1,17 +1,28 @@
-// client/src/entry-server.tsx
-import React from 'react';
 import { renderToString } from 'react-dom/server';
 import { StaticRouter } from 'react-router';
 import App from './app/App';
 import { Provider } from 'react-redux';
-import { store } from './store';
+import { rootReducer } from 'store/rootReduser';
+import { configureStore } from '@reduxjs/toolkit';
+import { fetchUserThunk } from 'store/userInfoSlice';
 
-export function render(url: string) {
-    return renderToString(
-        <Provider store={store}>
-            <StaticRouter location={url}>
-                <App />
-            </StaticRouter>
-        </Provider>,
-    );
-}
+export const render = async (url: string) => {
+    const store = configureStore({
+        reducer: rootReducer,
+    });
+
+    console.log(store.getState(), 'store.getState()');
+
+    await store.dispatch(fetchUserThunk());
+
+    return {
+        html: renderToString(
+            <Provider store={store}>
+                <StaticRouter location={url}>
+                    <App />
+                </StaticRouter>
+            </Provider>,
+        ),
+        initialState: store.getState(),
+    };
+};
