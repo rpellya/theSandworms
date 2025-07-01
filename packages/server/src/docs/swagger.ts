@@ -36,11 +36,13 @@ const options: swaggerJsdoc.Options = {
 			},
 		},
 	},
-	apis: ['./src/controllers/*.ts'], // путь к JSDoc комментариям
+	apis: ['./src/controllers/*.ts'],
 };
 
 const swaggerSpec = swaggerJsdoc(options);
 
 export const setupSwagger = (app: Express) => {
-	app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+	// app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+	app.use('/docs', swaggerUi.serve as any);
+	app.get('/docs', swaggerUi.setup(swaggerSpec) as any);
 };
