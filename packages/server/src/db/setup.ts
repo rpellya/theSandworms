@@ -22,7 +22,7 @@ export async function setup() {
 	const superClient = new Client({
 		user: SUPERUSER,
 		password: SUPERPASS,
-		host: 'localhost',
+		host: '127.0.0.1',
 		port: Number(POSTGRES_PORT),
 		database: 'postgres',
 	});

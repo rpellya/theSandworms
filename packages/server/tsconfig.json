@@ -1,8 +1,9 @@
 {
     "compilerOptions": {
+        "skipLibCheck": true,
         "composite": true,
         "target": "es2019",
-        "module": "CommonJS",
+        "module": "CommonJS", 
         "moduleResolution": "node",
         "esModuleInterop": true,
         "sourceMap": true,
@@ -17,7 +18,7 @@
         "noUnusedParameters": true,
         "noUnusedLocals": true,
         "forceConsistentCasingInFileNames": true,
-        "lib": ["es2019", "esnext.asynciterable"],
+        "lib": ["es2019", "esnext.asynciterable", "dom"],
         "types": ["node", "jest"],
         "baseUrl": ".",
         "paths": {
@@ -26,5 +27,8 @@
         "outDir": "dist",
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true
-    }
+    },
+    "exclude": [
+        "dist"
+    ]
 }
