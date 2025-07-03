@@ -8,7 +8,8 @@
         "dev": "cross-env NODE_ENV=development nodemon index.ts",
         "lint": "eslint .",
         "format": "prettier --write .",
-        "test": "jest ."
+        "test": "jest .",
+        "setup-db": "ts-node src/db/setup.ts"
     },
     "dependencies": {
         "cors": "^2.8.5",
@@ -18,8 +19,15 @@
         "express": "^4.21.2",
         "node-fetch": "2",
         "pg": "^8.8.0",
+        "pg-format": "^1.0.4",
         "prettier": "^2.7.1",
-        "vite": "^7.0.0"
+        "reflect-metadata": "^0.2.2",
+        "sequelize": "^6.6.5",
+        "sequelize-typescript": "^2.1.0",
+        "swagger-jsdoc": "^6.2.8",
+        "swagger-ui-express": "^5.0.1",
+        "vite": "^7.0.0",
+        "winston": "^3.17.0"
     },
     "devDependencies": {
         "@types/cors": "^2.8.12",
@@ -27,6 +35,9 @@
         "@types/jest": "^28.1.8",
         "@types/node-fetch": "2",
         "@types/pg": "^8.6.5",
+        "@types/pg-format": "^1.0.5",
+        "@types/swagger-jsdoc": "^6.0.4",
+        "@types/swagger-ui-express": "^4.1.8",
         "@typescript-eslint/eslint-plugin": "^5.35.1",
         "@typescript-eslint/parser": "^5.35.1",
         "babel-jest": "^29.0.1",

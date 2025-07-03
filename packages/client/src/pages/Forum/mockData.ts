@@ -22,7 +22,7 @@ const mockTopic: TForumTopic = {
 	author: mockAuthor,
 };
 
-const forumTopicsMock: TForumTopic[] = Array.from({ length: 20 }, (_, i) => {
+const forumTopicsMock: TForumTopic[] = Array.from({ length: 10 }, (_, i) => {
 	const topicId = `t${i + 1}`;
 	const messageId = `m${i + 1}`;
 

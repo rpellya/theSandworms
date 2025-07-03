@@ -4,11 +4,16 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import { createServer as createViteServer } from 'vite';
 import fs from 'fs/promises';
-import apiRouter from './routes/index';
+import apiRouter from './src/routes/index';
+import { dbConnect } from './src/init';
+import { setup } from './src/db/setup';
+import { setupSwagger } from './src/docs/swagger';
 
 dotenv.config();
 
 async function start() {
+	await setup();
+	await dbConnect();
 	const app = express();
 	const port = Number(process.env.SERVER_PORT) || 3001;
 	app.use(express.json());
@@ -40,6 +45,8 @@ async function start() {
 	);
 	app.use('/logo.ico', express.static(path.resolve(clientPath, 'logo.ico')));
 	app.use('/sw.js', express.static(path.resolve(clientPath, 'sw.js')));
+
+	setupSwagger(app);
 
 	// Игнорируем SSR для статических файлов по расширению
 	app.get(/\.(js|ts|jsx|tsx|css|map|webp|png|jpg|jpeg|svg)$/, (_, res) => {

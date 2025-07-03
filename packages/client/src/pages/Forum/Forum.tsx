@@ -2,8 +2,7 @@ import { memo } from 'react';
 import { TextLabel } from 'components/TextLabel';
 import { ForumCell } from './ForumCell';
 import cls from './Forum.module.scss';
-import { forumTopicsMock } from './mockData';
-
+import { forumMessagesMock, forumTopicsMock } from './mockData';
 import { Button } from 'components/Button';
 import { useState } from 'react';
 import { Modal } from 'components/Modal/Modal';
@@ -17,7 +16,8 @@ export const Forum = memo(() => {
 
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
-
+    console.log('forumTopicsMock', forumTopicsMock);
+    console.log('forumMessagesMock', forumMessagesMock);
     return (
         <div className={cls.Forum}>
             <div className={cls.forumOverlay}>

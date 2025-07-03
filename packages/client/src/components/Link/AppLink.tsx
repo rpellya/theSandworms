@@ -12,14 +12,13 @@ interface AppLinkProps extends LinkProps {
 }
 
 export const AppLink: React.FC<AppLinkProps> = memo(
-    ({ className, text, children, ...otherProps }) => {
+    ({ className, children, text, ...otherProps }) => {
         return (
             <Link
                 className={classNames(cls.applink, {}, [className])}
                 {...otherProps}
             >
-                {text ?? ''}
-                {children ?? ''}
+                {children ? children : text || ''}
             </Link>
         );
     },
