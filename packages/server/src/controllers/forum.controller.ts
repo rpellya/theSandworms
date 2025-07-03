@@ -5,6 +5,7 @@ import {
 	getListTopicsFromDB,
 	getTopicById,
 } from '../services/forum.service';
+import { logger } from '../logger';
 
 /**
  * @swagger
@@ -128,7 +129,7 @@ export const createTopic = async (req: Request, res: Response) => {
 		const topic = await createTopicDB({ title, description, userId });
 		return res.status(201).json({ data: topic });
 	} catch (error) {
-		console.error('Ошибка при создании топика:', error);
+		logger.error('Ошибка при создании топика:', error);
 		return res.status(500).json({ error: 'Internal server error' });
 	}
 };
@@ -183,7 +184,7 @@ export const addMessageToTopic = async (req: Request, res: Response) => {
 		});
 		return res.status(201).json({ data: resMessage });
 	} catch (error) {
-		console.error('Ошибка при создании сообщения:', error);
+		logger.error('Ошибка при создании сообщения:', error);
 		return res.status(500).json({ error: 'Internal server error' });
 	}
 };

@@ -1,7 +1,8 @@
-// src/db/setup.ts
-
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Client } from 'pg';
 import dotenv from 'dotenv';
+import format from 'pg-format';
+import { logger } from '../logger';
 
 dotenv.config();
 
@@ -14,9 +15,9 @@ const {
 	SUPERPASS,
 } = process.env;
 
-const DB_USER = POSTGRES_USER;
-const DB_PASSWORD = POSTGRES_PASSWORD;
-const DB_NAME = POSTGRES_DB;
+const DB_USER = POSTGRES_USER!;
+const DB_PASSWORD = POSTGRES_PASSWORD!;
+const DB_NAME = POSTGRES_DB!;
 
 export async function setup() {
 	const superClient = new Client({
@@ -30,14 +31,21 @@ export async function setup() {
 	await superClient.connect();
 
 	// 1. Создать пользователя при отсутствии
-	await superClient.query(`
+	const createUserQuery = format(
+		`
 		DO $$
 		BEGIN
-			IF NOT EXISTS (SELECT FROM pg_roles WHERE rolname = '${DB_USER}') THEN
-				CREATE ROLE ${DB_USER} LOGIN PASSWORD '${DB_PASSWORD}';
+			IF NOT EXISTS (SELECT FROM pg_roles WHERE rolname = %L) THEN
+				CREATE ROLE %I LOGIN PASSWORD %L;
 			END IF;
 		END$$;
-	`);
+	`,
+		DB_USER,
+		DB_USER,
+		DB_PASSWORD,
+	);
+
+	await superClient.query(createUserQuery);
 
 	// 2. Создать базу данных, если её нет
 	const dbExists = await superClient.query(
@@ -46,10 +54,15 @@ export async function setup() {
 	);
 
 	if (dbExists.rowCount === 0) {
-		await superClient.query(`CREATE DATABASE ${DB_NAME} OWNER ${DB_USER};`);
-		console.log(`✅ База данных ${DB_NAME} создана`);
+		const createDbQuery = format(
+			'CREATE DATABASE %I OWNER %I;',
+			DB_NAME,
+			DB_USER,
+		);
+		await superClient.query(createDbQuery);
+		logger.info(`✅ База данных ${DB_NAME} создана`);
 	} else {
-		console.log(`ℹ️ База данных ${DB_NAME} уже существует`);
+		logger.info(`ℹ️ База данных ${DB_NAME} уже существует`);
 	}
 
 	await superClient.end();
@@ -66,12 +79,20 @@ export async function setup() {
 	await dbClient.connect();
 
 	// 4. Передача прав и владения схемой `public`
-	await dbClient.query(`
-  ALTER SCHEMA public OWNER TO ${DB_USER};
-  GRANT ALL ON SCHEMA public TO ${DB_USER};
-  ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO ${DB_USER};
-  ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO ${DB_USER};
-`);
+	const grantPermissionsQuery = format(
+		`
+		ALTER SCHEMA public OWNER TO %I;
+		GRANT ALL ON SCHEMA public TO %I;
+		ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO %I;
+		ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO %I;
+	`,
+		DB_USER,
+		DB_USER,
+		DB_USER,
+		DB_USER,
+	);
+
+	await dbClient.query(grantPermissionsQuery);
 
 	await dbClient.end();
 
@@ -85,10 +106,9 @@ export async function setup() {
 	});
 	try {
 		await appClient.connect();
-
-		console.log('✅ Подключение к базе под пользователем прошло успешно');
+		logger.info('✅ Подключение к базе под пользователем прошло успешно');
 	} catch (error) {
-		console.error(error);
+		logger.error(error);
 	} finally {
 		await appClient.end();
 	}

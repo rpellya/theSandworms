@@ -1,6 +1,7 @@
 import { User } from '../models/user';
 import { Message } from '../models/message';
 import { Topic } from '../models/topic';
+import { logger } from '../logger';
 
 interface CreateMessageParams {
 	topicId: string;
@@ -37,7 +38,7 @@ export const getListTopicsFromDB = async () => {
 		});
 		return topics;
 	} catch (error) {
-		console.error('❌ Ошибка при получении топиков:', error);
+		logger.error('❌ Ошибка при получении топиков:', error);
 		throw error;
 	}
 };
@@ -64,7 +65,7 @@ export const getTopicById = async (id: string) => {
 		});
 		return topic;
 	} catch (error) {
-		console.error('❌ Ошибка при получении топика по ID:', error);
+		logger.error('❌ Ошибка при получении топика по ID:', error);
 		throw error;
 	}
 };
@@ -74,7 +75,7 @@ export const createTopicDB = async (params: Record<any, string>) => {
 		const topic = await Topic.create(params);
 		return topic;
 	} catch (err) {
-		console.error('Ошибка при создании топика:', err);
+		logger.error('Ошибка при создании топика:', err);
 		throw err;
 	}
 };

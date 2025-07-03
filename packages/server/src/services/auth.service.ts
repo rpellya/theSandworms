@@ -1,5 +1,6 @@
 import fetch from 'node-fetch';
 import { User } from '../models/user';
+import { logger } from '../logger';
 
 const base_host = 'https://ya-praktikum.tech/api/v2/oauth/yandex';
 
@@ -23,10 +24,10 @@ export const setUserIntoDb = async (user: Record<string, any>) => {
 			avatar: user.avatar,
 			display_name: user.display_name,
 		});
-		console.log(`👤 Пользователь ${user.id} сохранён`);
+		logger.info(`👤 Пользователь ${user.id} сохранён`);
 		return `👤 Пользователь ${user.id} сохранён`;
 	} catch (error) {
-		console.error('Ошибка при сохранении пользователя в БД:', error);
+		logger.error('Ошибка при сохранении пользователя в БД:', error);
 		return error;
 	}
 };
