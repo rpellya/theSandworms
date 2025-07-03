@@ -11,7 +11,6 @@ export const useSendCode = () => {
     const location = useLocation();
     const dispatch = useAppDispatch();
     const [getUserInfo] = useLazyGetAuthUserQuery();
-
     const [sendCode] = useSendYandexCodeMutation();
 
     const handleSendCode = async (code: string) => {
