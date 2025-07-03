@@ -1,17 +1,17 @@
 import { TextLabel } from 'components/TextLabel';
 import cls from './Login.module.scss';
-import React, { memo } from 'react';
+import React, { memo, useEffect } from 'react';
 import { Button } from 'components/Button';
 import { AppLink } from 'components/Link/AppLink';
 import { Input } from 'components/Input';
-import { useLazyGetAuthUserQuery, useLoginApiMutation } from 'api/auth/authApi';
+import { useLoginApiMutation } from 'api/auth/authApi';
 import { Form } from 'components/Form';
 import { useNavigate } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from 'store/hooks';
+import { useAppSelector } from 'store/hooksStore';
 import { useForm } from 'react-hook-form';
-import { USER_LOCALSTORAGE_KEY } from 'app/providers/const/localStorage';
-import { userActions } from 'store/userInfoSlice';
 import { RoutePath } from 'app/providers/router/config/routeConfig';
+import { useLazyGetYandexServiceIdQuery } from 'api/auth/oAuthApi';
+import { useAuth } from 'hooks/useAuth';
 
 interface LoginProps {
     regPath: string;
@@ -29,13 +29,9 @@ export const Login: React.FC<LoginProps> = memo(({ regPath }) => {
     } = useForm<LoginData>({
         mode: 'onSubmit',
     });
-    const isAuthenticated = useAppSelector(
-        (state) => state.userReducer.isAuthenticated,
-    );
+    const { isAuthenticated } = useAppSelector((state) => state.userReducer);
     const [loginFunc] = useLoginApiMutation();
-    const [getAuthUser] = useLazyGetAuthUserQuery();
     const navigate = useNavigate();
-    const dispatch = useAppDispatch();
 
     const onSubmit = async (values: LoginData) => {
         if (isAuthenticated) {
@@ -46,24 +42,34 @@ export const Login: React.FC<LoginProps> = memo(({ regPath }) => {
             const response = await loginFunc(values);
 
             if (response.data === 'OK') {
-                const result = await getAuthUser();
-
-                if (result.status === 'fulfilled') {
-                    navigate(RoutePath.main);
-
-                    localStorage.setItem(
-                        USER_LOCALSTORAGE_KEY,
-                        JSON.stringify(result.data),
-                    );
-
-                    dispatch(userActions.setUserInfo(result.data));
-                }
+                navigate(RoutePath.main);
             }
         } catch (err) {
             console.error('error:', err);
         }
     };
 
+    const [getServiceId] = useLazyGetYandexServiceIdQuery();
+
+    const authorizationUsingYandex = async () => {
+        try {
+            const { data } = await getServiceId({
+                redirectUri: window.location.origin,
+            });
+            if (data?.clientId) {
+                // eslint-disable-next-line max-len
+                const URL = `https://oauth.yandex.ru/authorize?response_type=code&client_id=${data.clientId}&redirect_uri=${window.location.origin}/oauth`;
+                window.location.href = URL;
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
+    useEffect(() => {
+        if (isAuthenticated) {
+            navigate(-1);
+        }
+    }, [isAuthenticated]);
     return (
         <div className={cls.loginPage}>
             <Form onSubmit={handleSubmit(onSubmit)} method="submit">
@@ -121,6 +127,12 @@ export const Login: React.FC<LoginProps> = memo(({ regPath }) => {
                 )}
                 <Button className={cls.loginPage__button} type="submit">
                     Войти
+                </Button>
+                <Button
+                    className={cls.loginPage__button}
+                    onClick={authorizationUsingYandex}
+                >
+                    Войти через Яндекс
                 </Button>
                 <AppLink
                     to={regPath}

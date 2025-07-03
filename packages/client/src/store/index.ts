@@ -4,6 +4,7 @@ import { rootReducer } from 'store/rootReduser';
 import { authApi } from 'api/auth/authApi';
 import { rtkApi } from 'api/gameApi/rtk';
 import { leaderBoardApi } from 'api/leaderBoard/leaderBoardApi';
+import { oAuthApi } from 'api/auth/oAuthApi';
 
 // Глобально декларируем в window наш ключ и задаем ему тип такой же, как у стейта в сторе
 declare global {
@@ -18,6 +19,7 @@ export const store = configureStore({
 	middleware: (getDefaultMiddleware) =>
 		getDefaultMiddleware().concat(
 			authApi.middleware,
+			oAuthApi.middleware,
 			rtkApi.middleware,
 			leaderBoardApi.middleware,
 		),

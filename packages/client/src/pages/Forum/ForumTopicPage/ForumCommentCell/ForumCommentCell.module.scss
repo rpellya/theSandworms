@@ -1,6 +1,7 @@
 .commentCell {
     padding: 12px;
     border-bottom: 1px solid #ccc;
+    width: 100%;
 }
 
 .commentHeader {
@@ -31,5 +32,6 @@
 }
 
 .commentBody {
-    margin-left: 40px;
+    display: flex;
+    justify-content: space-between;
 }
