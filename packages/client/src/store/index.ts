@@ -12,7 +12,6 @@ declare global {
 		APP_INITIAL_STATE: ReturnType<typeof rootReducer>;
 	}
 }
-console.log(window.APP_INITIAL_STATE, 'window.APP_INITIAL_STATE');
 
 export const store = configureStore({
 	reducer: rootReducer,

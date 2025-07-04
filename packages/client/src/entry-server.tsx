@@ -11,8 +11,6 @@ export const render = async (url: string) => {
         reducer: rootReducer,
     });
 
-    console.log(store.getState(), 'store.getState()');
-
     await store.dispatch(fetchUserThunk());
 
     return {

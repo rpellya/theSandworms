@@ -17,7 +17,16 @@ export const fetchUserThunk = createAsyncThunk(
 	'user/fetchUserThunk',
 	async () => {
 		const url = 'http://localhost:3001/user';
-		return fetch(url).then((res) => res.json());
+		return fetch(url)
+			.then((res) => {
+				if (!res.ok) {
+					throw new Error('Failed to fetch user');
+				}
+				return res.json();
+			})
+			.catch((error) => {
+				console.error(error);
+			});
 	},
 );
 
@@ -38,10 +47,7 @@ export const userSlice = createSlice({
 			}
 		},
 		logout: (state) => {
-			console.log(state, 'logout');
-
 			state.userInfo = null;
-			// state.isAuthenticated = false;
 			localStorage.removeItem(USER_LOCALSTORAGE_KEY);
 		},
 	},
