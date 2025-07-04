@@ -6,6 +6,13 @@ import { rtkApi } from 'api/gameApi/rtk';
 import { leaderBoardApi } from 'api/leaderBoard/leaderBoardApi';
 import { oAuthApi } from 'api/auth/oAuthApi';
 
+// Глобально декларируем в window наш ключ и задаем ему тип такой же, как у стейта в сторе
+declare global {
+	interface Window {
+		APP_INITIAL_STATE: ReturnType<typeof rootReducer>;
+	}
+}
+
 export const store = configureStore({
 	reducer: rootReducer,
 	middleware: (getDefaultMiddleware) =>
@@ -15,6 +22,8 @@ export const store = configureStore({
 			rtkApi.middleware,
 			leaderBoardApi.middleware,
 		),
+	preloadedState:
+		typeof window === 'undefined' ? undefined : window.APP_INITIAL_STATE,
 });
 
 export type RootState = ReturnType<typeof store.getState>;

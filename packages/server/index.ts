@@ -4,6 +4,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import { createServer as createViteServer } from 'vite';
 import fs from 'fs/promises';
+import serialize from 'serialize-javascript';
 import apiRouter from './src/routes/index';
 import { dbConnect } from './src/init';
 import { setup } from './src/db/setup';
@@ -53,6 +54,11 @@ async function start() {
 		res.status(404).end();
 	});
 
+	// Тестовые данные
+	app.get('/user', (_, res) => {
+		res.json({ first_name: '</script>Иван', second_name: 'Иванов' });
+	});
+
 	// Обработка SSR (в конце)
 	app.get('*', async (req, res) => {
 		try {
@@ -69,9 +75,16 @@ async function start() {
 			const { render } = await vite.ssrLoadModule(
 				'/src/entry-server.tsx',
 			);
-			const appHtml = await render(url);
 
-			const html = template.replace('<!--ssr-outlet-->', appHtml);
+			const { html: appHtml, initialState } = await render();
+
+			const html = template.replace('<!--ssr-outlet-->', appHtml).replace(
+				'<!--ssr-initial-state-->',
+				`<script>window.APP_INITIAL_STATE = ${serialize(initialState, {
+					isJSON: true,
+				})}</script>`,
+			);
+
 			res.status(200).set({ 'Content-Type': 'text/html' }).end(html);
 		} catch (e) {
 			if (e instanceof Error) {
