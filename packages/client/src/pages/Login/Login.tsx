@@ -4,14 +4,15 @@ import React, { memo, useEffect } from 'react';
 import { Button } from 'components/Button';
 import { AppLink } from 'components/Link/AppLink';
 import { Input } from 'components/Input';
-import { useLoginApiMutation } from 'api/auth/authApi';
+import { useLazyGetAuthUserQuery, useLoginApiMutation } from 'api/auth/authApi';
 import { Form } from 'components/Form';
 import { useNavigate } from 'react-router-dom';
-import { useAppSelector } from 'store/hooksStore';
+import { useAppDispatch, useAppSelector } from 'store/hooksStore';
 import { useForm } from 'react-hook-form';
 import { RoutePath } from 'app/providers/router/config/routeConfig';
 import { useLazyGetYandexServiceIdQuery } from 'api/auth/oAuthApi';
-import { useAuth } from 'hooks/useAuth';
+import { userActions } from 'store/userInfoSlice';
+import { USER_LOCALSTORAGE_KEY } from 'app/providers/const/localStorage';
 
 interface LoginProps {
     regPath: string;
@@ -31,7 +32,21 @@ export const Login: React.FC<LoginProps> = memo(({ regPath }) => {
     });
     const { isAuthenticated } = useAppSelector((state) => state.userReducer);
     const [loginFunc] = useLoginApiMutation();
+    const [getUserInfo] = useLazyGetAuthUserQuery();
     const navigate = useNavigate();
+    const dispatch = useAppDispatch();
+
+    const getUser = () => {
+        getUserInfo().then((res) => {
+            if (res.data) {
+                dispatch(userActions.setUserInfo(res.data));
+                localStorage.setItem(
+                    USER_LOCALSTORAGE_KEY,
+                    JSON.stringify(res.data),
+                );
+            }
+        });
+    };
 
     const onSubmit = async (values: LoginData) => {
         if (isAuthenticated) {
@@ -40,8 +55,12 @@ export const Login: React.FC<LoginProps> = memo(({ regPath }) => {
 
         try {
             const response = await loginFunc(values);
-
-            if (response.data === 'OK') {
+            if (
+                response.data === 'OK' ||
+                JSON.parse((response as any).error.data).reason ===
+                    'User already in system'
+            ) {
+                setTimeout(getUser, 500);
                 navigate(RoutePath.main);
             }
         } catch (err) {
@@ -67,7 +86,7 @@ export const Login: React.FC<LoginProps> = memo(({ regPath }) => {
     };
     useEffect(() => {
         if (isAuthenticated) {
-            navigate(-1);
+            navigate('/');
         }
     }, [isAuthenticated]);
     return (
