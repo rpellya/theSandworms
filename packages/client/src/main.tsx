@@ -5,6 +5,7 @@ import App from './app/App';
 import { Provider } from 'react-redux';
 import { store } from 'store';
 import { ErrorBoundary } from 'app/providers/error-boundary/ErrorBoundary';
+import { ThemeProvider } from 'app/providers/ThemeProvider';
 import './app/styles/index.scss';
 
 function startServiceWorker() {
@@ -73,7 +74,9 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
         <Provider store={store}>
             <BrowserRouter>
                 <ErrorBoundary>
-                    <App />
+                    <ThemeProvider>
+                        <App />
+                    </ThemeProvider>
                 </ErrorBoundary>
             </BrowserRouter>
         </Provider>

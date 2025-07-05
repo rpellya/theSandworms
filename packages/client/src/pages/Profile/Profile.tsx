@@ -20,8 +20,8 @@ import { Form } from 'components/Form';
 import { useForm } from 'react-hook-form';
 import { userActions } from 'store/userInfoSlice';
 import { RoutePath } from 'app/providers/router/config/routeConfig';
-import { useAuth } from 'hooks/useAuth';
 import { useAppDispatch, useAppSelector } from 'store/hooksStore';
+import { ThemeSwitcher } from 'components/ThemeSwitcher/ThemeSwitcher';
 
 /**
  * Оборачиваем в memo, чтобы при рендеринге этого компонента не перерисовывался весь дочерний контент
@@ -125,12 +125,13 @@ export const Profile: React.FC = memo(() => {
             setIcon(`${baseUrl}/resources${userInfo?.avatar}`);
         }
     }, [userInfo, icon]);
-    // useAuth();
+
     useEffect(() => {
         if (!isAuthenticated) {
             navigate('/login');
         }
     }, [isAuthenticated]);
+
     return (
         <div className={cls.profile}>
             <header className={cls.profile_header}>
@@ -147,7 +148,7 @@ export const Profile: React.FC = memo(() => {
                 </Button>
             </header>
             <div className={cls.profile_container}>
-                <h3>Профиль</h3>
+                <h3 className={cls.profile_container__title}>Профиль</h3>
                 <img
                     onClick={() => updateIconProfile(setIcon, handleUpload)}
                     className={cls.profile_container_icon}
@@ -183,6 +184,7 @@ export const Profile: React.FC = memo(() => {
                     </Button>
                 </Form>
             </div>
+            <ThemeSwitcher />
         </div>
     );
 });
