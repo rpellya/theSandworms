@@ -5,10 +5,12 @@ import { useAppDispatch } from 'store/hooksStore';
 import { userActions } from 'store/userInfoSlice';
 import { useSendCode } from 'hooks/useSendCode';
 import { useLazySetUserQuery } from 'api/auth/oAuthApi';
+import { useLazyGetAuthUserQuery } from 'api/auth/authApi';
 
 const App = () => {
     const dispatch = useAppDispatch();
     const [sendUserToBff] = useLazySetUserQuery();
+    const [getUserData] = useLazyGetAuthUserQuery();
 
     useEffect(() => {
         dispatch(userActions.initAuthData());
@@ -19,6 +21,10 @@ const App = () => {
         const currentUser = localStorage.getItem('user');
         if (currentUser) {
             sendUserToBff(currentUser);
+        } else {
+            getUserData().then((res) => {
+                dispatch(userActions.setUserInfo(res.data));
+            });
         }
     }, []);
 

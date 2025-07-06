@@ -1,16 +1,19 @@
 import { memo, useState } from 'react';
 import cls from './ForumCommentCell.module.scss';
 import { TextLabel } from 'components/TextLabel';
-import { TForumMessage } from '../../types';
 import profileImgMock from '/src/assets/img/profileMockImg.webp';
 import { EmojiButton } from './EmojiButton';
+import { Message } from 'api/forumApi/forumApi';
+import { baseUrl } from 'consts/baseUrl';
 
 interface ForumCommentCellProps {
-    message: TForumMessage;
+    message: Message;
 }
 
 export const ForumCommentCell = memo(({ message }: ForumCommentCellProps) => {
-    const [avatarSrc, setAvatarSrc] = useState(message.author.avatarUrl);
+    const [avatarSrc, setAvatarSrc] = useState(
+        `${baseUrl}/resources${message.user?.avatar}`,
+    );
 
     const handleImgError = () => {
         setAvatarSrc(profileImgMock);
@@ -21,19 +24,23 @@ export const ForumCommentCell = memo(({ message }: ForumCommentCellProps) => {
             <div className={cls.commentHeader}>
                 <img
                     src={avatarSrc}
-                    alt={message.author.name}
+                    alt={message.user?.firstName}
                     className={cls.avatar}
                     onError={handleImgError}
                 />
                 <div className={cls.authorInfo}>
                     <TextLabel
-                        text={message.author.name}
+                        text={`${message.user?.firstName} ${message.user?.lastName}`}
                         className={cls.authorName}
                     />
-                    <TextLabel
-                        text={message.dateTime.toLocaleString()}
-                        className={cls.commentDate}
-                    />
+                    {
+                        <TextLabel
+                            text={new Date(
+                                message.updatedAt ?? message.createdAt ?? '',
+                            ).toLocaleString()}
+                            className={cls.commentDate}
+                        />
+                    }
                 </div>
             </div>
             <div className={cls.commentBody}>

@@ -30,13 +30,19 @@
 }
 
 .topicCreateButton {
+    display: block;
+    text-align: center;
     width: 100px;
     height: 30px;
     border-radius: 10px;
     border: none;
+    color: black;
     font-family: var(--font-family-custom);
     font-weight: 100;
     font-style: unset;
+    background-color: antiquewhite;
+    cursor: pointer;
+
     transition: background-color 0.2s ease, transform 0.1s ease;
 
     &:hover {

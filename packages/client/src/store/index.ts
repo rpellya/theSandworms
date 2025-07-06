@@ -5,6 +5,7 @@ import { authApi } from 'api/auth/authApi';
 import { rtkApi } from 'api/gameApi/rtk';
 import { leaderBoardApi } from 'api/leaderBoard/leaderBoardApi';
 import { oAuthApi } from 'api/auth/oAuthApi';
+import { forumApi } from 'api/forumApi/forumApi';
 
 // Глобально декларируем в window наш ключ и задаем ему тип такой же, как у стейта в сторе
 declare global {
@@ -21,6 +22,7 @@ export const store = configureStore({
 			oAuthApi.middleware,
 			rtkApi.middleware,
 			leaderBoardApi.middleware,
+			forumApi.middleware,
 		),
 	preloadedState:
 		typeof window === 'undefined' ? undefined : window.APP_INITIAL_STATE,

@@ -1,37 +1,40 @@
-import { useState } from 'react';
-import { nanoid } from 'nanoid';
-import { TForumTopic, TForumAuthor } from '../types';
+import { forwardRef, useState } from 'react';
 import cls from './ForumTopicForm.module.scss';
 import { Button } from 'components/Button';
 
-const mockAuthor: TForumAuthor = {
-    id: nanoid(),
-    name: 'John Doe',
-    avatarUrl: '',
-};
+import { Topic, useCreateTopicMutation } from 'api/forumApi/forumApi';
+import { useAppSelector } from 'store/hooksStore';
 
-export const ForumTopicForm = () => {
+export const ForumTopicForm = (props) => {
+    const [createTopicApi] = useCreateTopicMutation();
+
     const [title, setTitle] = useState('');
+
+    const { userInfo } = useAppSelector((state) => {
+        console.log(state);
+        return state.userReducer;
+    });
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
-        const topicId = nanoid();
-
-        const newTopic: TForumTopic = {
-            id: topicId,
+        const newTopic: Topic = {
             title,
-            dateTime: new Date(),
-            author: mockAuthor,
-            lastMessage: {
-                id: nanoid(),
-                message: 'Пока нет сообщений',
-                author: mockAuthor,
-                dateTime: new Date(),
-                topicId,
-            },
+            description: message.value,
+            userId: userInfo?.id ?? 0,
         };
-        console.log('Создан топик:', newTopic);
+        createTopic(newTopic);
+    };
+
+    const createTopic = async (data: Topic) => {
+        try {
+            const result = await createTopicApi(data);
+            if (typeof props.closeModal === 'function') {
+                props.closeModal();
+            }
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     return (
@@ -49,7 +52,7 @@ export const ForumTopicForm = () => {
                 </div>
 
                 <div className={cls.formGroup}>
-                    <label htmlFor="message">Сообщение</label>
+                    <label htmlFor="message">Описание</label>
                     <textarea id="message" name="message" />
                 </div>
             </div>

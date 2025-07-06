@@ -1,27 +1,46 @@
-import { memo } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { TextLabel } from 'components/TextLabel';
 import { ForumCell } from './ForumCell';
 import cls from './Forum.module.scss';
-import { forumMessagesMock, forumTopicsMock } from './mockData';
 import { Button } from 'components/Button';
-import { useState } from 'react';
 import { Modal } from 'components/Modal/Modal';
 import { ForumTopicForm } from './ForumTopicForm';
 import { AppLink } from 'components/Link/AppLink';
-import { TForumTopic } from './types';
+
+import { Topic, useGetTopicsMutation } from 'api/forumApi/forumApi';
+import { RoutePath } from 'app/providers/router/config/routeConfig';
 
 export const Forum = memo(() => {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [topics, setTopics] = useState<TForumTopic[]>(forumTopicsMock);
+    const [topics, setTopics] = useState<Topic[]>([]);
+    const [getTopicsApi] = useGetTopicsMutation();
 
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
-    console.log('forumTopicsMock', forumTopicsMock);
-    console.log('forumMessagesMock', forumMessagesMock);
+
+    const getTopics = async () => {
+        try {
+            const result = await getTopicsApi(null);
+            setTopics(result.data.topics);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    useEffect(() => {
+        getTopics();
+    }, []);
+
     return (
         <div className={cls.Forum}>
             <div className={cls.forumOverlay}>
                 <div className={cls.forumHeader}>
+                    <AppLink
+                        className={cls.topicCreateButton}
+                        to={RoutePath.main}
+                    >
+                        Назад
+                    </AppLink>
                     <TextLabel className={cls.forumTitle} text="Форум" />
                     <Button
                         onClick={openModal}
@@ -34,11 +53,16 @@ export const Forum = memo(() => {
                         onClose={closeModal}
                         title="Создание топика"
                     >
-                        <ForumTopicForm />
+                        <ForumTopicForm
+                            closeModal={() => {
+                                closeModal();
+                                getTopics();
+                            }}
+                        />
                     </Modal>
                 </div>
                 <div className={cls.topicsOverlay}>
-                    {topics.map((topic) => (
+                    {topics?.map((topic) => (
                         <AppLink
                             key={topic.id}
                             to={`/forum/${topic.id}`}
