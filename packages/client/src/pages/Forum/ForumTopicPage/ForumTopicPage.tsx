@@ -39,6 +39,8 @@ export const ForumTopicPage = () => {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
+        const content = e.currentTarget.elements.content;
+
         const newMessage: Message = {
             message: content.value,
             topicId: id ?? '',

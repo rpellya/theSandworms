@@ -5,7 +5,7 @@ import { Button } from 'components/Button';
 import { Topic, useCreateTopicMutation } from 'api/forumApi/forumApi';
 import { useAppSelector } from 'store/hooksStore';
 
-export const ForumTopicForm = (props) => {
+export const ForumTopicForm = (props: { closeModal: () => void }) => {
     const [createTopicApi] = useCreateTopicMutation();
 
     const [title, setTitle] = useState('');
