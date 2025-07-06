@@ -21,7 +21,7 @@ export const ForumCell = memo(({ topic }: ForumCellProps) => {
             <TextLabel className={cls.lastMessage} text={topic.description} />
             <TextLabel
                 className={cls.author}
-                text={`${topic.user.firstName} ${topic.user.lastName}`}
+                text={`${topic.user?.firstName} ${topic.user?.lastName}`}
             />
         </div>
     );
