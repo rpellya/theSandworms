@@ -3,8 +3,8 @@ import { Theme, useTheme } from 'app/providers/ThemeProvider';
 import LightIcon from 'assets/icons/theme-light.svg';
 import DarkIcon from 'assets/icons/theme-dark.svg';
 import { memo } from 'react';
-import { Button, ButtonVariant } from '../Button/Button';
 import cls from './ThemeSwitcher.module.scss';
+import { Button, ButtonVariant } from 'components/Button';
 
 interface ThemeSwitcherProps {
     className?: string;

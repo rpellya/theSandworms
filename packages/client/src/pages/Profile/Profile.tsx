@@ -21,7 +21,7 @@ import { useForm } from 'react-hook-form';
 import { userActions } from 'store/userInfoSlice';
 import { RoutePath } from 'app/providers/router/config/routeConfig';
 import { useAppDispatch, useAppSelector } from 'store/hooksStore';
-import { ThemeSwitcher } from 'components/ThemeSwitcher/ThemeSwitcher';
+import { ThemeSwitcher } from 'components/ThemeSwitcher';
 
 /**
  * Оборачиваем в memo, чтобы при рендеринге этого компонента не перерисовывался весь дочерний контент
