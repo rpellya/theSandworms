@@ -23,6 +23,8 @@ export const ForumTopicPage = () => {
         return state.userReducer;
     });
 
+    let content;
+
     const getTopic = async () => {
         try {
             const result = await getTopicApi(id);
@@ -36,7 +38,7 @@ export const ForumTopicPage = () => {
         getTopic();
     }, []);
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const form = e.currentTarget;
         const formElements = form.elements as typeof form.elements & {
@@ -49,12 +51,9 @@ export const ForumTopicPage = () => {
             topicId: id ?? '',
             userId: userInfo?.id ?? 0,
         };
-        createMessage(newMessage);
-    };
 
-    const createMessage = async (data: Message) => {
         try {
-            const result = await createMessageApi(data);
+            const result = await createMessageApi(newMessage);
             content.value = '';
             getTopic();
         } catch (error) {
