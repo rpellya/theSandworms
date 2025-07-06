@@ -15,10 +15,15 @@ export const ForumTopicForm = (props: { closeModal: () => void }) => {
         return state.userReducer;
     });
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        const message = e.currentTarget.elements.message;
+        const form = e.currentTarget;
+        const formElements = form.elements as typeof form.elements & {
+            message: HTMLTextAreaElement;
+        };
+
+        const message = formElements.message;
 
         const newTopic: Topic = {
             title,

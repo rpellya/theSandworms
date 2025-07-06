@@ -36,10 +36,13 @@ export const ForumTopicPage = () => {
         getTopic();
     }, []);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-
-        const content = e.currentTarget.elements.content;
+        const form = e.currentTarget;
+        const formElements = form.elements as typeof form.elements & {
+            content: HTMLTextAreaElement;
+        };
+        const content = formElements.content;
 
         const newMessage: Message = {
             message: content.value,
