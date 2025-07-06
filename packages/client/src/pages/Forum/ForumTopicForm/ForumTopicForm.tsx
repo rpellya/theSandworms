@@ -18,6 +18,8 @@ export const ForumTopicForm = (props: { closeModal: () => void }) => {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
+        const message = e.currentTarget.elements.message;
+
         const newTopic: Topic = {
             title,
             description: message.value,
