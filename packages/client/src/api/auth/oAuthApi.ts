@@ -1,7 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { baseUrl } from 'consts/baseUrl';
+import { baseUrl, apiUrl } from 'consts/baseUrl';
 
-const bffUrl = 'http://localhost:3001';
 interface ServiceIdResponse {
 	clientId: string;
 }
@@ -23,7 +22,7 @@ export const oAuthApi = createApi({
 			{ redirectUri: string }
 		>({
 			query: ({ redirectUri }) => ({
-				url: `${bffUrl}/oauth/yandex`,
+				url: `${apiUrl}/oauth/yandex`,
 				method: 'POST',
 				credentials: 'include',
 				headers: {
@@ -48,7 +47,7 @@ export const oAuthApi = createApi({
 		}),
 		setUser: builder.query<any, string>({
 			query: (user) => ({
-				url: `${bffUrl}/oauth/setUser`,
+				url: `${apiUrl}/oauth/setUser`,
 				method: 'POST',
 				credentials: 'include',
 				headers: {

@@ -1,10 +1,10 @@
 import { memo } from 'react';
 import cls from './ForumCell.module.scss';
 import { TextLabel } from 'components/TextLabel';
-import { TForumTopic } from '../types';
+import { Topic } from 'api/forumApi/forumApi';
 
 interface ForumCellProps {
-    topic: TForumTopic;
+    topic: Topic;
 }
 
 export const ForumCell = memo(({ topic }: ForumCellProps) => {
@@ -16,13 +16,13 @@ export const ForumCell = memo(({ topic }: ForumCellProps) => {
 
             <TextLabel
                 className={cls.date}
-                text={topic.dateTime.toLocaleDateString()}
+                text={new Date(topic.updatedAt ?? '').toLocaleDateString()}
             />
+            <TextLabel className={cls.lastMessage} text={topic.description} />
             <TextLabel
-                className={cls.lastMessage}
-                text={topic.lastMessage.message}
+                className={cls.author}
+                text={`${topic.user?.firstName} ${topic.user?.lastName}`}
             />
-            <TextLabel className={cls.author} text={topic.author.name} />
         </div>
     );
 });

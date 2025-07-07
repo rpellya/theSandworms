@@ -35,7 +35,10 @@ export const userSlice = createSlice({
 	initialState,
 	reducers: {
 		setUserInfo(state, action: PayloadAction<UserInfo | null>) {
-			state.userInfo = action.payload;
+			if (action.payload) {
+				state.userInfo = action.payload;
+				state.isAuthenticated = true;
+			}
 		},
 		initAuthData: (state) => {
 			const user = localStorage.getItem(USER_LOCALSTORAGE_KEY);
@@ -48,6 +51,7 @@ export const userSlice = createSlice({
 		},
 		logout: (state) => {
 			state.userInfo = null;
+			state.isAuthenticated = false;
 			localStorage.removeItem(USER_LOCALSTORAGE_KEY);
 		},
 	},

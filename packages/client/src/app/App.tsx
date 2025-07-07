@@ -5,11 +5,14 @@ import { useAppDispatch } from 'store/hooksStore';
 import { userActions } from 'store/userInfoSlice';
 import { useSendCode } from 'hooks/useSendCode';
 import { useLazySetUserQuery } from 'api/auth/oAuthApi';
+import { useLazyGetAuthUserQuery } from 'api/auth/authApi';
 import { useTheme } from './providers/ThemeProvider';
 
 const App = () => {
     const dispatch = useAppDispatch();
     const [sendUserToBff] = useLazySetUserQuery();
+    const [getUserData] = useLazyGetAuthUserQuery();
+
     const { theme } = useTheme();
     document.body.className = theme;
     useEffect(() => {
@@ -21,6 +24,10 @@ const App = () => {
         const currentUser = localStorage.getItem('user');
         if (currentUser) {
             sendUserToBff(currentUser);
+        } else {
+            getUserData().then((res) => {
+                dispatch(userActions.setUserInfo(res.data));
+            });
         }
     }, []);
 

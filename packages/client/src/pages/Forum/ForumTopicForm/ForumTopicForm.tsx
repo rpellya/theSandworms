@@ -1,37 +1,46 @@
 import { useState } from 'react';
-import { nanoid } from 'nanoid';
-import { TForumTopic, TForumAuthor } from '../types';
 import cls from './ForumTopicForm.module.scss';
 import { Button } from 'components/Button';
 
-const mockAuthor: TForumAuthor = {
-    id: nanoid(),
-    name: 'John Doe',
-    avatarUrl: '',
-};
+import { Topic, useCreateTopicMutation } from 'api/forumApi/forumApi';
+import { useAppSelector } from 'store/hooksStore';
 
-export const ForumTopicForm = () => {
+export const ForumTopicForm = (props: { closeModal: () => void }) => {
+    const [createTopicApi] = useCreateTopicMutation();
+
     const [title, setTitle] = useState('');
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const { userInfo } = useAppSelector((state) => {
+        return state.userReducer;
+    });
+
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        const topicId = nanoid();
-
-        const newTopic: TForumTopic = {
-            id: topicId,
-            title,
-            dateTime: new Date(),
-            author: mockAuthor,
-            lastMessage: {
-                id: nanoid(),
-                message: 'Пока нет сообщений',
-                author: mockAuthor,
-                dateTime: new Date(),
-                topicId,
-            },
+        const form = e.currentTarget;
+        const formElements = form.elements as typeof form.elements & {
+            message: HTMLTextAreaElement;
         };
-        console.log('Создан топик:', newTopic);
+
+        const message = formElements.message;
+
+        const newTopic: Topic = {
+            title,
+            description: message.value,
+            userId: userInfo?.id ?? 0,
+        };
+        createTopic(newTopic);
+    };
+
+    const createTopic = async (data: Topic) => {
+        try {
+            const result = await createTopicApi(data);
+            if (typeof props.closeModal === 'function') {
+                props.closeModal();
+            }
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     return (
@@ -49,7 +58,7 @@ export const ForumTopicForm = () => {
                 </div>
 
                 <div className={cls.formGroup}>
-                    <label htmlFor="message">Сообщение</label>
+                    <label htmlFor="message">Описание</label>
                     <textarea id="message" name="message" />
                 </div>
             </div>

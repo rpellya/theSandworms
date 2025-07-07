@@ -10,7 +10,10 @@ import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from 'store/hooksStore';
 import { useForm } from 'react-hook-form';
 import { RoutePath } from 'app/providers/router/config/routeConfig';
-import { useLazyGetYandexServiceIdQuery } from 'api/auth/oAuthApi';
+import {
+    useLazyGetYandexServiceIdQuery,
+    useLazySetUserQuery,
+} from 'api/auth/oAuthApi';
 import { userActions } from 'store/userInfoSlice';
 import { USER_LOCALSTORAGE_KEY } from 'app/providers/const/localStorage';
 
@@ -33,12 +36,14 @@ export const Login: React.FC<LoginProps> = memo(({ regPath }) => {
     const { isAuthenticated } = useAppSelector((state) => state.userReducer);
     const [loginFunc] = useLoginApiMutation();
     const [getUserInfo] = useLazyGetAuthUserQuery();
+    const [setUser] = useLazySetUserQuery();
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
 
     const getUser = () => {
         getUserInfo().then((res) => {
             if (res.data) {
+                setUser(JSON.stringify(res.data));
                 dispatch(userActions.setUserInfo(res.data));
                 localStorage.setItem(
                     USER_LOCALSTORAGE_KEY,

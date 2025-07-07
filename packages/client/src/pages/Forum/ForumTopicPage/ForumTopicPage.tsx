@@ -1,22 +1,75 @@
 import cls from './ForumTopicPage.module.scss';
+import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { forumTopicsMock, forumMessagesMock } from '../mockData';
 import { ForumCommentCell } from './ForumCommentCell';
 import { Button } from 'components/Button';
+
+import {
+    Topic,
+    Message,
+    useGetTopicMutation,
+    useCreateMessageMutation,
+} from 'api/forumApi/forumApi';
+import { useAppSelector } from 'store/hooksStore';
+import { classNames } from 'app/lib/classNames';
 
 export const ForumTopicPage = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
-    const topic = forumTopicsMock.find((t) => t.id === id);
-    if (!topic) return <div>Тема не найдена</div>;
+    const [getTopicApi] = useGetTopicMutation();
+    const [createMessageApi] = useCreateMessageMutation();
+    const [topic, setTopic] = useState<Topic | null>(null);
 
-    const comments = forumMessagesMock.filter((m) => m.topicId === topic.id);
+    const { userInfo } = useAppSelector((state) => {
+        return state.userReducer;
+    });
+
+    const getTopic = async () => {
+        try {
+            const result = await getTopicApi(id);
+            setTopic(result.data.topic);
+        } catch (error) {
+            return <div>Тема не найдена</div>;
+        }
+    };
+
+    useEffect(() => {
+        getTopic();
+    }, []);
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        const form = e.currentTarget;
+        const formElements = form.elements as typeof form.elements & {
+            content: HTMLTextAreaElement;
+        };
+        const content = formElements.content;
+
+        const newMessage: Message = {
+            message: content.value,
+            topicId: id ?? '',
+            userId: userInfo?.id ?? 0,
+        };
+
+        try {
+            const result = await createMessageApi(newMessage);
+            content.value = '';
+            getTopic();
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     return (
         <div className={cls.ForumTopicPage}>
             <div className={cls.forumPageOverlay}>
                 <div className={cls.header}>
-                    <div>{topic.title}</div>
+                    <div>
+                        <div className={cls.header_title}>{topic?.title}</div>
+                        <div className={cls.header_description}>
+                            {topic?.description}
+                        </div>
+                    </div>
                     <div>
                         <Button
                             className={cls.backButton}
@@ -27,9 +80,29 @@ export const ForumTopicPage = () => {
                     </div>
                 </div>
                 <div className={cls.commentsSection}>
-                    {comments.map((comment) => (
+                    {topic?.messages?.map((comment) => (
                         <ForumCommentCell key={comment.id} message={comment} />
                     ))}
+
+                    <form onSubmit={handleSubmit}>
+                        <div className={cls.comment}>
+                            <textarea
+                                className={cls.comment_textarea}
+                                id="content"
+                                name="content"
+                                placeholder="Сообщение"
+                            />
+
+                            <Button
+                                className={classNames(cls.backButton, {}, [
+                                    cls.send,
+                                ])}
+                                type="submit"
+                            >
+                                Отправить
+                            </Button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

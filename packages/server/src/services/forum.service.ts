@@ -30,7 +30,7 @@ export const getListTopicsFromDB = async () => {
 					include: [
 						{
 							model: User,
-							attributes: ['firstName', 'lastName'],
+							attributes: ['firstName', 'lastName', 'avatar'],
 						},
 					],
 				},
@@ -50,14 +50,14 @@ export const getTopicById = async (id: string) => {
 			include: [
 				{
 					model: User,
-					attributes: ['firstName', 'lastName'],
+					attributes: ['firstName', 'lastName', 'avatar'],
 				},
 				{
 					model: Message,
 					include: [
 						{
 							model: User,
-							attributes: ['firstName', 'lastName'],
+							attributes: ['firstName', 'lastName', 'avatar'],
 						},
 					],
 				},
