@@ -1,5 +1,5 @@
 import React, { forwardRef, InputHTMLAttributes, memo } from 'react';
-import cls from './field.module.scss';
+import cls from './Field.module.scss';
 
 interface FieldProps
     extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
@@ -16,18 +16,18 @@ export const Field: React.FC<FieldProps> = memo(
             ref,
         ) => {
             return (
-                <div className={cls.field}>
-                    <p className={cls.field_name}>{fieldName}</p>
-                    <div className={cls.field_container}>
+                <div className={cls.Field}>
+                    <p className={cls.Field_name}>{fieldName}</p>
+                    <div className={cls.Field_container}>
                         <input
                             ref={ref}
                             disabled={disabled}
-                            className={cls.field_container_input}
+                            className={cls.Field_container_input}
                             type={fieldType}
                             {...otherProps}
                         />
                         {errorMessage && (
-                            <p className={cls.field_container_errorMessage}>
+                            <p className={cls.Field_container_errorMessage}>
                                 {errorMessage}
                             </p>
                         )}
