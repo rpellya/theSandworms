@@ -1,19 +1,23 @@
-.field {
+.Field {
     position: relative;
     display: flex;
     align-items: center;
     justify-content: flex-start;
     gap: var(--space-m);
-    border-bottom: 1px solid white;
+    border-bottom: 1px solid var(--secondary);
 
     &_name {
+        color: var(--secondary);
         width: 150px;
     }
+
     &_container {
         border: none;
         background-color: inherit;
         text-align: right;
+
         &_input {
+            color: var(--secondary);
             border: none;
             background-color: inherit;
             text-align: right;

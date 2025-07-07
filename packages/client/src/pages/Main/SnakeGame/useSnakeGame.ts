@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import bgImgUrl from '/src/assets/bg/bg-004.webp';
+import bgImgUrl from 'src/assets/bg/bg-004.webp';
 import { TGameState } from './types';
 
 /**
