@@ -19,6 +19,8 @@ export const ForumCommentCell = memo(({ message }: ForumCommentCellProps) => {
         setAvatarSrc(profileImgMock);
     };
 
+    const commentDate = new Date(message.updatedAt ?? message.createdAt ?? '');
+
     return (
         <div className={cls.commentCell}>
             <div className={cls.commentHeader}>
@@ -35,9 +37,7 @@ export const ForumCommentCell = memo(({ message }: ForumCommentCellProps) => {
                     />
                     {
                         <TextLabel
-                            text={new Date(
-                                message.updatedAt ?? message.createdAt ?? '',
-                            ).toLocaleString()}
+                            text={commentDate.toLocaleString()}
                             className={cls.commentDate}
                         />
                     }

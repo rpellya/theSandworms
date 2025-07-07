@@ -1,4 +1,4 @@
-import { forwardRef, useState } from 'react';
+import { useState } from 'react';
 import cls from './ForumTopicForm.module.scss';
 import { Button } from 'components/Button';
 
@@ -11,7 +11,6 @@ export const ForumTopicForm = (props: { closeModal: () => void }) => {
     const [title, setTitle] = useState('');
 
     const { userInfo } = useAppSelector((state) => {
-        console.log(state);
         return state.userReducer;
     });
 

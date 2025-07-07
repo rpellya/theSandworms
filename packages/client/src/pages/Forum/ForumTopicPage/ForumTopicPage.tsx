@@ -11,6 +11,7 @@ import {
     useCreateMessageMutation,
 } from 'api/forumApi/forumApi';
 import { useAppSelector } from 'store/hooksStore';
+import { classNames } from 'app/lib/classNames';
 
 export const ForumTopicPage = () => {
     const { id } = useParams<{ id: string }>();
@@ -22,8 +23,6 @@ export const ForumTopicPage = () => {
     const { userInfo } = useAppSelector((state) => {
         return state.userReducer;
     });
-
-    let content;
 
     const getTopic = async () => {
         try {
@@ -95,7 +94,9 @@ export const ForumTopicPage = () => {
                             />
 
                             <Button
-                                className={`${cls.backButton} ${cls.send}`}
+                                className={classNames(cls.backButton, {}, [
+                                    cls.send,
+                                ])}
                                 type="submit"
                             >
                                 Отправить
