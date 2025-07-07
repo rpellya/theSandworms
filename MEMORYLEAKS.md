@@ -75,10 +75,3 @@ useEffect(() => {
 ```
 
 * После правки heap остаётся ровным, Allocation‑профиль показывает единственные активные объекты `HTMLImageElement`.
-
----
-
-## Ссылки
-
-* [https://react.dev/learn/optimizing-performance#avoiding-memory-leaks](https://react.dev/learn/optimizing-performance#avoiding-memory-leaks)
-* Chrome DevTools → Memory Docs
