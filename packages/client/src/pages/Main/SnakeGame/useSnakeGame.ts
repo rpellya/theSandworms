@@ -61,14 +61,33 @@ const botFaceUrl = getRandomFaceUrl();
 
 export const useSnakeGame = (gameState: TGameState) => {
 	const canvasRef = useRef<HTMLCanvasElement | null>(null);
+	const playerFace = useRef<HTMLImageElement | null>(null);
+	const botFace = useRef<HTMLImageElement | null>(null);
 	const playerFaceRef = useRef<HTMLImageElement | null>(null);
 	const botFaceRef = useRef<HTMLImageElement | null>(null);
+	const bgPatternRef = useRef<HTMLImageElement | null>(null);
 	const [score, setScore] = useState(0);
 
-	const playerFace = new Image();
-	const botFace = new Image();
-	playerFace.src = playerFaceUrl;
-	botFace.src = botFaceUrl;
+	useEffect(() => {
+		// Игрок
+		const playerFaceImg = new Image();
+		playerFaceImg.src = playerFaceUrl;
+		playerFaceImg.onload = () => (playerFaceRef.current = playerFaceImg);
+		playerFace.current = playerFaceImg;
+
+		// Бот
+		const botFaceImg = new Image();
+		botFaceImg.src = botFaceUrl;
+		botFaceImg.onload = () => (botFaceRef.current = botFaceImg);
+		botFace.current = botFaceImg;
+
+		// Фоновая текстура
+		const bgImg = new Image();
+		bgImg.src = bgImgUrl;
+		bgImg.onload = () => {
+			bgPatternRef.current = bgImg;
+		};
+	}, []);
 
 	const snakeLength = 30;
 	const botLength = 45;
@@ -97,14 +116,6 @@ export const useSnakeGame = (gameState: TGameState) => {
 		setScore(0);
 	};
 
-	playerFace.onload = () => {
-		playerFaceRef.current = playerFace;
-	};
-
-	botFace.onload = () => {
-		botFaceRef.current = botFace;
-	};
-
 	useEffect(() => {
 		const canvas = canvasRef.current;
 		let animationId: number;
@@ -122,10 +133,12 @@ export const useSnakeGame = (gameState: TGameState) => {
 		const center = { x: canvas.width / 2, y: canvas.height / 2 };
 		const mouse = { x: center.x, y: center.y };
 
-		document.addEventListener('mousemove', (e) => {
+		const onMouseMove = (e: MouseEvent) => {
 			mouse.x = e.clientX;
 			mouse.y = e.clientY;
-		});
+		};
+
+		document.addEventListener('mousemove', onMouseMove);
 
 		function spawnFood() {
 			const range = 500;
@@ -165,7 +178,7 @@ export const useSnakeGame = (gameState: TGameState) => {
 		}
 
 		function drawBackground(offsetX: number, offsetY: number) {
-			if (!canvas || !ctx || !bgPattern) return;
+			if (!canvas || !ctx || !bgPatternRef.current) return;
 			const patternSize = 256;
 			const startX = -(
 				((offsetX % patternSize) + patternSize) %
@@ -187,7 +200,7 @@ export const useSnakeGame = (gameState: TGameState) => {
 					y += patternSize
 				) {
 					ctx.drawImage(
-						bgPattern,
+						bgPatternRef.current,
 						Math.floor(x),
 						Math.floor(y),
 						patternSize,
@@ -414,6 +427,7 @@ export const useSnakeGame = (gameState: TGameState) => {
 
 		return () => {
 			window.removeEventListener('resize', resizeCanvas);
+			document.removeEventListener('mousemove', onMouseMove);
 			if (animationId) cancelAnimationFrame(animationId);
 		};
 	}, [gameState]);
