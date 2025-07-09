@@ -98,6 +98,8 @@ async function start() {
 		}
 	});
 
+	app.get('/health', (_, res) => res.sendStatus(200));
+
 	app.listen(port, () => {
 		console.log(`✅ SSR сервер запущен на http://localhost:${port}`);
 	});
