@@ -1,9 +1,16 @@
 import React, { useState } from 'react';
 import cls from './EmojiButton.module.scss';
+import { useCreateEmojiMutation } from 'api/forumApi/forumApi';
+import { useSelector } from 'react-redux';
+import { RootState } from 'store';
 
 export const EmojiButton: React.FC = () => {
     const [menuOpen, setMenuOpen] = useState(false);
+    const [createEmoji, { isLoading }] = useCreateEmojiMutation();
     const [emojis, setEmojis] = useState<{ icon: string; count: number }[]>([]);
+    const userId = useSelector(
+        (state: RootState) => state.userReducer.userInfo?.id,
+    );
 
     const toggleMenu = () => setMenuOpen(!menuOpen);
 
@@ -18,6 +25,7 @@ export const EmojiButton: React.FC = () => {
                 return [...prev, { icon: emoji, count: 1 }];
             }
         });
+        userId && createEmoji({ emoji: emoji, userId: userId });
         setMenuOpen(false);
     };
 

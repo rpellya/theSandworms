@@ -30,6 +30,11 @@ export interface Message {
 	};
 }
 
+export interface Emoji {
+	userId: number;
+	emoji: string;
+}
+
 export const forumApi = createApi({
 	reducerPath: 'forum',
 	baseQuery: fetchBaseQuery({ baseUrl: apiUrl }),
@@ -67,6 +72,15 @@ export const forumApi = createApi({
 				credentials: 'include',
 			}),
 		}),
+
+		createEmoji: builder.mutation({
+			query: (body: Emoji) => ({
+				url: '/forum/topic/createEmoji',
+				method: 'POST',
+				body,
+				credentials: 'include',
+			}),
+		}),
 	}),
 });
 
@@ -75,4 +89,5 @@ export const {
 	useGetTopicMutation,
 	useCreateTopicMutation,
 	useCreateMessageMutation,
+	useCreateEmojiMutation,
 } = forumApi;

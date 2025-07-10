@@ -3,6 +3,7 @@ import {
 	createTopic,
 	getTopicByUUID,
 	getTopics,
+	createEmoji,
 } from '../controllers/forum.controller';
 import { Router } from 'express';
 
@@ -12,5 +13,6 @@ forumRouter.get('/topics', getTopics);
 forumRouter.get('/topic/:topicId', getTopicByUUID);
 forumRouter.post('/createTopic', createTopic);
 forumRouter.post('/topics/:topicId/messages', addMessageToTopic);
+forumRouter.post('/topic/createEmoji', createEmoji);
 
 export default forumRouter;

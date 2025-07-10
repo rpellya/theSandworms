@@ -4,6 +4,7 @@ import {
 	createTopicDB,
 	getListTopicsFromDB,
 	getTopicById,
+	createEmojiDB,
 } from '../services/forum.service';
 import { logger } from '../logger';
 
@@ -185,6 +186,93 @@ export const addMessageToTopic = async (req: Request, res: Response) => {
 		return res.status(201).json({ data: resMessage });
 	} catch (error) {
 		logger.error('Ошибка при создании сообщения:', error);
+		return res.status(500).json({ error: 'Internal server error' });
+	}
+};
+
+/**
+ * @swagger
+ * /forum/emojis:
+ *   post:
+ *     summary: Создать новый emoji для пользователя
+ *     tags: [Forum]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - userId
+ *               - emoji
+ *             properties:
+ *               userId:
+ *                 type: integer
+ *                 example: 123
+ *               emoji:
+ *                 type: string
+ *                 example: "😊"
+ *     responses:
+ *       201:
+ *         description: Emoji успешно создан
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: integer
+ *                       example: 1
+ *                     userId:
+ *                       type: integer
+ *                       example: 123
+ *                     emoji:
+ *                       type: string
+ *                       example: "😊"
+ *                     createdAt:
+ *                       type: string
+ *                       format: date-time
+ *                       example: "2025-07-10T12:34:56.789Z"
+ *                     updatedAt:
+ *                       type: string
+ *                       format: date-time
+ *                       example: "2025-07-10T12:34:56.789Z"
+ *       400:
+ *         description: Отсутствуют обязательные параметры userId или emoji
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "userId и emoji обязательны"
+ *       500:
+ *         description: Внутренняя ошибка сервера при создании emoji
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Internal server error"
+ */
+export const createEmoji = async (req: Request, res: Response) => {
+	const { userId, emoji } = req.body;
+
+	if (!userId || !emoji) {
+		return res.status(400).json({ error: 'userId и emoji обязательны' });
+	}
+
+	try {
+		const newEmoji = await createEmojiDB({ userId, emoji });
+		return res.status(201).json({ data: newEmoji });
+	} catch (error) {
+		logger.error('Ошибка при создании emoji:', error);
 		return res.status(500).json({ error: 'Internal server error' });
 	}
 };

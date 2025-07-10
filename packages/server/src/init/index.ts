@@ -3,6 +3,7 @@ import { Topic } from '../models/topic';
 import { Message } from '../models/message';
 import { User } from '../models/user';
 import dotenv from 'dotenv';
+import { Emoji } from '../models/emoji';
 dotenv.config();
 
 const {
@@ -20,7 +21,7 @@ const sequelizeOptions: SequelizeOptions = {
 	password: POSTGRES_PASSWORD,
 	database: POSTGRES_DB,
 	dialect: 'postgres',
-	models: [Topic, Message, User],
+	models: [Topic, Message, User, Emoji],
 };
 
 export const sequelize = new Sequelize(sequelizeOptions);
