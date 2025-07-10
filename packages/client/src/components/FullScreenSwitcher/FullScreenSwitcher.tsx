@@ -7,6 +7,8 @@ interface FSSwitcherProps {
 }
 
 function toggleFullsrceen(rootElemClassName: string) {
+    if (typeof document === 'undefined') return;
+
     const rootElem = document.querySelector(`.${rootElemClassName}`);
     if (!document.fullscreenElement) {
         rootElem?.requestFullscreen?.();
@@ -23,6 +25,8 @@ export const FullScreenSwitcher: React.FC<FSSwitcherProps> = memo(
                 <Button
                     className={cls.fullScreen__button}
                     onClick={() => {
+                        if (typeof document === 'undefined') return;
+
                         toggleFullsrceen.call(this, rootElemClassName);
                         setFullScreen(
                             document.fullscreenElement ? true : false,

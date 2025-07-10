@@ -18,7 +18,7 @@ async function start() {
 	const app = express();
 	const port = Number(process.env.SERVER_PORT) || 3001;
 	app.use(express.json());
-	const clientPath = path.resolve(__dirname, '../client');
+	const clientPath = path.resolve(__dirname, '../../../client');
 
 	const vite = await createViteServer({
 		root: clientPath,
@@ -33,6 +33,9 @@ async function start() {
 		}),
 	);
 	app.use(apiRouter);
+
+	// Healthcheck для Docker'а
+	app.get('/health', (_, res) => res.sendStatus(200));
 
 	// Используем Vite middleware (для HMR, модулей и т.д.)
 	app.use(vite.middlewares);
@@ -97,8 +100,6 @@ async function start() {
 			}
 		}
 	});
-
-	app.get('/health', (_, res) => res.sendStatus(200));
 
 	app.listen(port, () => {
 		console.log(`✅ SSR сервер запущен на http://localhost:${port}`);

@@ -14,14 +14,21 @@ const App = () => {
     const [getUserData] = useLazyGetAuthUserQuery();
 
     const { theme } = useTheme();
-    document.body.className = theme;
+
+    if (typeof document !== 'undefined') {
+        document.body.className = theme;
+    }
+
     useEffect(() => {
         dispatch(userActions.initAuthData());
     }, [dispatch]);
 
     useSendCode();
     useEffect(() => {
-        const currentUser = localStorage.getItem('user');
+        const currentUser =
+            typeof localStorage !== 'undefined'
+                ? localStorage.getItem('user')
+                : null;
         if (currentUser) {
             sendUserToBff(currentUser);
         } else {

@@ -6,7 +6,10 @@ import {
 } from '../lib/ThemeContext';
 
 const defaultTheme =
-    (localStorage.getItem(LOCAL_STORAGE_THEME_KEY) as Theme) || Theme.LIGHT;
+    typeof localStorage !== 'undefined'
+        ? (localStorage.getItem(LOCAL_STORAGE_THEME_KEY) as Theme) ||
+          Theme.LIGHT
+        : Theme.LIGHT;
 
 interface ThemeProviderProps {
     initialTheme?: Theme;

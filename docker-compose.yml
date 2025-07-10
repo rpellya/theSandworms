@@ -46,14 +46,23 @@ services:
       DATABASE_URL: >-
         postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:${POSTGRES_PORT}/${POSTGRES_DB}
 
+    volumes:
+      - ./packages/client:/app/client
     depends_on:
       postgres:
         condition: service_healthy
     healthcheck:
-      test: [ "CMD-SHELL", "curl -f http://localhost:${SERVER_PORT}/health || exit 1" ]
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "require('http').get('http://localhost:'+process.env.SERVER_PORT+'/health', r=>process.exit(r.statusCode===200?0:1))"
+        ]
       interval: 10s
       timeout: 3s
       retries: 5
+      start_period: 30s
 
     networks:
       - practicum-net
