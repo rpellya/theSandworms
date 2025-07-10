@@ -17,12 +17,12 @@
         background-color: var(--white);
         border-radius: var(--radius-m);
         padding: var(--space-l);
-        
+
         &_title {
             font: var(--font-l);
             margin-bottom: var(--space-xl);
         }
-        
+
         &_fields {
             display: flex;
             flex-direction: column;
@@ -67,7 +67,7 @@
                 padding: 0.3em;
                 cursor: pointer;
             }
-            
+
             &_btn {
                 color: white;
                 background-color: var(--basic);

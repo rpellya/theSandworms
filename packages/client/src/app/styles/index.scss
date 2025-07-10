@@ -1,7 +1,7 @@
-@use "nullstyles.scss" as *;
-@use "themes/light.module.scss" as *;
-@use "themes/dark.module.scss" as *;
-@use "variables/global.scss" as *;
+@use 'nullstyles.scss' as *;
+@use 'themes/light.module.scss' as *;
+@use 'themes/dark.module.scss' as *;
+@use 'variables/global.scss' as *;
 
 body {
     font: var(--font-m);
