@@ -2,11 +2,17 @@ import { User } from '../models/user';
 import { Message } from '../models/message';
 import { Topic } from '../models/topic';
 import { logger } from '../logger';
+import { Emoji } from '../models/emoji';
 
 interface CreateMessageParams {
 	topicId: string;
 	message: string;
 	userId: string;
+}
+
+interface CreateEmojiParams {
+	userId: number;
+	emoji: string;
 }
 
 export const createMessageForTopic = async ({
@@ -78,4 +84,8 @@ export const createTopicDB = async (params: Record<any, string>) => {
 		logger.error('Ошибка при создании топика:', err);
 		throw err;
 	}
+};
+
+export const createEmojiDB = async ({ userId, emoji }: CreateEmojiParams) => {
+	return await Emoji.create({ userId, emoji });
 };
