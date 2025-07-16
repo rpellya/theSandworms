@@ -10,6 +10,7 @@ const {
 	POSTGRES_USER,
 	POSTGRES_PASSWORD,
 	POSTGRES_DB,
+	POSTGRES_HOST = 'postgres',
 	POSTGRES_PORT,
 	SUPERUSER,
 	SUPERPASS,
@@ -23,7 +24,7 @@ export async function setup() {
 	const superClient = new Client({
 		user: SUPERUSER,
 		password: SUPERPASS,
-		host: '127.0.0.1',
+		host: POSTGRES_HOST,
 		port: Number(POSTGRES_PORT),
 		database: 'postgres',
 	});
@@ -71,7 +72,7 @@ export async function setup() {
 	const dbClient = new Client({
 		user: SUPERUSER,
 		password: SUPERPASS,
-		host: 'localhost',
+		host: POSTGRES_HOST,
 		port: 5432,
 		database: DB_NAME,
 	});
@@ -100,7 +101,7 @@ export async function setup() {
 	const appClient = new Client({
 		user: DB_USER,
 		password: DB_PASSWORD,
-		host: 'localhost',
+		host: POSTGRES_HOST,
 		port: 5432,
 		database: DB_NAME,
 	});

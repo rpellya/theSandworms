@@ -5,11 +5,16 @@ import { User } from '../models/user';
 import dotenv from 'dotenv';
 dotenv.config();
 
-const { POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB, POSTGRES_PORT } =
-	process.env;
+const {
+	POSTGRES_USER,
+	POSTGRES_PASSWORD,
+	POSTGRES_DB,
+	POSTGRES_PORT,
+	POSTGRES_HOST,
+} = process.env;
 
 const sequelizeOptions: SequelizeOptions = {
-	host: 'localhost',
+	host: POSTGRES_HOST || 'postgres',
 	port: Number(POSTGRES_PORT),
 	username: POSTGRES_USER,
 	password: POSTGRES_PASSWORD,
