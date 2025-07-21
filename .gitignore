@@ -5,4 +5,4 @@ node_modules/
 dist
 tmp
 vite.config.ts.timestamp-*.mjs
-app.log
+**/app.log

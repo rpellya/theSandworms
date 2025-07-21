@@ -78,7 +78,7 @@ export const forumApi = createApi({
 
 		getEmojies: builder.query<Emoji[], null>({
 			query: () => ({
-				url: '/forum/topic/emoji',
+				url: '/forum/topic/emojies',
 				method: 'GET',
 				credentials: 'include',
 			}),
@@ -87,7 +87,7 @@ export const forumApi = createApi({
 
 		toggleEmoji: builder.mutation({
 			query: (body: Emoji) => ({
-				url: '/forum/topic/toggleEmoji',
+				url: '/forum/topic/emojies',
 				method: 'POST',
 				body,
 				credentials: 'include',

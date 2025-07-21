@@ -195,20 +195,45 @@ export const addMessageToTopic = async (req: Request, res: Response) => {
  * @swagger
  * /forum/emojies:
  *   get:
- *     summary: Получить список Эмоджи
+ *     summary: Получить список эмоджи
  *     tags: [Forum]
  *     responses:
  *       200:
- *         description: Список Эмоджи
+ *         description: Список эмоджи
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
- *                 topics:
+ *                 emojies:
  *                   type: array
  *                   items:
- *                     $ref: '#/components/schemas/Topic'
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: integer
+ *                         example: 1
+ *                       emoji:
+ *                         type: string
+ *                         example: "😊"
+ *                       createdAt:
+ *                         type: string
+ *                         format: date-time
+ *                         example: "2025-07-10T12:34:56.789Z"
+ *                       updatedAt:
+ *                         type: string
+ *                         format: date-time
+ *                         example: "2025-07-10T12:34:56.789Z"
+ *       500:
+ *         description: Не удалось получить эмоджи
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Не удалось получить эмоджи"
  */
 export const getEmojies = async (_req: Request, res: Response) => {
 	const emojies = await getAllEmojis();
@@ -222,7 +247,7 @@ export const getEmojies = async (_req: Request, res: Response) => {
  * @swagger
  * /forum/emojis:
  *   post:
- *     summary: Создать новый emoji для пользователя
+ *     summary: Переключить emoji для пользователя в сообщении (добавить или удалить)
  *     tags: [Forum]
  *     requestBody:
  *       required: true
@@ -233,6 +258,7 @@ export const getEmojies = async (_req: Request, res: Response) => {
  *             required:
  *               - userId
  *               - emoji
+ *               - messageId
  *             properties:
  *               userId:
  *                 type: integer
@@ -240,9 +266,13 @@ export const getEmojies = async (_req: Request, res: Response) => {
  *               emoji:
  *                 type: string
  *                 example: "😊"
+ *               messageId:
+ *                 type: string
+ *                 format: uuid
+ *                 example: "3c8ac32c-c829-4fbe-bafc-30d2cd617d30"
  *     responses:
  *       201:
- *         description: Emoji успешно создан
+ *         description: Emoji добавлено
  *         content:
  *           application/json:
  *             schema:
@@ -260,6 +290,10 @@ export const getEmojies = async (_req: Request, res: Response) => {
  *                     emoji:
  *                       type: string
  *                       example: "😊"
+ *                     messageId:
+ *                       type: string
+ *                       format: uuid
+ *                       example: "3c8ac32c-c829-4fbe-bafc-30d2cd617d30"
  *                     createdAt:
  *                       type: string
  *                       format: date-time
@@ -268,8 +302,18 @@ export const getEmojies = async (_req: Request, res: Response) => {
  *                       type: string
  *                       format: date-time
  *                       example: "2025-07-10T12:34:56.789Z"
+ *       200:
+ *         description: Emoji удалено
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Emoji удалено"
  *       400:
- *         description: Отсутствуют обязательные параметры userId или emoji
+ *         description: Отсутствуют обязательные параметры userId, emoji или messageId
  *         content:
  *           application/json:
  *             schema:
@@ -277,9 +321,9 @@ export const getEmojies = async (_req: Request, res: Response) => {
  *               properties:
  *                 error:
  *                   type: string
- *                   example: "userId и emoji обязательны"
+ *                   example: "userId, emoji и messageId обязательны"
  *       500:
- *         description: Внутренняя ошибка сервера при создании emoji
+ *         description: Внутренняя ошибка сервера при переключении emoji
  *         content:
  *           application/json:
  *             schema:
