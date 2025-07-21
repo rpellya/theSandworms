@@ -9,6 +9,7 @@ import apiRouter from './src/routes/index';
 import { dbConnect } from './src/init';
 import { setup } from './src/db/setup';
 import { setupSwagger } from './src/docs/swagger';
+import { xssSanitizeMiddleware } from './src/middlewares/xss';
 
 dotenv.config();
 
@@ -18,6 +19,7 @@ async function start() {
 	const app = express();
 	const port = Number(process.env.SERVER_PORT) || 3001;
 	app.use(express.json());
+	app.use(xssSanitizeMiddleware);
 	const clientPath = path.resolve(__dirname, '../../../client');
 
 	const vite = await createViteServer({
