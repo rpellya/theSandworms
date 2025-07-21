@@ -2,9 +2,10 @@ import { Request, Response } from 'express';
 import {
 	createMessageForTopic,
 	createTopicDB,
+	getAllEmojis,
 	getListTopicsFromDB,
 	getTopicById,
-	createEmojiDB,
+	toggleEmojiDB,
 } from '../services/forum.service';
 import { logger } from '../logger';
 
@@ -192,6 +193,33 @@ export const addMessageToTopic = async (req: Request, res: Response) => {
 
 /**
  * @swagger
+ * /forum/emojies:
+ *   get:
+ *     summary: Получить список Эмоджи
+ *     tags: [Forum]
+ *     responses:
+ *       200:
+ *         description: Список Эмоджи
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 topics:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Topic'
+ */
+export const getEmojies = async (_req: Request, res: Response) => {
+	const emojies = await getAllEmojis();
+	if (!emojies) {
+		return res.status(500).json({ error: 'Не удалось получить топики' });
+	}
+	return res.json(emojies);
+};
+
+/**
+ * @swagger
  * /forum/emojis:
  *   post:
  *     summary: Создать новый emoji для пользователя
@@ -261,18 +289,25 @@ export const addMessageToTopic = async (req: Request, res: Response) => {
  *                   type: string
  *                   example: "Internal server error"
  */
-export const createEmoji = async (req: Request, res: Response) => {
-	const { userId, emoji } = req.body;
+export const toggleEmoji = async (req: Request, res: Response) => {
+	const { userId, emoji, messageId } = req.body;
 
-	if (!userId || !emoji) {
-		return res.status(400).json({ error: 'userId и emoji обязательны' });
+	if (!userId || !emoji || !messageId) {
+		return res
+			.status(400)
+			.json({ error: 'userId, emoji и messageId обязательны' });
 	}
 
 	try {
-		const newEmoji = await createEmojiDB({ userId, emoji });
-		return res.status(201).json({ data: newEmoji });
+		const result = await toggleEmojiDB({ userId, emoji, messageId });
+
+		if (result.removed) {
+			return res.status(200).json({ message: 'Emoji удалено' });
+		} else {
+			return res.status(201).json({ data: result.data });
+		}
 	} catch (error) {
-		logger.error('Ошибка при создании emoji:', error);
+		logger.error('Ошибка при переключении emoji:', error);
 		return res.status(500).json({ error: 'Internal server error' });
 	}
 };

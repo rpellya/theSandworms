@@ -13,6 +13,7 @@ interface CreateMessageParams {
 interface CreateEmojiParams {
 	userId: number;
 	emoji: string;
+	messageId: string;
 }
 
 export const createMessageForTopic = async ({
@@ -86,6 +87,24 @@ export const createTopicDB = async (params: Record<any, string>) => {
 	}
 };
 
-export const createEmojiDB = async ({ userId, emoji }: CreateEmojiParams) => {
-	return await Emoji.create({ userId, emoji });
+export const getAllEmojis = async () => {
+	return await Emoji.findAll();
+};
+
+export const toggleEmojiDB = async ({
+	userId,
+	emoji,
+	messageId,
+}: CreateEmojiParams) => {
+	const existingEmoji = await Emoji.findOne({
+		where: { userId, emoji, messageId },
+	});
+
+	if (existingEmoji) {
+		await existingEmoji.destroy();
+		return { removed: true };
+	} else {
+		const newEmoji = await Emoji.create({ userId, emoji, messageId });
+		return { removed: false, data: newEmoji };
+	}
 };

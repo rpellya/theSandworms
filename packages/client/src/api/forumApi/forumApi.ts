@@ -31,13 +31,16 @@ export interface Message {
 }
 
 export interface Emoji {
+	id?: number;
 	userId: number;
 	emoji: string;
+	messageId: string;
 }
 
 export const forumApi = createApi({
 	reducerPath: 'forum',
 	baseQuery: fetchBaseQuery({ baseUrl: apiUrl }),
+	tagTypes: ['Topic', 'Message', 'Emoji'],
 	endpoints: (builder) => ({
 		getTopics: builder.mutation({
 			query: () => ({
@@ -73,13 +76,23 @@ export const forumApi = createApi({
 			}),
 		}),
 
-		createEmoji: builder.mutation({
+		getEmojies: builder.query<Emoji[], null>({
+			query: () => ({
+				url: '/forum/topic/emoji',
+				method: 'GET',
+				credentials: 'include',
+			}),
+			providesTags: ['Emoji'],
+		}),
+
+		toggleEmoji: builder.mutation({
 			query: (body: Emoji) => ({
-				url: '/forum/topic/createEmoji',
+				url: '/forum/topic/toggleEmoji',
 				method: 'POST',
 				body,
 				credentials: 'include',
 			}),
+			invalidatesTags: ['Emoji'],
 		}),
 	}),
 });
@@ -89,5 +102,6 @@ export const {
 	useGetTopicMutation,
 	useCreateTopicMutation,
 	useCreateMessageMutation,
-	useCreateEmojiMutation,
+	useGetEmojiesQuery,
+	useToggleEmojiMutation,
 } = forumApi;

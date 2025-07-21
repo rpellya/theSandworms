@@ -4,6 +4,21 @@
     width: 100%;
 }
 
+.emojies {
+    display: flex;
+    gap: 5px;
+    margin-right: 5px;
+}
+
+.emoDiv {
+    display: flex;
+    background-color: white;
+    border-radius: 15px;
+    border: none;
+    padding: 3px;
+    cursor: pointer;
+}
+
 .commentHeader {
     display: flex;
     align-items: center;

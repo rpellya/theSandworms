@@ -11,6 +11,7 @@ import {
 	UpdatedAt,
 } from 'sequelize-typescript';
 import { User } from './user';
+import { Message } from './message';
 
 @Table({ tableName: 'emojis' })
 export class Emoji extends Model {
@@ -25,6 +26,10 @@ export class Emoji extends Model {
 
 	@Column({ type: DataType.STRING, allowNull: false })
 	emoji!: string;
+
+	@ForeignKey(() => Message)
+	@Column({ type: DataType.STRING, allowNull: false })
+	messageId!: string;
 
 	@BelongsTo(() => User)
 	user!: User;
