@@ -5,13 +5,18 @@ import { memo } from 'react';
 interface TextLabelProps extends React.HTMLAttributes<HTMLParagraphElement> {
     text: string;
     className?: string;
-    htmlFor?: string
+    htmlFor?: string;
 }
 
 export const TextLabel: React.FC<TextLabelProps> = memo(
     ({ className, text, ...otherProps }) => {
         return (
-            <p className={classNames(cls.textLabel, {}, [className])} {...otherProps}>{text}</p>
+            <p
+                className={classNames(cls.textLabel, {}, [className])}
+                {...otherProps}
+            >
+                {text}
+            </p>
         );
     },
 );
