@@ -3,7 +3,7 @@ name: Push to GitHub Container Registry
 on:
   push:
     branches:
-      - 9.5_autodeploy
+      - main
 
 jobs:
   build-and-push:
