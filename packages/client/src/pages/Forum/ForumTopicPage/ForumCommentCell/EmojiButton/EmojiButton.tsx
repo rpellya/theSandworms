@@ -10,7 +10,7 @@ interface EmojiButtonProps {
 
 export const EmojiButton: React.FC<EmojiButtonProps> = ({ messageId }) => {
     const [menuOpen, setMenuOpen] = useState(false);
-    const [createEmoji, { isLoading }] = useToggleEmojiMutation();
+    const [createEmoji] = useToggleEmojiMutation();
     const userId = useSelector(
         (state: RootState) => state.userReducer.userInfo?.id,
     );
@@ -23,7 +23,6 @@ export const EmojiButton: React.FC<EmojiButtonProps> = ({ messageId }) => {
             userId: userId ?? 0,
             messageId: messageId ?? '',
         };
-        console.log(emo);
         userId && messageId && createEmoji(emo);
         setMenuOpen(false);
     };

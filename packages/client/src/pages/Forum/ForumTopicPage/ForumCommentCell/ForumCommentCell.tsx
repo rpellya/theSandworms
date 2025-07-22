@@ -50,15 +50,15 @@ export const ForumCommentCell = memo(
                     />
                     <div className={cls.authorInfo}>
                         <TextLabel
-                            text={`${message.user?.firstName} ${message.user?.lastName}`}
+                            text={`${message.user?.firstName ?? ''} ${
+                                message.user?.lastName ?? ''
+                            }`}
                             className={cls.authorName}
                         />
-                        {
-                            <TextLabel
-                                text={commentDate.toLocaleString()}
-                                className={cls.commentDate}
-                            />
-                        }
+                        <TextLabel
+                            text={commentDate.toLocaleString()}
+                            className={cls.commentDate}
+                        />
                     </div>
                 </div>
                 <div className={cls.commentBody}>
@@ -68,7 +68,7 @@ export const ForumCommentCell = memo(
                             <button
                                 key={emo.emoji}
                                 className={cls.emoDiv}
-                                onClick={(event) => {
+                                onClick={(_) => {
                                     handleCreateEmoji(emo.emoji);
                                 }}
                             >
