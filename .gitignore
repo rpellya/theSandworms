@@ -6,3 +6,4 @@ dist
 tmp
 vite.config.ts.timestamp-*.mjs
 logs/
+**/app.log

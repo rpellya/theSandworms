@@ -1,6 +1,6 @@
 @font-face {
-    font-family: "FredokaOneFont";
-    src: url("src/assets/fonts/FredokaOne-Regular.ttf") format("truetype");
+    font-family: 'FredokaOneFont';
+    src: url('src/assets/fonts/FredokaOne-Regular.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
@@ -12,7 +12,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-image: url("/src/assets/bg/bg.webp");
+    background-image: url('/src/assets/bg/bg.webp');
     background-size: 40%;
 }
 
@@ -51,12 +51,8 @@
     line-height: 70px;
     text-decoration: none;
     color: var(--secondary);
-    text-shadow:
-        5px 5px 0 #510f07,
-        -3px -3px 0 #510f07,
-        3px -3px 0 #510f07,
-        -3px 3px 0 #510f07,
-        0px 3px 3px #510f07;
+    text-shadow: 5px 5px 0 #510f07, -3px -3px 0 #510f07, 3px -3px 0 #510f07,
+        -3px 3px 0 #510f07, 0px 3px 3px #510f07;
 
     &:hover {
         color: #f76f3d;
@@ -67,10 +63,6 @@
     color: #fff7e0;
     margin: auto 40px 40px auto;
     font-size: 25px;
-    text-shadow:
-        2px 2px 0 #510f07,
-        -2px -2px 0 #510f07,
-        2px -2px 0 #510f07,
-        -2px 2px 0 #510f07,
-        0px 2px 3px #510f07;
+    text-shadow: 2px 2px 0 #510f07, -2px -2px 0 #510f07, 2px -2px 0 #510f07,
+        -2px 2px 0 #510f07, 0px 2px 3px #510f07;
 }

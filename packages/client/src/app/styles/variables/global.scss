@@ -27,7 +27,8 @@
     --font-xl: var(--font-size-xl) / var(--font-line-xl) var(--font-family-main);
     --font-size-huge: 80px;
     --font-line-huge: 100px;
-    --font-huge: var(--font-size-huge) / var(--font-line-huge) var(--font-family-custom);
+    --font-huge: var(--font-size-huge) / var(--font-line-huge)
+        var(--font-family-custom);
 
     --space-xs: 2px;
     --space-s: 4px;

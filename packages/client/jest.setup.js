@@ -6,7 +6,7 @@ global.TextEncoder = TextEncoder;
 global.TextDecoder = TextDecoder;
 
 jest.mock('nanoid', () => {
-  return {
-    nanoid: () => Math.random().toString(),
-  };
+	return {
+		nanoid: () => Math.random().toString(),
+	};
 });

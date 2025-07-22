@@ -50,7 +50,7 @@
         justify-content: center;
         align-items: stretch;
         width: 100%;
- 
+
         box-sizing: border-box;
         background-color: antiquewhite;
         overflow-y: auto;
@@ -82,12 +82,13 @@
             line-height: 28px;
             text-decoration: none;
             color: var(--buttons);
-            text-shadow: 1px 1px 0 #510f07, -1px -1px 0 #510f07, 1px -1px 0 #510f07, -1px 0px 0 #510f07, 0px 2px 2px #510f07;
+            text-shadow: 1px 1px 0 #510f07, -1px -1px 0 #510f07,
+                1px -1px 0 #510f07, -1px 0px 0 #510f07, 0px 2px 2px #510f07;
             &:hover {
                 color: #f76f3d;
             }
             &:disabled {
-                opacity: .4;
+                opacity: 0.4;
             }
         }
     }

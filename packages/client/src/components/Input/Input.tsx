@@ -8,14 +8,21 @@ interface InputProps
     inputClassName?: string;
     type: string;
     inputLabel: string;
-    inputId?: string
+    inputId?: string;
     onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
 export const Input: React.FC<InputProps> = memo(
     forwardRef<HTMLInputElement, InputProps>(
         (
-            { labelClassName, inputClassName, inputLabel, type, inputId, ...otherProps },
+            {
+                labelClassName,
+                inputClassName,
+                inputLabel,
+                type,
+                inputId,
+                ...otherProps
+            },
             ref,
         ) => {
             return (

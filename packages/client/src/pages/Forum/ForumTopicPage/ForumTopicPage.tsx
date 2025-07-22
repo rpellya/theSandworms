@@ -9,6 +9,7 @@ import {
     Message,
     useGetTopicMutation,
     useCreateMessageMutation,
+    useGetEmojiesQuery,
 } from 'api/forumApi/forumApi';
 import { useAppSelector } from 'store/hooksStore';
 import { classNames } from 'app/lib/classNames';
@@ -19,6 +20,7 @@ export const ForumTopicPage = () => {
     const [getTopicApi] = useGetTopicMutation();
     const [createMessageApi] = useCreateMessageMutation();
     const [topic, setTopic] = useState<Topic | null>(null);
+    const { data: emojies } = useGetEmojiesQuery(null);
 
     const { userInfo } = useAppSelector((state) => {
         return state.userReducer;
@@ -80,9 +82,34 @@ export const ForumTopicPage = () => {
                     </div>
                 </div>
                 <div className={cls.commentsSection}>
-                    {topic?.messages?.map((comment) => (
-                        <ForumCommentCell key={comment.id} message={comment} />
-                    ))}
+                    {topic?.messages?.map((comment) => {
+                        const emojiesForComment = (emojies ?? [])?.filter(
+                            (emo) => emo.messageId === comment.id,
+                        );
+
+                        const emojiCounts = emojiesForComment.reduce(
+                            (acc, emo) => {
+                                acc[emo.emoji] = (acc[emo.emoji] || 0) + 1;
+                                return acc;
+                            },
+                            {} as Record<string, number>,
+                        );
+
+                        // превращаем объект { emoji: count } в массив { emoji, count }
+                        const result = Object.entries(emojiCounts).map(
+                            ([emoji, count]) => ({
+                                emoji,
+                                count,
+                            }),
+                        );
+                        return (
+                            <ForumCommentCell
+                                key={comment.id}
+                                message={comment}
+                                emojies={result}
+                            />
+                        );
+                    })}
 
                     <form onSubmit={handleSubmit}>
                         <div className={cls.comment}>

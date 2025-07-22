@@ -1,5 +1,4 @@
 .fullScreen {
-
     &__container {
         position: absolute;
         width: 100vw;
@@ -13,12 +12,11 @@
         border: none;
         margin: 0 auto 0 5px;
         background-image: none;
-        opacity: .4;
+        opacity: 0.4;
         cursor: pointer;
     }
 
     &__button:hover {
-        opacity: .8;
+        opacity: 0.8;
     }
-
 }
