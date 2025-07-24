@@ -26,6 +26,7 @@
         "lerna": "^5.4.3"
     },
     "dependencies": {
-        "@types/node": "^24.0.7"
+        "@types/node": "^24.0.7",
+        "xss": "^1.0.15"
     }
 }
