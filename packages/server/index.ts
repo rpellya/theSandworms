@@ -31,7 +31,7 @@ async function start() {
 	app.use(
 		cors({
 			credentials: true,
-			origin: 'http://localhost:3000',
+			origin: process.env.ORIGIN,
 		}),
 	);
 	app.use(apiRouter);
