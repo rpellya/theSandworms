@@ -23,11 +23,11 @@ export class User extends Model {
 	@Column({ type: DataType.STRING, allowNull: false })
 	lastName!: string;
 
-	@Column({ type: DataType.STRING, allowNull: false })
-	avatar!: string;
+	@Column({ type: DataType.STRING, allowNull: true })
+	avatar?: string;
 
-	@Column({ type: DataType.STRING, allowNull: false })
-	display_name!: string;
+	@Column({ type: DataType.STRING, allowNull: true })
+	display_name?: string;
 
 	@HasMany(() => Topic)
 	topics!: Topic[];
