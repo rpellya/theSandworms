@@ -1,42 +1,39 @@
-import React from 'react';
-import cls from './field.module.scss';
-import { changeInput } from '../helpers/changeInput';
+import React, { forwardRef, InputHTMLAttributes, memo } from 'react';
+import cls from './Field.module.scss';
 
-interface FieldProps {
+interface FieldProps
+    extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
     fieldName: string;
-    placeholder: string;
+    errorMessage: string;
     fieldType: string;
-    fieldKey: string;
-    profileValues: Record<string, any>;
-    setProfileValues: (value: any) => void;
     disabled: boolean;
 }
 
-export const Field: React.FC<FieldProps> = ({
-    fieldName,
-    placeholder,
-    fieldType,
-    disabled,
-    profileValues,
-    setProfileValues,
-    fieldKey,
-}) => {
-    return (
-        <div className={cls.field}>
-            <p className={cls.field_name}>{fieldName}</p>
-            <input
-                onChange={(event) =>
-                    changeInput(
-                        { key: fieldKey, value: event.target.value },
-                        setProfileValues,
-                    )
-                }
-                disabled={disabled}
-                className={cls.field_input}
-                type={fieldType}
-                value={profileValues[fieldKey]}
-                placeholder={placeholder}
-            />
-        </div>
-    );
-};
+export const Field: React.FC<FieldProps> = memo(
+    forwardRef<HTMLInputElement, FieldProps>(
+        (
+            { fieldName, errorMessage, fieldType, disabled, ...otherProps },
+            ref,
+        ) => {
+            return (
+                <div className={cls.Field}>
+                    <p className={cls.Field_name}>{fieldName}</p>
+                    <div className={cls.Field_container}>
+                        <input
+                            ref={ref}
+                            disabled={disabled}
+                            className={cls.Field_container_input}
+                            type={fieldType}
+                            {...otherProps}
+                        />
+                        {errorMessage && (
+                            <p className={cls.Field_container_errorMessage}>
+                                {errorMessage}
+                            </p>
+                        )}
+                    </div>
+                </div>
+            );
+        },
+    ),
+);

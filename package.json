@@ -10,7 +10,9 @@
         "test": "lerna run test",
         "lint": "eslint",
         "format": "lerna run format",
-        "preview": "lerna run preview"
+        "preview": "lerna run preview",
+        "setup-db": "ts-node ./packages/server/src/db/setup.ts",
+        "lint:quiet": "eslint --quiet ."
     },
     "license": "MIT",
     "workspaces": [
@@ -21,10 +23,15 @@
     },
     "devDependencies": {
         "@evilmartians/lefthook": "^1.3.9",
+        "@testing-library/jest-dom": "^6.6.3",
+        "lefthook": "^1.11.14",
         "@types/node": "^22.15.3",
         "lerna": "^8.2.2"
     },
     "resolutions": {
         "rimraf": "4.4.1"
+    },
+    "dependencies": {
+        "@types/node": "^24.0.7"
     }
 }

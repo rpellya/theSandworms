@@ -1,5 +1,6 @@
 import { ButtonHTMLAttributes, memo, ReactNode } from 'react';
 import cls from './Button.module.scss';
+import { classNames } from 'app/lib/classNames';
 
 // Примеры которые можно использовать для стилей
 export enum ButtonVariant {
@@ -30,9 +31,13 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
  * Компонент кнопки обернут в memo, потому что 99% содержимое кнопки это строка.
  */
 export const Button: React.FC<ButtonProps> = memo(
-    ({ children, ...otherProps }) => {
+    ({ children, className, ...otherProps }) => {
         return (
-            <button className={cls.Button} type="button" {...otherProps}>
+            <button
+                className={classNames(cls.Buttonm, {}, [className])}
+                type={otherProps.type || 'button'}
+                {...otherProps}
+            >
                 {children}
             </button>
         );

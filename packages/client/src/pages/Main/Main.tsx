@@ -1,23 +1,56 @@
-import { memo } from 'react';
+import { memo, useState } from 'react';
 import cls from './Main.module.scss';
 import { SnakeImage } from './SnakeImage/SnakeImage';
 import { RoutePath } from 'app/providers/router/config/routeConfig';
 import { AppLink } from 'components/Link/AppLink';
-import logo from '/src/assets/img/logo.webp';
+import logo from 'src/assets/img/logo.webp';
+import { SnakeGame } from './SnakeGame';
+import { Button } from 'components/Button';
+import { GameOver } from 'components/GameOver/GameOver';
 
 export const Main = memo(() => {
+    const [isPlaying, setIsPlaying] = useState(false);
+    const [isOver, setIsOver] = useState(false);
+
+    const score = 100500;
+
+    const handlePlayClick = () => {
+        setIsOver(false);
+        setIsPlaying(true);
+    };
+
+    const handleHome = () => {
+        setIsOver(false);
+        setIsPlaying(false);
+    };
+
+    if (isPlaying) {
+        return <SnakeGame onExit={() => setIsPlaying(false)} />;
+    }
+
+    if (isOver) {
+        return (
+            <GameOver
+                score={score}
+                restart={handlePlayClick}
+                home={handleHome}
+            />
+        );
+    }
+
     return (
         <div className={cls.Main}>
             <div className={cls.mainMenu}>
-                <img width="300px" src={logo} alt="Логотип" />
-                <nav>
-                    <ul>
+                <img className={cls.mainMenu_img} src={logo} alt="Логотип" />
+                <nav className={cls.mainMenu_nav}>
+                    <ul className={cls.mainMenu_ul}>
                         <li>
-                            <AppLink
+                            <Button
                                 className={cls.appLink}
-                                to="#"
-                                text="Играть"
-                            />
+                                onClick={handlePlayClick}
+                            >
+                                Играть
+                            </Button>
                         </li>
                         <li>
                             <AppLink
@@ -38,6 +71,13 @@ export const Main = memo(() => {
                                 className={cls.appLink}
                                 to={RoutePath.leaderboard}
                                 text="Лидеры"
+                            />
+                        </li>
+                        <li>
+                            <AppLink
+                                className={cls.appLink}
+                                to={RoutePath.profile}
+                                text="Профиль"
                             />
                         </li>
                     </ul>

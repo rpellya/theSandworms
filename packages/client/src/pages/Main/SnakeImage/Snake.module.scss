@@ -10,6 +10,7 @@
     top: 50%;
     transform: translateY(-50%);
     animation: moveSnake 5s linear infinite; /* анимация для бесконечного движения */
+    height: 75px;
 }
 
 @keyframes moveSnake {

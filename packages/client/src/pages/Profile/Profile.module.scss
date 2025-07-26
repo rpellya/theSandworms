@@ -9,8 +9,8 @@
         display: flex;
         justify-content: space-between;
         width: 100%;
-        padding: 12px;
-        background-color: greenyellow;
+        padding: var(--space-ml);
+        background-color: var(--secondary);
 
         &_homeBtn,
         &_logout {
@@ -27,10 +27,16 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
+        row-gap: 30px;
+
+        &__title {
+            font-size: var(--font-size-l);
+            color: var(--secondary);
+        }
 
         &_form {
             width: 350px;
-            padding: 12px;
+            padding: var(--space-ml);
             display: flex;
             flex-direction: column;
             gap: 20px;
@@ -39,8 +45,8 @@
                 width: 100%;
                 display: flex;
                 flex-direction: column;
-                gap: 8px;
-                padding: 4px;
+                gap: var(--space-sl);
+                padding: var(--space-s);
             }
         }
 

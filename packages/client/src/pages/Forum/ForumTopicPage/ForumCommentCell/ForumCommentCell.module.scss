@@ -1,6 +1,22 @@
 .commentCell {
     padding: 12px;
     border-bottom: 1px solid #ccc;
+    width: 100%;
+}
+
+.emojies {
+    display: flex;
+    gap: 5px;
+    margin-right: 5px;
+}
+
+.emoDiv {
+    display: flex;
+    background-color: white;
+    border-radius: 15px;
+    border: none;
+    padding: 3px;
+    cursor: pointer;
 }
 
 .commentHeader {
@@ -31,5 +47,6 @@
 }
 
 .commentBody {
-    margin-left: 40px;
+    display: flex;
+    justify-content: space-between;
 }

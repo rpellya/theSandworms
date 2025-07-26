@@ -2,7 +2,7 @@
     background-image: url('/src/assets/bg/bg.webp');
     background-size: 40%;
     width: 100vw;
-    height: 100vw;
+    height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -11,7 +11,7 @@
 
 .forumOverlay {
     width: 60%;
-    height: 80%;
+    height: fit-content;
     background-color: white;
     border-radius: 20px;
     display: flex;
@@ -30,13 +30,19 @@
 }
 
 .topicCreateButton {
+    display: block;
+    text-align: center;
     width: 100px;
     height: 30px;
     border-radius: 10px;
     border: none;
+    color: black;
     font-family: var(--font-family-custom);
     font-weight: 100;
     font-style: unset;
+    background-color: antiquewhite;
+    cursor: pointer;
+
     transition: background-color 0.2s ease, transform 0.1s ease;
 
     &:hover {

@@ -1,10 +1,12 @@
 import { Main } from 'pages/Main';
 import { Profile } from 'pages/Profile';
+import { Register } from 'pages/Register';
 import { CodeError } from 'pages/CodeError';
 import { RouteProps } from 'react-router-dom';
 import { Forum } from 'pages/Forum';
 import { ForumTopicPage } from 'pages/Forum/ForumTopicPage';
 import { Login } from 'pages/Login';
+import { LeaderBoard } from 'pages/LeaderBoard';
 
 enum AppRoutes {
     MAIN = 'main',
@@ -18,6 +20,7 @@ enum AppRoutes {
     // last
     NOT_FOUND = 'not_found',
     FORUM_TOPIC = 'forum_topic',
+    AUTH = 'auth',
 }
 
 export const RoutePath: Record<AppRoutes, string> = {
@@ -30,6 +33,7 @@ export const RoutePath: Record<AppRoutes, string> = {
     [AppRoutes.FORUM]: '/forum',
     [AppRoutes.SERVER_ERROR]: '/error',
     [AppRoutes.FORUM_TOPIC]: '/forum/:id',
+    [AppRoutes.AUTH]: '/oauth',
 
     // last
     [AppRoutes.NOT_FOUND]: '*',
@@ -44,18 +48,11 @@ export const routeConfig: Record<AppRoutes, RouteProps> = {
     },
     [AppRoutes.LOGIN]: {
         path: RoutePath.login,
-        element: (
-            <Login
-                regPath={RoutePath.register}
-                onSubmit={() => {
-                    return true;
-                }} //подключем авторизацию здесь
-            />
-        ),
+        element: <Login regPath={RoutePath.register} />,
     },
     [AppRoutes.REGISTER]: {
         path: RoutePath.register,
-        element: 'Register (example)',
+        element: <Register />,
     },
     [AppRoutes.ABOUT]: {
         path: RoutePath.about,
@@ -67,7 +64,7 @@ export const routeConfig: Record<AppRoutes, RouteProps> = {
     },
     [AppRoutes.LEADERBOARD]: {
         path: RoutePath.leaderboard,
-        element: 'Leaderboard (example)',
+        element: <LeaderBoard />,
     },
     [AppRoutes.FORUM]: {
         path: RoutePath.forum,
@@ -90,6 +87,10 @@ export const routeConfig: Record<AppRoutes, RouteProps> = {
                 linkText="На главную"
             />
         ),
+    },
+    [AppRoutes.AUTH]: {
+        path: RoutePath.auth,
+        element: <></>,
     },
 
     // Все маршруты, которые не указаны в routeConfig будут перенаправлены на 404 страницу

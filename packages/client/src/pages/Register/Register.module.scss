@@ -1,0 +1,81 @@
+.register {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    background-color: var(--basic);
+
+    width: 100%;
+    height: 100%;
+
+    &_content {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-color: var(--white);
+        border-radius: var(--radius-m);
+        padding: var(--space-l);
+
+        &_title {
+            font: var(--font-l);
+            margin-bottom: var(--space-xl);
+        }
+
+        &_fields {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-start;
+            margin-bottom: var(--space-m);
+            width: 100%;
+
+            .label {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                font: var(--font-m);
+                width: calc(var(--space-s) * 90);
+                width: 100%;
+
+                .error {
+                    color: var(--accent);
+                    z-index: 2;
+                    background: var(--secondary);
+                    width: fit-content;
+                    font: var(--font-sm);
+                }
+            }
+        }
+
+        &_buttons {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: stretch;
+            gap: var(--space-m);
+            width: calc(var(--space-s) * 90);
+
+            &_btn,
+            &_link {
+                width: 100%;
+                border: none;
+                border-radius: 8px;
+                font-weight: bold;
+                font-size: var(--font-size-m);
+                padding: 0.3em;
+                cursor: pointer;
+            }
+
+            &_btn {
+                color: white;
+                background-color: var(--basic);
+            }
+
+            &_link {
+                text-align: center;
+            }
+        }
+    }
+}
