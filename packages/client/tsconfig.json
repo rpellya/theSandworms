@@ -17,9 +17,6 @@
         "jsx": "react-jsx",
 
         "baseUrl": "src",
-        "paths": {
-            "@/*": ["/*"]
-        },
         "rootDir": "."
     },
     "include": ["./src/**/*.ts", "./src/**/*.tsx"],
