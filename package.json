@@ -2,13 +2,13 @@
     "name": "client-server-template-with-vite",
     "private": true,
     "scripts": {
-        "bootstrap": "yarn && node init.js && lerna clean && yarn install",
+        "bootstrap": "yarn && node init.js && lerna clean && yarn && lerna bootstrap",
         "build": "lerna run build",
         "dev:client": "lerna run dev  --scope=client",
         "dev:server": "lerna run dev --scope=server",
         "dev": "lerna run dev",
         "test": "lerna run test",
-        "lint": "eslint",
+        "lint": "lerna run lint",
         "format": "lerna run format",
         "preview": "lerna run preview",
         "setup-db": "ts-node ./packages/server/src/db/setup.ts",
@@ -25,10 +25,9 @@
         "@evilmartians/lefthook": "^1.3.9",
         "@testing-library/jest-dom": "^6.6.3",
         "lefthook": "^1.11.14",
-        "@types/node": "^24.0.7",
-        "lerna": "^8.2.2"
+        "lerna": "^5.4.3"
     },
-    "resolutions": {
-        "rimraf": "4.4.1"
+    "dependencies": {
+        "@types/node": "^24.0.7"
     }
 }
