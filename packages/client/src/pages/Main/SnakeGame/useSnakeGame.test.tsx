@@ -34,6 +34,7 @@ describe('Game engine tests', () => {
             <Provider store={store}>
                 <BrowserRouter>
                     <SnakeGame
+                        onGameOver={() => {}}
                         onExit={() => {
                             return '';
                         }}

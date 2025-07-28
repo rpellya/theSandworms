@@ -413,11 +413,6 @@ export const useSnakeGame = ({ gameState, onGameOver }: UseSnakeGameParams) => {
 			}
 
 			return false; // столкновения нет
-
-			// Здесь начинается другая функция — ошибка синтаксиса!
-			function spawnFoodFromBot() {
-				// ...
-			}
 		}
 
 		function spawnFoodFromBot() {
