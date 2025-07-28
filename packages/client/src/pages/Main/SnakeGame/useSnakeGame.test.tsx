@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 import '@testing-library/jest-dom';
 import { cleanup, render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
@@ -33,7 +34,7 @@ describe('Game engine tests', () => {
         render(
             <Provider store={store}>
                 <BrowserRouter>
-                    <SnakeGame onGameOver={() => undefined} onExit={() => {}} />
+                    <SnakeGame onGameOver={() => null} onExit={() => null} />
                 </BrowserRouter>
             </Provider>,
         );
