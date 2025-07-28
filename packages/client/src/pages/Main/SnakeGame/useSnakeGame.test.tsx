@@ -33,12 +33,7 @@ describe('Game engine tests', () => {
         render(
             <Provider store={store}>
                 <BrowserRouter>
-                    <SnakeGame
-                        onGameOver={() => {}}
-                        onExit={() => {
-                            return '';
-                        }}
-                    />
+                    <SnakeGame onGameOver={() => undefined} onExit={() => {}} />
                 </BrowserRouter>
             </Provider>,
         );
