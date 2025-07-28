@@ -1,1 +1,1 @@
-export { Profile } from './Profile'; //Тест
+export { Profile } from './Profile';

@@ -1,10 +1,9 @@
 .fullScreen {
     &__container {
         position: absolute;
-        width: 100vw;
         margin: 5px;
-        display: flex;
-        justify-content: right;
+        left: 0;
+        bottom: 0;
         z-index: 100;
     }
 
