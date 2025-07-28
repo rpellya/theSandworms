@@ -115,8 +115,30 @@ export const useSnakeGame = ({ gameState, onGameOver }: UseSnakeGameParams) => {
 	const botSnakeRef = useRef([{ x: 100, y: 100 }]);
 	const botDirectionRef = useRef(Math.random() * 2 * Math.PI);
 	const localScoreRef = useRef(0);
+	const playerSkinRef = useRef(getRandomSkin());
+	const botSkinRef = useRef(getRandomSkin());
 
 	const resetGame = () => {
+		playerSkinRef.current = getRandomSkin();
+		botSkinRef.current = getRandomSkin();
+
+		const newPlayerFaceUrl = getRandomFaceUrl();
+		const newPlayerFaceImg = new Image();
+		newPlayerFaceImg.src = newPlayerFaceUrl;
+		newPlayerFaceImg.onload = () => {
+			playerFaceRef.current = newPlayerFaceImg;
+		};
+		playerFace.current = newPlayerFaceImg;
+
+		const newBotFaceUrl = getRandomFaceUrl();
+		const newBotFaceImg = new Image();
+		newBotFaceImg.src = newBotFaceUrl;
+		newBotFaceImg.onload = () => {
+			botFaceRef.current = newBotFaceImg;
+		};
+		botFace.current = newBotFaceImg;
+
+		// остальной reset
 		snakeRef.current = [...initialSnake];
 		botSnakeRef.current = [...initialBotSnake];
 		speedRef.current = initialSpeed;
