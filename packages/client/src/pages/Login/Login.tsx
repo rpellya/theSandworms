@@ -78,7 +78,7 @@ export const Login: React.FC<LoginProps> = memo(({ regPath }) => {
     const authorizationUsingYandex = async () => {
         try {
             const { data } = await getServiceId({
-                redirectUri: window.location.origin,
+                redirectUri: `${window.location.origin}/oauth`,
             });
             if (data?.clientId) {
                 // eslint-disable-next-line max-len
