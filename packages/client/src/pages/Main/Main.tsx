@@ -15,6 +15,7 @@ export const Main = memo(() => {
     const score = 100500;
 
     const handlePlayClick = () => {
+        console.log('Начинаем игру!');
         setIsOver(false);
         setIsPlaying(true);
     };
@@ -25,7 +26,15 @@ export const Main = memo(() => {
     };
 
     if (isPlaying) {
-        return <SnakeGame onExit={() => setIsPlaying(false)} />;
+        return (
+            <SnakeGame
+                onExit={() => setIsPlaying(false)}
+                onGameOver={() => {
+                    setIsPlaying(false);
+                    setIsOver(true);
+                }}
+            />
+        );
     }
 
     if (isOver) {

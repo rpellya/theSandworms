@@ -54,12 +54,17 @@ function getRandomSkin() {
 	return { colors, stripePattern, getColorForSegment };
 }
 
+type UseSnakeGameParams = {
+	gameState: TGameState;
+	onGameOver?: (score?: number) => void;
+};
+
 const playerSkin = getRandomSkin();
 const botSkin = getRandomSkin();
 const playerFaceUrl = getRandomFaceUrl();
 const botFaceUrl = getRandomFaceUrl();
 
-export const useSnakeGame = (gameState: TGameState) => {
+export const useSnakeGame = ({ gameState, onGameOver }: UseSnakeGameParams) => {
 	const canvasRef = useRef<HTMLCanvasElement | null>(null);
 	const playerFace = useRef<HTMLImageElement | null>(null);
 	const botFace = useRef<HTMLImageElement | null>(null);
@@ -92,6 +97,8 @@ export const useSnakeGame = (gameState: TGameState) => {
 	const snakeLength = 30;
 	const botLength = 45;
 
+	const arenaSize = { width: 1000, height: 800 };
+
 	const initialSnake = [{ x: 0, y: 0 }];
 	const initialBotSnake = [{ x: 100, y: 100 }];
 	const initialSpeed = 1.5;
@@ -100,13 +107,38 @@ export const useSnakeGame = (gameState: TGameState) => {
 	const snakeRef = useRef([{ x: 0, y: 0 }]);
 	const foodsRef = useRef([{ x: 0, y: 0 }]);
 	const speedRef = useRef(1.5);
+	const wallsRef = useRef<
+		{ x: number; y: number; width: number; height: number }[]
+	>([]);
 	const snakeWidthRef = useRef(12);
 	const botSnakeWidthRef = useRef(12);
 	const botSnakeRef = useRef([{ x: 100, y: 100 }]);
 	const botDirectionRef = useRef(Math.random() * 2 * Math.PI);
 	const localScoreRef = useRef(0);
+	const playerSkinRef = useRef(getRandomSkin());
+	const botSkinRef = useRef(getRandomSkin());
 
 	const resetGame = () => {
+		playerSkinRef.current = getRandomSkin();
+		botSkinRef.current = getRandomSkin();
+
+		const newPlayerFaceUrl = getRandomFaceUrl();
+		const newPlayerFaceImg = new Image();
+		newPlayerFaceImg.src = newPlayerFaceUrl;
+		newPlayerFaceImg.onload = () => {
+			playerFaceRef.current = newPlayerFaceImg;
+		};
+		playerFace.current = newPlayerFaceImg;
+
+		const newBotFaceUrl = getRandomFaceUrl();
+		const newBotFaceImg = new Image();
+		newBotFaceImg.src = newBotFaceUrl;
+		newBotFaceImg.onload = () => {
+			botFaceRef.current = newBotFaceImg;
+		};
+		botFace.current = newBotFaceImg;
+
+		// остальной reset
 		snakeRef.current = [...initialSnake];
 		botSnakeRef.current = [...initialBotSnake];
 		speedRef.current = initialSpeed;
@@ -155,6 +187,36 @@ export const useSnakeGame = (gameState: TGameState) => {
 		function updateSnake() {
 			const snake = snakeRef.current;
 			const head = snake[0];
+			wallsRef.current = [
+				// Верхняя стена
+				{
+					x: -arenaSize.width / 2,
+					y: -arenaSize.height / 2 - 10,
+					width: arenaSize.width,
+					height: 10,
+				},
+				// Нижняя стена
+				{
+					x: -arenaSize.width / 2,
+					y: arenaSize.height / 2,
+					width: arenaSize.width,
+					height: 10,
+				},
+				// Левая стена
+				{
+					x: -arenaSize.width / 2 - 10,
+					y: -arenaSize.height / 2,
+					width: 10,
+					height: arenaSize.height,
+				},
+				// Правая стена
+				{
+					x: arenaSize.width / 2,
+					y: -arenaSize.height / 2,
+					width: 10,
+					height: arenaSize.height,
+				},
+			];
 			const dx = mouse.x - center.x;
 			const dy = mouse.y - center.y;
 			const angle = Math.atan2(dy, dx);
@@ -177,6 +239,26 @@ export const useSnakeGame = (gameState: TGameState) => {
 			if (botSnake.length > botLength) botSnake.pop();
 		}
 
+		function drawWalls() {
+			if (!ctx) return;
+			ctx.lineWidth = 5;
+			ctx.strokeStyle = 'black';
+
+			// Верхний левый угол стены в мировых координатах
+			const wallX = -arenaSize.width / 2;
+			const wallY = -arenaSize.height / 2;
+
+			// Смещаем стену относительно змейки, чтобы она правильно отобразилась на экране
+			const offsetX = center.x - snakeRef.current[0].x;
+			const offsetY = center.y - snakeRef.current[0].y;
+
+			ctx.strokeRect(
+				wallX + offsetX,
+				wallY + offsetY,
+				arenaSize.width,
+				arenaSize.height,
+			);
+		}
 		function drawBackground(offsetX: number, offsetY: number) {
 			if (!canvas || !ctx || !bgPatternRef.current) return;
 			const patternSize = 256;
@@ -337,6 +419,24 @@ export const useSnakeGame = (gameState: TGameState) => {
 			return false;
 		}
 
+		function checkWallCollision() {
+			const head = snakeRef.current[0];
+			const walls = wallsRef.current;
+
+			for (const wall of walls) {
+				if (
+					head.x + snakeWidthRef.current > wall.x &&
+					head.x - snakeWidthRef.current < wall.x + wall.width &&
+					head.y + snakeWidthRef.current > wall.y &&
+					head.y - snakeWidthRef.current < wall.y + wall.height
+				) {
+					return true; // столкновение со стеной
+				}
+			}
+
+			return false; // столкновения нет
+		}
+
 		function spawnFoodFromBot() {
 			const botSnake = botSnakeRef.current;
 			const foods = foodsRef.current;
@@ -397,6 +497,15 @@ export const useSnakeGame = (gameState: TGameState) => {
 					botSnakeRef.current = [];
 				}
 
+				if (checkWallCollision()) {
+					resetGame();
+					// Тут зависит, как вы управляете состоянием игры — gameState приходит как параметр
+					// Нужно вызвать внешний колбэк или изменить состояние извне (через пропсы или контекст)
+					// Предположим, у вас есть функция onGameOver, её нужно вызвать:
+					if (typeof onGameOver === 'function') onGameOver();
+					return; // Прекратить дальнейший рендеринг этого кадра
+				}
+
 				if (botSnakeRef.current.length === 0) {
 					botSnakeRef.current = [
 						{
@@ -409,6 +518,7 @@ export const useSnakeGame = (gameState: TGameState) => {
 			}
 
 			drawBackground(snakeRef.current[0].x, snakeRef.current[0].y);
+			drawWalls();
 			drawFood();
 			drawSnake();
 			drawBotSnake();
