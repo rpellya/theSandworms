@@ -20,20 +20,19 @@ function toggleFullsrceen(rootElemClassName: string) {
 export const FullScreenSwitcher: React.FC<FSSwitcherProps> = memo(
     ({ rootElemClassName }) => {
         const [isFullScreen, setFullScreen] = useState(false);
+
+        const handleChangeScreen = () => {
+            toggleFullsrceen.call(this, rootElemClassName);
+            setFullScreen((prev) => !prev);
+        };
+
         return (
             <div className={cls.fullScreen__container}>
                 <Button
                     className={cls.fullScreen__button}
-                    onClick={() => {
-                        if (typeof document === 'undefined') return;
-
-                        toggleFullsrceen.call(this, rootElemClassName);
-                        setFullScreen(
-                            document.fullscreenElement ? true : false,
-                        );
-                    }}
+                    onClick={handleChangeScreen}
                 >
-                    {isFullScreen ? 'Full screen' : 'Exit full screen mode'}
+                    {isFullScreen ? 'Exit full screen mode' : 'Full screen'}
                 </Button>
             </div>
         );
