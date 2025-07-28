@@ -33,6 +33,25 @@ const options: swaggerJsdoc.Options = {
 						updated_at: { type: 'string', format: 'date-time' },
 					},
 				},
+				Emoji: {
+					type: 'object',
+					properties: {
+						id: { type: 'integer' },
+						userId: { type: 'integer' },
+						emoji: { type: 'string' },
+						messageId: { type: 'string', format: 'uuid' },
+						createdAt: { type: 'string', format: 'date-time' },
+						updatedAt: { type: 'string', format: 'date-time' },
+					},
+					required: [
+						'id',
+						'userId',
+						'emoji',
+						'messageId',
+						'createdAt',
+						'updatedAt',
+					],
+				},
 			},
 		},
 	},
@@ -42,7 +61,5 @@ const options: swaggerJsdoc.Options = {
 const swaggerSpec = swaggerJsdoc(options);
 
 export const setupSwagger = (app: Express) => {
-	// app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-	app.use('/docs', swaggerUi.serve as any);
-	app.get('/docs', swaggerUi.setup(swaggerSpec) as any);
+	app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 };

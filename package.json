@@ -10,7 +10,9 @@
         "test": "lerna run test",
         "lint": "lerna run lint",
         "format": "lerna run format",
-        "preview": "lerna run preview"
+        "preview": "lerna run preview",
+        "setup-db": "ts-node ./packages/server/src/db/setup.ts",
+        "lint:quiet": "eslint --quiet ."
     },
     "license": "MIT",
     "workspaces": [

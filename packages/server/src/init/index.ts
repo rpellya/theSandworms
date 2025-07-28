@@ -3,6 +3,7 @@ import { Topic } from '../models/topic';
 import { Message } from '../models/message';
 import { User } from '../models/user';
 import dotenv from 'dotenv';
+import { Emoji } from '../models/emoji';
 dotenv.config();
 
 const {
@@ -20,14 +21,14 @@ const sequelizeOptions: SequelizeOptions = {
 	password: POSTGRES_PASSWORD,
 	database: POSTGRES_DB,
 	dialect: 'postgres',
-	models: [Topic, Message, User],
+	models: [Topic, Message, User, Emoji],
 };
 
 export const sequelize = new Sequelize(sequelizeOptions);
 
 export async function dbConnect() {
 	try {
-		await sequelize.sync();
+		await sequelize.sync({ alter: true });
 		console.log('Connection has been established successfully.');
 	} catch (error) {
 		console.error('Unable to connect to the database:', error);

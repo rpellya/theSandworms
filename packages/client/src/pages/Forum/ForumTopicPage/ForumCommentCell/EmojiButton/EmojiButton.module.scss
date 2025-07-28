@@ -17,6 +17,9 @@
     &:hover {
         background-color: #e0e0e0;
     }
+    &:hover {
+        background-color: #e0e0e0;
+    }
 }
 
 .emojies {
@@ -52,7 +55,17 @@
         background: none;
         border: none;
         cursor: pointer;
+    button {
+        font-size: 18px;
+        padding: 4px;
+        background: none;
+        border: none;
+        cursor: pointer;
 
+        &:hover {
+            transform: scale(1.2);
+        }
+    }
         &:hover {
             transform: scale(1.2);
         }
