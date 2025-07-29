@@ -7,6 +7,7 @@ import { Forum } from 'pages/Forum';
 import { ForumTopicPage } from 'pages/Forum/ForumTopicPage';
 import { Login } from 'pages/Login';
 import { LeaderBoard } from 'pages/LeaderBoard';
+import { About } from 'pages/About';
 
 enum AppRoutes {
     MAIN = 'main',
@@ -56,7 +57,7 @@ export const routeConfig: Record<AppRoutes, RouteProps> = {
     },
     [AppRoutes.ABOUT]: {
         path: RoutePath.about,
-        element: 'About page (example)',
+        element: <About />,
     },
     [AppRoutes.PROFILE]: {
         path: RoutePath.profile,
