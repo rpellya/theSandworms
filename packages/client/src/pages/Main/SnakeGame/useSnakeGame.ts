@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import bgImgUrl from 'src/assets/bg/bg-004.webp';
+import bgImgUrl from '/bg/bg-004.webp';
 import { TGameState } from './types';
 
 /**
@@ -10,7 +10,7 @@ function getRandomFaceUrl() {
 	const faceNumber = String(
 		Math.floor(Math.random() * totalFaces) + 1,
 	).padStart(3, '0');
-	return `/src/assets/faces/face-${faceNumber}.webp`;
+	return `/faces/face-${faceNumber}.webp`;
 }
 
 /**
