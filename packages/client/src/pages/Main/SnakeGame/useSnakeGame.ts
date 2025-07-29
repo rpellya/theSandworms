@@ -471,6 +471,20 @@ export const useSnakeGame = ({ gameState, onGameOver }: UseSnakeGameParams) => {
 			return false;
 		}
 
+		function checkPlayerCollisionWithBot(): boolean {
+			const snake = snakeRef.current; // игрок
+			const botSnake = botSnakeRef.current; // бот
+			const head = snake[0]; // голова игрока
+
+			// пропустим первые 5 сегментов бота, чтобы не ловить «касание голов»
+			for (let i = 5; i < botSnake.length; i++) {
+				const part = botSnake[i];
+				const dist = Math.hypot(head.x - part.x, head.y - part.y);
+				if (dist < botSnakeWidthRef.current) return true;
+			}
+			return false;
+		}
+
 		function checkWallCollision() {
 			const head = snakeRef.current[0];
 			const walls = wallsRef.current;
@@ -548,6 +562,14 @@ export const useSnakeGame = ({ gameState, onGameOver }: UseSnakeGameParams) => {
 			if (checkBotCollisionWithPlayer()) {
 				spawnFoodFromBot(); // бот рассыпается едой
 				botSnakeRef.current = [];
+			}
+
+			/*––– ИГРОК vs БОТ –––*/
+			if (checkPlayerCollisionWithBot()) {
+				resetGame();
+				if (typeof onGameOver === 'function')
+					onGameOver(localScoreRef.current);
+				return true; // прерываем цикл – игра окончена
 			}
 
 			/*––– СТЕНЫ –––*/
