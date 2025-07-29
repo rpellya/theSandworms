@@ -148,7 +148,59 @@ export const useSnakeGame = ({ gameState, onGameOver }: UseSnakeGameParams) => {
 		setScore(0);
 	};
 
+	type Behaviour = { update: () => boolean; drawExtra: () => void };
+
 	useEffect(() => {
+		const stateBehavior: Record<TGameState, Behaviour> = {
+			starting: {
+				update() {
+					return false;
+				},
+				drawExtra() {
+					drawWalls();
+				},
+			},
+			playing: {
+				update() {
+					updateSnake();
+					updateBotSnake();
+					return handleCollisionsAndFood(); // всё, что раньше было в if (playing) …
+				},
+				drawExtra() {
+					// то, что в playing & paused, но не в idle
+					drawWalls();
+					drawFood();
+				},
+			},
+
+			idle: {
+				update() {
+					updateBotSnake();
+					return false;
+				},
+				drawExtra() {
+					/* ничего лишнего */
+				},
+			},
+
+			paused: {
+				// пример третьего режима
+				update() {
+					return false;
+				},
+				drawExtra() {
+					drawWalls();
+					drawFood();
+				},
+			},
+			finished: {
+				update() {
+					return false;
+				},
+				drawExtra() {},
+			},
+		} as const;
+
 		const canvas = canvasRef.current;
 		let animationId: number;
 		if (!canvas) return;
@@ -465,63 +517,79 @@ export const useSnakeGame = ({ gameState, onGameOver }: UseSnakeGameParams) => {
 			}
 		}
 
+		/** Обрабатываем всё, что связано с едой и столкновениями.
+		 *  Возвращает true, если игра закончилась (чтобы оборвать кадр).
+		 */
+		function handleCollisionsAndFood(): boolean {
+			const snake = snakeRef.current;
+			const foods = foodsRef.current;
+			const head = snake[0];
+
+			/*––– ЕДА –––*/
+			foodsRef.current = foods.filter((food) => {
+				const dist = Math.hypot(head.x - food.x, head.y - food.y);
+				if (dist < 12) {
+					localScoreRef.current++;
+					setScore(localScoreRef.current);
+
+					speedRef.current += 0.1;
+					snakeWidthRef.current += 0.1;
+
+					// «растим» змею на 10 сегментов
+					for (let i = 0; i < 10; i++) {
+						snake.push({ ...snake[snake.length - 1] });
+					}
+					return false; // еду съели – удаляем
+				}
+				return true; // оставляем
+			});
+
+			/*––– БОТ vs ИГРОК –––*/
+			if (checkBotCollisionWithPlayer()) {
+				spawnFoodFromBot(); // бот рассыпается едой
+				botSnakeRef.current = [];
+			}
+
+			/*––– СТЕНЫ –––*/
+			if (checkWallCollision()) {
+				resetGame();
+				if (typeof onGameOver === 'function')
+					onGameOver(localScoreRef.current);
+				return true; // игра окончена – остановим кадр
+			}
+
+			/*––– РЕСПАВН БОТА (если съели) –––*/
+			if (botSnakeRef.current.length === 0) {
+				botSnakeRef.current = [
+					{
+						x: Math.random() * 500 - 250,
+						y: Math.random() * 500 - 250,
+					},
+				];
+				botDirectionRef.current = Math.random() * 2 * Math.PI;
+			}
+
+			return false; // игра продолжается
+		}
+
 		function loop() {
 			if (!canvas || !ctx) return;
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-			if (gameState === 'playing') {
-				updateSnake();
-				updateBotSnake();
-
-				const snake = snakeRef.current;
-				const foods = foodsRef.current;
-
-				const head = snake[0];
-				foodsRef.current = foods.filter((food) => {
-					const dist = Math.hypot(head.x - food.x, head.y - food.y);
-					if (dist < 12) {
-						localScoreRef.current++;
-						setScore(localScoreRef.current);
-						speedRef.current += 0.1;
-						snakeWidthRef.current += 0.1;
-						for (let i = 0; i < 10; i++) {
-							snake.push({ ...snake[snake.length - 1] });
-						}
-						return false;
-					}
-					return true;
-				});
-
-				if (checkBotCollisionWithPlayer()) {
-					spawnFoodFromBot();
-					botSnakeRef.current = [];
-				}
-
-				if (checkWallCollision()) {
-					resetGame();
-					// Тут зависит, как вы управляете состоянием игры — gameState приходит как параметр
-					// Нужно вызвать внешний колбэк или изменить состояние извне (через пропсы или контекст)
-					// Предположим, у вас есть функция onGameOver, её нужно вызвать:
-					if (typeof onGameOver === 'function') onGameOver();
-					return; // Прекратить дальнейший рендеринг этого кадра
-				}
-
-				if (botSnakeRef.current.length === 0) {
-					botSnakeRef.current = [
-						{
-							x: Math.random() * 500 - 250,
-							y: Math.random() * 500 - 250,
-						},
-					];
-					botDirectionRef.current = Math.random() * 2 * Math.PI;
-				}
-			}
+			const isStopped = stateBehavior[gameState].update();
+			if (isStopped) return; // прерываем кадр
 
 			drawBackground(snakeRef.current[0].x, snakeRef.current[0].y);
-			drawWalls();
-			drawFood();
-			drawSnake();
-			drawBotSnake();
+			stateBehavior[gameState].drawExtra();
+
+			if (gameState === 'idle') {
+				drawBotSnake();
+			}
+
+			if (gameState === 'playing') {
+				drawSnake();
+				drawBotSnake();
+			}
 
 			animationId = requestAnimationFrame(loop);
 		}
