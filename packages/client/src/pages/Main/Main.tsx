@@ -6,10 +6,12 @@ import logo from 'src/assets/img/logo.webp';
 import { SnakeGame, SnakeGameMain } from './SnakeGame';
 import { Button } from 'components/Button';
 import { GameOver } from 'components/GameOver/GameOver';
+import { BackgroundId } from 'consts/backgrounds';
 
 export const Main = memo(() => {
     const [isPlaying, setIsPlaying] = useState(false);
     const [isOver, setIsOver] = useState(false);
+    const [bg, setBg] = useState<BackgroundId>(BackgroundId.Sahara);
 
     const score = 100500;
 
@@ -32,6 +34,7 @@ export const Main = memo(() => {
                     setIsPlaying(false);
                     setIsOver(true);
                 }}
+                backgroundUrl={bg}
             />
         );
     }
@@ -46,9 +49,37 @@ export const Main = memo(() => {
         );
     }
 
+    const backgroundSelect = (
+        <>
+            <div className={cls.customSelectWrap}>
+                <label
+                    className={cls.customSelectLabel}
+                    htmlFor="backgroundSelect"
+                >
+                    Локация:
+                </label>
+                <select
+                    id="backgroundSelect"
+                    className={cls.customSelect}
+                    value={bg}
+                    onChange={(e) => setBg(e.target.value as BackgroundId)}
+                >
+                    <option value={BackgroundId.Sahara}>Сахара</option>
+                    <option value={BackgroundId.Atacama}>Атакама</option>
+                    <option value={BackgroundId.BetpakDala}>Бетпак-Дала</option>
+                    <option value={BackgroundId.Gobi}>Гоби</option>
+                    <option value={BackgroundId.Namib}>Намиб</option>
+                    <option value={BackgroundId.Kalahari}>Калахари</option>
+                    <option value={BackgroundId.Karakum}>Каракумы</option>
+                    <option value={BackgroundId.Kyzylkum}>Кызылкум</option>
+                </select>
+            </div>
+        </>
+    );
+
     return (
         <>
-            <SnakeGameMain />
+            <SnakeGameMain backgroundUrl={bg} />
             <div className={cls.Main}>
                 <div className={cls.mainMenu}>
                     <img
@@ -58,6 +89,7 @@ export const Main = memo(() => {
                     />
                     <nav className={cls.mainMenu_nav}>
                         <ul className={cls.mainMenu_ul}>
+                            <li>{backgroundSelect}</li>
                             <li>
                                 <Button
                                     className={cls.appLink}

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import bgImgUrl from 'src/assets/bg/bg-004.webp';
 import { TGameState } from './types';
+import { snakeSkins } from 'consts/snakeSkins';
 
 /**
  * Генерирует случайную мордочку змейки
@@ -17,20 +17,6 @@ function getRandomFaceUrl() {
  * Генерирует случайный паттерн для тела змейки
  */
 function getRandomSkin() {
-	const snakeSkins = [
-		['#FFD700', '#FF6347'],
-		['#00CED1', '#20B2AA'],
-		['#ADFF2F', '#556B2F'],
-		['#8A2BE2', '#4B0082'],
-		['#FF8C00', '#FF4500'],
-		['#00FF7F', '#2E8B57'],
-		['#1E90FF', '#00008B'],
-		['#DEB887', '#A52A2A'],
-		['#DC143C', '#B22222'],
-		['#F0E68C', '#DAA520'],
-		['#40E0D0', '#5F9EA0'],
-	];
-
 	const colors = snakeSkins[Math.floor(Math.random() * snakeSkins.length)];
 	const stripePattern = colors.map(() => Math.floor(Math.random() * 20) + 4); // длины от 2 до 5
 	const patternLength = stripePattern.reduce((sum, val) => sum + val, 0);
@@ -55,6 +41,7 @@ function getRandomSkin() {
 }
 
 type UseSnakeGameParams = {
+	backgroundUrl: string;
 	gameState: TGameState;
 	onGameOver?: (score?: number) => void;
 };
@@ -64,7 +51,11 @@ const botSkin = getRandomSkin();
 const playerFaceUrl = getRandomFaceUrl();
 const botFaceUrl = getRandomFaceUrl();
 
-export const useSnakeGame = ({ gameState, onGameOver }: UseSnakeGameParams) => {
+export const useSnakeGame = ({
+	gameState,
+	onGameOver,
+	backgroundUrl,
+}: UseSnakeGameParams) => {
 	const canvasRef = useRef<HTMLCanvasElement | null>(null);
 	const playerFace = useRef<HTMLImageElement | null>(null);
 	const botFace = useRef<HTMLImageElement | null>(null);
@@ -85,14 +76,15 @@ export const useSnakeGame = ({ gameState, onGameOver }: UseSnakeGameParams) => {
 		botFaceImg.src = botFaceUrl;
 		botFaceImg.onload = () => (botFaceRef.current = botFaceImg);
 		botFace.current = botFaceImg;
-
-		// Фоновая текстура
-		const bgImg = new Image();
-		bgImg.src = bgImgUrl;
-		bgImg.onload = () => {
-			bgPatternRef.current = bgImg;
-		};
 	}, []);
+
+	useEffect(() => {
+		const img = new Image();
+		img.src = backgroundUrl;
+		img.onload = () => {
+			bgPatternRef.current = img;
+		};
+	}, [backgroundUrl]);
 
 	const snakeLength = 30;
 	const botLength = 45;
@@ -615,15 +607,7 @@ export const useSnakeGame = ({ gameState, onGameOver }: UseSnakeGameParams) => {
 
 			animationId = requestAnimationFrame(loop);
 		}
-
-		const bgImg = new Image();
-		bgImg.src = bgImgUrl;
-		let bgPattern: HTMLImageElement | null = null;
-
-		bgImg.onload = () => {
-			bgPattern = bgImg;
-			loop();
-		};
+		loop();
 
 		return () => {
 			window.removeEventListener('resize', resizeCanvas);

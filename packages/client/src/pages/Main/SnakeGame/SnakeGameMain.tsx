@@ -5,18 +5,25 @@ import cls from './SnakeGame.module.scss';
 
 import { TGameState } from './types';
 
-export const SnakeGameMain: React.FC = memo(() => {
-    const [gameState, setGameState] = useState<TGameState>('idle');
+interface SnakeGameMainProps {
+    backgroundUrl: string;
+}
 
-    const { canvasRef } = useSnakeGame({
-        gameState,
-    });
+export const SnakeGameMain: React.FC<SnakeGameMainProps> = memo(
+    ({ backgroundUrl }) => {
+        const [gameState, setGameState] = useState<TGameState>('idle');
 
-    return (
-        <canvas
-            ref={canvasRef}
-            className={cls.snakeGame__canvas}
-            style={{ position: 'absolute', inset: 0 }}
-        />
-    );
-});
+        const { canvasRef } = useSnakeGame({
+            gameState,
+            backgroundUrl,
+        });
+
+        return (
+            <canvas
+                ref={canvasRef}
+                className={cls.snakeGame__canvas}
+                style={{ position: 'absolute', inset: 0 }}
+            />
+        );
+    },
+);
