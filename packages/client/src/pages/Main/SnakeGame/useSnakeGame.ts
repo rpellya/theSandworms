@@ -10,7 +10,7 @@ function getRandomFaceUrl() {
 	const faceNumber = String(
 		Math.floor(Math.random() * totalFaces) + 1,
 	).padStart(3, '0');
-	return `/src/assets/faces/face-${faceNumber}.webp`;
+	return `/faces/face-${faceNumber}.webp`;
 }
 
 /**
