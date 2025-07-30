@@ -6,17 +6,20 @@ import logo from 'src/assets/img/logo.webp';
 import { SnakeGame, SnakeGameMain } from './SnakeGame';
 import { Button } from 'components/Button';
 import { GameOver } from 'components/GameOver/GameOver';
+import { useMusic } from 'app/providers/MusicProvider/MusicProvider';
 import { BackgroundId } from 'consts/backgrounds';
 
 export const Main = memo(() => {
     const [isPlaying, setIsPlaying] = useState(false);
     const [isOver, setIsOver] = useState(false);
+    const { play } = useMusic();
     const [bg, setBg] = useState<BackgroundId>(BackgroundId.Sahara);
 
     const score = 100500;
 
     const handlePlayClick = () => {
         console.log('Начинаем игру!');
+        play();
         setIsOver(false);
         setIsPlaying(true);
     };

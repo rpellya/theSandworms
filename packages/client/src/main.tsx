@@ -7,6 +7,7 @@ import { store } from 'store';
 import { ErrorBoundary } from 'app/providers/error-boundary/ErrorBoundary';
 import { ThemeProvider } from 'app/providers/ThemeProvider';
 import './app/styles/index.scss';
+import { MusicProvider } from './app/providers/MusicProvider/MusicProvider';
 
 function startServiceWorker() {
     if ('serviceWorker' in navigator) {
@@ -43,6 +44,9 @@ function startServiceWorker() {
                         '/faces/face-013.webp',
                         '/faces/face-014.webp',
                         '/src/assets/img/profileMockImg.webp',
+                        '/music/bg1.mp3',
+                        '/music/bg2.mp3',
+                        '/music/bg3.mp3',
                     ];
 
                     resources = resources.concat(staticResources);
@@ -75,7 +79,9 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
             <BrowserRouter>
                 <ErrorBoundary>
                     <ThemeProvider>
-                        <App />
+                        <MusicProvider>
+                            <App />
+                        </MusicProvider>
                     </ThemeProvider>
                 </ErrorBoundary>
             </BrowserRouter>
