@@ -1,1 +1,6 @@
-export type TGameState = 'starting' | 'playing' | 'paused' | 'finished';
+export type TGameState =
+	| 'idle'
+	| 'starting'
+	| 'playing'
+	| 'paused'
+	| 'finished';

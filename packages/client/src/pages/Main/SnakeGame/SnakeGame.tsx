@@ -12,18 +12,20 @@ import { useSelector } from 'react-redux';
 import { RootState } from 'store';
 
 interface SnakeGameProps {
+    backgroundUrl: string;
     onExit: () => void;
     onGameOver: (score?: number) => void;
 }
 
 export const SnakeGame: React.FC<SnakeGameProps> = memo(
-    ({ onExit, onGameOver }) => {
+    ({ onExit, onGameOver, backgroundUrl }) => {
         const [sendSchoreApi] = useSendSchoreMutation();
         const [gameState, setGameState] = useState<TGameState>('starting');
 
         const { canvasRef, score, resetGame } = useSnakeGame({
             gameState,
             onGameOver,
+            backgroundUrl,
         });
         const [countdown, setCountdown] = useState<number | null>(5);
 
