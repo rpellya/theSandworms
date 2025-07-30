@@ -444,6 +444,8 @@ export const useSnakeGame = ({
 		}
 
 		function checkBotWallCollision(): boolean {
+			const botSnake = botSnakeRef.current;
+			if (botSnake.length === 0) return false;
 			const head = botSnakeRef.current[0];
 			const dist = Math.hypot(head.x, head.y);
 			return dist + botSnakeWidthRef.current > arenaRadius;
