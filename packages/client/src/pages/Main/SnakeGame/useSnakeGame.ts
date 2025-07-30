@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import bgImgUrl from 'src/assets/bg/bg-004.webp';
 import { TGameState } from './types';
+import { snakeSkins } from 'consts/snakeSkins';
 
 /**
  * Генерирует случайную мордочку змейки
@@ -10,27 +10,13 @@ function getRandomFaceUrl() {
 	const faceNumber = String(
 		Math.floor(Math.random() * totalFaces) + 1,
 	).padStart(3, '0');
-	return `/src/assets/faces/face-${faceNumber}.webp`;
+	return `/faces/face-${faceNumber}.webp`;
 }
 
 /**
  * Генерирует случайный паттерн для тела змейки
  */
 function getRandomSkin() {
-	const snakeSkins = [
-		['#FFD700', '#FF6347'],
-		['#00CED1', '#20B2AA'],
-		['#ADFF2F', '#556B2F'],
-		['#8A2BE2', '#4B0082'],
-		['#FF8C00', '#FF4500'],
-		['#00FF7F', '#2E8B57'],
-		['#1E90FF', '#00008B'],
-		['#DEB887', '#A52A2A'],
-		['#DC143C', '#B22222'],
-		['#F0E68C', '#DAA520'],
-		['#40E0D0', '#5F9EA0'],
-	];
-
 	const colors = snakeSkins[Math.floor(Math.random() * snakeSkins.length)];
 	const stripePattern = colors.map(() => Math.floor(Math.random() * 20) + 4); // длины от 2 до 5
 	const patternLength = stripePattern.reduce((sum, val) => sum + val, 0);
@@ -55,6 +41,7 @@ function getRandomSkin() {
 }
 
 type UseSnakeGameParams = {
+	backgroundUrl: string;
 	gameState: TGameState;
 	onGameOver?: (score?: number) => void;
 };
@@ -64,7 +51,11 @@ const botSkin = getRandomSkin();
 const playerFaceUrl = getRandomFaceUrl();
 const botFaceUrl = getRandomFaceUrl();
 
-export const useSnakeGame = ({ gameState, onGameOver }: UseSnakeGameParams) => {
+export const useSnakeGame = ({
+	gameState,
+	onGameOver,
+	backgroundUrl,
+}: UseSnakeGameParams) => {
 	const canvasRef = useRef<HTMLCanvasElement | null>(null);
 	const playerFace = useRef<HTMLImageElement | null>(null);
 	const botFace = useRef<HTMLImageElement | null>(null);
@@ -85,14 +76,15 @@ export const useSnakeGame = ({ gameState, onGameOver }: UseSnakeGameParams) => {
 		botFaceImg.src = botFaceUrl;
 		botFaceImg.onload = () => (botFaceRef.current = botFaceImg);
 		botFace.current = botFaceImg;
-
-		// Фоновая текстура
-		const bgImg = new Image();
-		bgImg.src = bgImgUrl;
-		bgImg.onload = () => {
-			bgPatternRef.current = bgImg;
-		};
 	}, []);
+
+	useEffect(() => {
+		const img = new Image();
+		img.src = backgroundUrl;
+		img.onload = () => {
+			bgPatternRef.current = img;
+		};
+	}, [backgroundUrl]);
 
 	const snakeLength = 30;
 	const botLength = 45;
@@ -148,7 +140,59 @@ export const useSnakeGame = ({ gameState, onGameOver }: UseSnakeGameParams) => {
 		setScore(0);
 	};
 
+	type Behaviour = { update: () => boolean; drawExtra: () => void };
+
 	useEffect(() => {
+		const stateBehavior: Record<TGameState, Behaviour> = {
+			starting: {
+				update() {
+					return false;
+				},
+				drawExtra() {
+					drawWalls();
+				},
+			},
+			playing: {
+				update() {
+					updateSnake();
+					updateBotSnake();
+					return handleCollisionsAndFood(); // всё, что раньше было в if (playing) …
+				},
+				drawExtra() {
+					// то, что в playing & paused, но не в idle
+					drawWalls();
+					drawFood();
+				},
+			},
+
+			idle: {
+				update() {
+					updateBotSnake();
+					return false;
+				},
+				drawExtra() {
+					/* ничего лишнего */
+				},
+			},
+
+			paused: {
+				// пример третьего режима
+				update() {
+					return false;
+				},
+				drawExtra() {
+					drawWalls();
+					drawFood();
+				},
+			},
+			finished: {
+				update() {
+					return false;
+				},
+				drawExtra() {},
+			},
+		} as const;
+
 		const canvas = canvasRef.current;
 		let animationId: number;
 		if (!canvas) return;
@@ -419,6 +463,20 @@ export const useSnakeGame = ({ gameState, onGameOver }: UseSnakeGameParams) => {
 			return false;
 		}
 
+		function checkPlayerCollisionWithBot(): boolean {
+			const snake = snakeRef.current; // игрок
+			const botSnake = botSnakeRef.current; // бот
+			const head = snake[0]; // голова игрока
+
+			// пропустим первые 5 сегментов бота, чтобы не ловить «касание голов»
+			for (let i = 5; i < botSnake.length; i++) {
+				const part = botSnake[i];
+				const dist = Math.hypot(head.x - part.x, head.y - part.y);
+				if (dist < botSnakeWidthRef.current) return true;
+			}
+			return false;
+		}
+
 		function checkWallCollision() {
 			const head = snakeRef.current[0];
 			const walls = wallsRef.current;
@@ -465,75 +523,91 @@ export const useSnakeGame = ({ gameState, onGameOver }: UseSnakeGameParams) => {
 			}
 		}
 
+		/** Обрабатываем всё, что связано с едой и столкновениями.
+		 *  Возвращает true, если игра закончилась (чтобы оборвать кадр).
+		 */
+		function handleCollisionsAndFood(): boolean {
+			const snake = snakeRef.current;
+			const foods = foodsRef.current;
+			const head = snake[0];
+
+			/*––– ЕДА –––*/
+			foodsRef.current = foods.filter((food) => {
+				const dist = Math.hypot(head.x - food.x, head.y - food.y);
+				if (dist < 12) {
+					localScoreRef.current++;
+					setScore(localScoreRef.current);
+
+					speedRef.current += 0.1;
+					snakeWidthRef.current += 0.1;
+
+					// «растим» змею на 10 сегментов
+					for (let i = 0; i < 10; i++) {
+						snake.push({ ...snake[snake.length - 1] });
+					}
+					return false; // еду съели – удаляем
+				}
+				return true; // оставляем
+			});
+
+			/*––– БОТ vs ИГРОК –––*/
+			if (checkBotCollisionWithPlayer()) {
+				spawnFoodFromBot(); // бот рассыпается едой
+				botSnakeRef.current = [];
+			}
+
+			/*––– ИГРОК vs БОТ –––*/
+			if (checkPlayerCollisionWithBot()) {
+				resetGame();
+				if (typeof onGameOver === 'function')
+					onGameOver(localScoreRef.current);
+				return true; // прерываем цикл – игра окончена
+			}
+
+			/*––– СТЕНЫ –––*/
+			if (checkWallCollision()) {
+				resetGame();
+				if (typeof onGameOver === 'function')
+					onGameOver(localScoreRef.current);
+				return true; // игра окончена – остановим кадр
+			}
+
+			/*––– РЕСПАВН БОТА (если съели) –––*/
+			if (botSnakeRef.current.length === 0) {
+				botSnakeRef.current = [
+					{
+						x: Math.random() * 500 - 250,
+						y: Math.random() * 500 - 250,
+					},
+				];
+				botDirectionRef.current = Math.random() * 2 * Math.PI;
+			}
+
+			return false; // игра продолжается
+		}
+
 		function loop() {
 			if (!canvas || !ctx) return;
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-			if (gameState === 'playing') {
-				updateSnake();
-				updateBotSnake();
-
-				const snake = snakeRef.current;
-				const foods = foodsRef.current;
-
-				const head = snake[0];
-				foodsRef.current = foods.filter((food) => {
-					const dist = Math.hypot(head.x - food.x, head.y - food.y);
-					if (dist < 12) {
-						localScoreRef.current++;
-						setScore(localScoreRef.current);
-						speedRef.current += 0.1;
-						snakeWidthRef.current += 0.1;
-						for (let i = 0; i < 10; i++) {
-							snake.push({ ...snake[snake.length - 1] });
-						}
-						return false;
-					}
-					return true;
-				});
-
-				if (checkBotCollisionWithPlayer()) {
-					spawnFoodFromBot();
-					botSnakeRef.current = [];
-				}
-
-				if (checkWallCollision()) {
-					resetGame();
-					// Тут зависит, как вы управляете состоянием игры — gameState приходит как параметр
-					// Нужно вызвать внешний колбэк или изменить состояние извне (через пропсы или контекст)
-					// Предположим, у вас есть функция onGameOver, её нужно вызвать:
-					if (typeof onGameOver === 'function') onGameOver();
-					return; // Прекратить дальнейший рендеринг этого кадра
-				}
-
-				if (botSnakeRef.current.length === 0) {
-					botSnakeRef.current = [
-						{
-							x: Math.random() * 500 - 250,
-							y: Math.random() * 500 - 250,
-						},
-					];
-					botDirectionRef.current = Math.random() * 2 * Math.PI;
-				}
-			}
+			const isStopped = stateBehavior[gameState].update();
+			if (isStopped) return; // прерываем кадр
 
 			drawBackground(snakeRef.current[0].x, snakeRef.current[0].y);
-			drawWalls();
-			drawFood();
-			drawSnake();
-			drawBotSnake();
+			stateBehavior[gameState].drawExtra();
+
+			if (gameState === 'idle') {
+				drawBotSnake();
+			}
+
+			if (gameState === 'playing') {
+				drawSnake();
+				drawBotSnake();
+			}
 
 			animationId = requestAnimationFrame(loop);
 		}
-
-		const bgImg = new Image();
-		bgImg.src = bgImgUrl;
-		let bgPattern: HTMLImageElement | null = null;
-
-		bgImg.onload = () => {
-			bgPattern = bgImg;
-			loop();
-		};
+		loop();
 
 		return () => {
 			window.removeEventListener('resize', resizeCanvas);
