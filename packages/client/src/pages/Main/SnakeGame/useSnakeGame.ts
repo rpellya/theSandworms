@@ -89,7 +89,7 @@ export const useSnakeGame = ({
 	const snakeLength = 30;
 	const botLength = 45;
 
-	const arenaSize = { width: 1000, height: 800 };
+	const arenaRadius = 1000;
 
 	const initialSnake = [{ x: 0, y: 0 }];
 	const initialBotSnake = [{ x: 100, y: 100 }];
@@ -99,9 +99,6 @@ export const useSnakeGame = ({
 	const snakeRef = useRef([{ x: 0, y: 0 }]);
 	const foodsRef = useRef([{ x: 0, y: 0 }]);
 	const speedRef = useRef(1.5);
-	const wallsRef = useRef<
-		{ x: number; y: number; width: number; height: number }[]
-	>([]);
 	const snakeWidthRef = useRef(12);
 	const botSnakeWidthRef = useRef(12);
 	const botSnakeRef = useRef([{ x: 100, y: 100 }]);
@@ -231,36 +228,6 @@ export const useSnakeGame = ({
 		function updateSnake() {
 			const snake = snakeRef.current;
 			const head = snake[0];
-			wallsRef.current = [
-				// Верхняя стена
-				{
-					x: -arenaSize.width / 2,
-					y: -arenaSize.height / 2 - 10,
-					width: arenaSize.width,
-					height: 10,
-				},
-				// Нижняя стена
-				{
-					x: -arenaSize.width / 2,
-					y: arenaSize.height / 2,
-					width: arenaSize.width,
-					height: 10,
-				},
-				// Левая стена
-				{
-					x: -arenaSize.width / 2 - 10,
-					y: -arenaSize.height / 2,
-					width: 10,
-					height: arenaSize.height,
-				},
-				// Правая стена
-				{
-					x: arenaSize.width / 2,
-					y: -arenaSize.height / 2,
-					width: 10,
-					height: arenaSize.height,
-				},
-			];
 			const dx = mouse.x - center.x;
 			const dy = mouse.y - center.y;
 			const angle = Math.atan2(dy, dx);
@@ -285,23 +252,16 @@ export const useSnakeGame = ({
 
 		function drawWalls() {
 			if (!ctx) return;
+
+			const snakeHead = snakeRef.current[0];
+			const offsetX = center.x - snakeHead.x;
+			const offsetY = center.y - snakeHead.y;
+
 			ctx.lineWidth = 5;
 			ctx.strokeStyle = 'black';
-
-			// Верхний левый угол стены в мировых координатах
-			const wallX = -arenaSize.width / 2;
-			const wallY = -arenaSize.height / 2;
-
-			// Смещаем стену относительно змейки, чтобы она правильно отобразилась на экране
-			const offsetX = center.x - snakeRef.current[0].x;
-			const offsetY = center.y - snakeRef.current[0].y;
-
-			ctx.strokeRect(
-				wallX + offsetX,
-				wallY + offsetY,
-				arenaSize.width,
-				arenaSize.height,
-			);
+			ctx.beginPath();
+			ctx.arc(offsetX, offsetY, arenaRadius, 0, Math.PI * 2);
+			ctx.stroke();
 		}
 		function drawBackground(offsetX: number, offsetY: number) {
 			if (!canvas || !ctx || !bgPatternRef.current) return;
@@ -479,20 +439,14 @@ export const useSnakeGame = ({
 
 		function checkWallCollision() {
 			const head = snakeRef.current[0];
-			const walls = wallsRef.current;
+			const dist = Math.hypot(head.x, head.y); // расстояние от (0,0)
+			return dist + snakeWidthRef.current > arenaRadius;
+		}
 
-			for (const wall of walls) {
-				if (
-					head.x + snakeWidthRef.current > wall.x &&
-					head.x - snakeWidthRef.current < wall.x + wall.width &&
-					head.y + snakeWidthRef.current > wall.y &&
-					head.y - snakeWidthRef.current < wall.y + wall.height
-				) {
-					return true; // столкновение со стеной
-				}
-			}
-
-			return false; // столкновения нет
+		function checkBotWallCollision(): boolean {
+			const head = botSnakeRef.current[0];
+			const dist = Math.hypot(head.x, head.y);
+			return dist + botSnakeWidthRef.current > arenaRadius;
 		}
 
 		function spawnFoodFromBot() {
@@ -550,6 +504,11 @@ export const useSnakeGame = ({
 				return true; // оставляем
 			});
 
+			// если съели последнюю еду, сразу создаём новую
+			if (foodsRef.current.length === 0) {
+				foodsRef.current.push(spawnFood());
+			}
+
 			/*––– БОТ vs ИГРОК –––*/
 			if (checkBotCollisionWithPlayer()) {
 				spawnFoodFromBot(); // бот рассыпается едой
@@ -558,7 +517,6 @@ export const useSnakeGame = ({
 
 			/*––– ИГРОК vs БОТ –––*/
 			if (checkPlayerCollisionWithBot()) {
-				resetGame();
 				if (typeof onGameOver === 'function')
 					onGameOver(localScoreRef.current);
 				return true; // прерываем цикл – игра окончена
@@ -566,10 +524,15 @@ export const useSnakeGame = ({
 
 			/*––– СТЕНЫ –––*/
 			if (checkWallCollision()) {
-				resetGame();
 				if (typeof onGameOver === 'function')
 					onGameOver(localScoreRef.current);
 				return true; // игра окончена – остановим кадр
+			}
+
+			/*––– СТЕНЫ vs БОТ –––*/
+			if (checkBotWallCollision()) {
+				spawnFoodFromBot();
+				botSnakeRef.current = [];
 			}
 
 			/*––– РЕСПАВН БОТА (если съели) –––*/
