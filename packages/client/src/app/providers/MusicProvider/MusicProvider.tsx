@@ -8,6 +8,7 @@ const playlist = [
 
 type Ctx = {
     playing: boolean;
+    userMuted: boolean;
     play: () => void;
     toggle: () => void;
     next: () => void;
@@ -21,6 +22,7 @@ export const MusicProvider: React.FC<{ children: React.ReactNode }> = ({
     const audioRef = useRef<HTMLAudioElement | null>(null);
     const [index, setIndex] = useState(0);
     const [playing, setPlaying] = useState(false);
+    const [userMuted, setUserMuted] = useState(false);
 
     useEffect(() => {
         audioRef.current = new Audio(playlist[0]);
@@ -45,14 +47,25 @@ export const MusicProvider: React.FC<{ children: React.ReactNode }> = ({
         playing ? a.play().catch(console.error) : a.pause();
     }, [playing]);
 
-    const play = () => setPlaying(true);
-    const toggle = () => setPlaying((p) => !p);
+    const play = () => {
+        setPlaying(true);
+        setUserMuted(false);
+    };
+    const toggle = () =>
+        setPlaying((p) => {
+            const next = !p;
+            if (!next) setUserMuted(true);
+            else setUserMuted(false);
+            return next;
+        });
     const next = () => setIndex((i) => (i + 1) % playlist.length);
     const prev = () =>
         setIndex((i) => (i - 1 + playlist.length) % playlist.length);
 
     return (
-        <MusicCtx.Provider value={{ playing, play, toggle, next, prev }}>
+        <MusicCtx.Provider
+            value={{ playing, userMuted, play, toggle, next, prev }}
+        >
             {children}
         </MusicCtx.Provider>
     );
