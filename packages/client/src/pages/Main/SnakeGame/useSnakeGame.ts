@@ -567,6 +567,11 @@ export const useSnakeGame = ({
 				return true; // оставляем
 			});
 
+			// если съели последнюю еду, сразу создаём новую
+			if (foodsRef.current.length === 0) {
+				foodsRef.current.push(spawnFood());
+			}
+
 			/*––– БОТ vs ИГРОК –––*/
 			if (checkBotCollisionWithPlayer()) {
 				spawnFoodFromBot(); // бот рассыпается едой
