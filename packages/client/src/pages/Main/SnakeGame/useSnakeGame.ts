@@ -496,7 +496,9 @@ export const useSnakeGame = ({
 		}
 
 		function checkBotWallCollision(): boolean {
-			const head = botSnakeRef.current[0];
+			const botSnake = botSnakeRef.current;
+			if (botSnake.length === 0) return false;
+			const head = botSnake[0];
 			const walls = wallsRef.current;
 
 			for (const wall of walls) {
