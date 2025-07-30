@@ -34,7 +34,11 @@ describe('Game engine tests', () => {
         render(
             <Provider store={store}>
                 <BrowserRouter>
-                    <SnakeGame onGameOver={() => null} onExit={() => null} />
+                    <SnakeGame
+                        onGameOver={() => null}
+                        onExit={() => null}
+                        backgroundUrl=""
+                    />
                 </BrowserRouter>
             </Provider>,
         );
