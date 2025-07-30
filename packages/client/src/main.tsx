@@ -44,6 +44,9 @@ function startServiceWorker() {
                         '/src/assets/faces/face-013.webp',
                         '/src/assets/faces/face-014.webp',
                         '/src/assets/img/profileMockImg.webp',
+                        '/music/bg1.mp3',
+                        '/music/bg2.mp3',
+                        '/music/bg3.mp3',
                     ];
 
                     resources = resources.concat(staticResources);
