@@ -34,7 +34,7 @@ export const Main = memo(() => {
     if (isPlaying || isOver) {
         return (
             <SnakeGame
-                onExit={() => setIsPlaying(false)}
+                onExit={handleHome}
                 onGameOver={() => {
                     setIsPlaying(false);
                     setIsOver(true);
