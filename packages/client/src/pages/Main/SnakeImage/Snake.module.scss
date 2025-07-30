@@ -1,0 +1,23 @@
+.Snake {
+    width: 100%;
+    height: 100px;
+    position: relative;
+    overflow: hidden; /* скрыть всё, что выходит за пределы контейнера */
+}
+
+.snakeImage {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    animation: moveSnake 5s linear infinite; /* анимация для бесконечного движения */
+    height: 75px;
+}
+
+@keyframes moveSnake {
+    0% {
+        left: -200px; /* начальная позиция слева */
+    }
+    100% {
+        left: 100%; /* конечная позиция справа */
+    }
+}

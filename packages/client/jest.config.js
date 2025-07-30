@@ -1,11 +1,19 @@
-import dotenv from 'dotenv'
-dotenv.config()
+import dotenv from 'dotenv';
+dotenv.config();
 
 export default {
-  preset: 'ts-jest',
-  testEnvironment: 'jsdom',
-  testMatch: ['<rootDir>/src/**/*.test.{ts,tsx}'],
-  globals: {
-    __SERVER_PORT__: process.env.SERVER_PORT,
-  },
-}
+	preset: 'ts-jest',
+	testEnvironment: 'jsdom',
+	setupFiles: ['<rootDir>/jest.setup.js'],
+	setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
+	coveragePathIgnorePatterns: ['\\\\node_modules\\\\'],
+	testMatch: ['<rootDir>/src/**/*.test.{ts,tsx}'],
+	moduleFileExtensions: ['js', 'ts', 'tsx', 'json', 'node'],
+	moduleNameMapper: {
+		'\\.(css|less|scss|sass|webp|png|svg|jpg)$': 'identity-obj-proxy',
+	},
+	moduleDirectories: ['node_modules', 'src'],
+	globals: {
+		__SERVER_PORT__: process.env.SERVER_PORT,
+	},
+};

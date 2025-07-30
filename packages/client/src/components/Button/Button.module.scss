@@ -1,0 +1,15 @@
+// @use 'src/app/styles/themes/light.module' as *;
+
+.Button {
+    cursor: pointer;
+    color: var(--black);
+    padding: 6px 12px;
+
+    &:hover {
+        opacity: 0.7;
+    }
+}
+
+.disabled {
+    opacity: 0.3;
+}

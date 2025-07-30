@@ -1,0 +1,21 @@
+.fullScreen {
+    &__container {
+        position: absolute;
+        margin: 5px;
+        left: 0;
+        bottom: 0;
+        z-index: 100;
+    }
+
+    &__button {
+        border: none;
+        margin: 0 auto 0 5px;
+        background-image: none;
+        opacity: 0.4;
+        cursor: pointer;
+    }
+
+    &__button:hover {
+        opacity: 0.8;
+    }
+}

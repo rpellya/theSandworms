@@ -1,0 +1,43 @@
+.AboutPage {
+    .AboutPageContainer {
+        padding: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .ProjectInfo {
+        margin-bottom: 3rem;
+    }
+
+    .text {
+        color: var(--secondary);
+    }
+
+    .TeamMembers {
+        .TeamGrid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .TeamCard {
+            background: var(--secondary);
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            transition: transform 0.2s;
+
+            &:hover {
+                transform: translateY(-5px);
+            }
+        }
+    }
+    .backButton {
+        background-color: var(--secondary);
+        height: 36px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 4px;
+    }
+}

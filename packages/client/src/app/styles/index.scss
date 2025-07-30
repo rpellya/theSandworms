@@ -1,0 +1,24 @@
+@use 'nullstyles.scss' as *;
+@use 'themes/light.module.scss' as *;
+@use 'themes/dark.module.scss' as *;
+@use 'variables/global.scss' as *;
+
+body {
+    font: var(--font-m);
+}
+
+.App {
+    min-height: 100vh;
+    display: flex;
+    align-items: stretch;
+}
+
+.content-page {
+    width: 100%;
+    background-color: var(--basic);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: stretch;
+}

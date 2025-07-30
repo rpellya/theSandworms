@@ -1,0 +1,1 @@
+export { ForumTopicForm } from './ForumTopicForm';

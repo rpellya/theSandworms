@@ -1,0 +1,24 @@
+.appInput {
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid var(--black);
+    font-size: var(--font-size-m);
+    line-height: var(--font-line-m);
+    font-style: normal;
+    font-weight: normal;
+    padding: 0.3em;
+    margin-bottom: 0.3em;
+
+    &__label {
+        font-size: var(--font-size-s);
+        line-height: var(--font-line-s);
+        color: rgb(51 105 243 / 100%);
+    }
+
+    &__inputContainer {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        margin: 0.3em;
+    }
+}

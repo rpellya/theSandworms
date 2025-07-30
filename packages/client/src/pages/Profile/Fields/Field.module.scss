@@ -1,0 +1,41 @@
+.Field {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: var(--space-m);
+    border-bottom: 1px solid var(--secondary);
+
+    &_name {
+        color: var(--secondary);
+        width: 150px;
+    }
+
+    &_container {
+        border: none;
+        background-color: inherit;
+        text-align: right;
+
+        &_input {
+            color: var(--secondary);
+            border: none;
+            background-color: inherit;
+            text-align: right;
+        }
+
+        &_errorMessage {
+            position: absolute;
+            top: 5px;
+            transform: translateX(200px);
+            background-color: var(--white);
+            color: var(--accent);
+            font-size: var(--space-ml);
+            text-decoration: underline;
+            line-height: var(--space-sl);
+            text-align: left;
+            border: 1px solid black;
+            border-radius: var(--radius-m);
+            padding: var(--space-s);
+        }
+    }
+}
