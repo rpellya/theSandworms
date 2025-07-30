@@ -14,8 +14,9 @@ export const Main = memo(() => {
     const [isOver, setIsOver] = useState(false);
     const { play } = useMusic();
     const [bg, setBg] = useState<BackgroundId>(BackgroundId.Sahara);
+    const [score, setScore] = useState(0);
 
-    const score = 100500;
+    // const score = 100500;
 
     const handlePlayClick = () => {
         console.log('Начинаем игру!');

@@ -1,7 +1,7 @@
 import React, { memo, useEffect, useState } from 'react';
 import {
     RATING_FIELD_NAME,
-    useSendSchoreMutation,
+    useSendScoreMutation,
 } from 'api/leaderBoard/leaderBoardApi';
 import { useSnakeGame } from './useSnakeGame';
 import cls from './SnakeGame.module.scss';
@@ -19,7 +19,7 @@ interface SnakeGameProps {
 
 export const SnakeGame: React.FC<SnakeGameProps> = memo(
     ({ onExit, onGameOver, backgroundUrl }) => {
-        const [sendSchoreApi] = useSendSchoreMutation();
+        const [sendScoreApi] = useSendScoreMutation();
         const [gameState, setGameState] = useState<TGameState>('starting');
 
         const { canvasRef, score, resetGame } = useSnakeGame({
@@ -44,7 +44,7 @@ export const SnakeGame: React.FC<SnakeGameProps> = memo(
 
         useEffect(() => {
             if ('finished' === gameState) {
-                sendSchore(score);
+                sendScore(score);
                 onGameOver(score);
             }
         }, [gameState, score, onGameOver]);
@@ -53,17 +53,17 @@ export const SnakeGame: React.FC<SnakeGameProps> = memo(
             (state: RootState) =>
                 state.userReducer.userInfo?.login ?? 'Anonimous User',
         );
-        const sendSchore = async (schore: number) => {
+        const sendScore = async (score: number) => {
             const data = {
                 data: {
-                    [RATING_FIELD_NAME]: schore,
+                    [RATING_FIELD_NAME]: score,
                     login: login,
                 },
                 ratingFieldName: RATING_FIELD_NAME,
             };
 
             try {
-                await sendSchoreApi(data);
+                await sendScoreApi(data);
             } catch (error) {
                 console.log(`ERROR: ${error}`);
             }

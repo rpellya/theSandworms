@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { baseUrl } from 'consts/baseUrl';
 
-export const RATING_FIELD_NAME = 'sandWormHighSchore1';
+export const RATING_FIELD_NAME = 'sandWormHighScore1';
 
 export interface LeaderBoardDataRow {
 	data: {
@@ -18,7 +18,7 @@ export const leaderBoardApi = createApi({
 	reducerPath: 'leaderBoard',
 	baseQuery: fetchBaseQuery({ baseUrl: baseUrl }),
 	endpoints: (builder) => ({
-		sendSchore: builder.mutation({
+		sendScore: builder.mutation({
 			query: (body) => ({
 				url: '/leaderboard',
 				method: 'POST',
@@ -38,4 +38,4 @@ export const leaderBoardApi = createApi({
 	}),
 });
 
-export const { useSendSchoreMutation, useGetLeadersMutation } = leaderBoardApi;
+export const { useSendScoreMutation, useGetLeadersMutation } = leaderBoardApi;
