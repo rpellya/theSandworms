@@ -1,6 +1,7 @@
 import { Button } from 'components/Button';
 import cls from './FullScreenSwitcher.module.scss';
 import { memo, useState } from 'react';
+import { MusicSwitcher } from '../MusicSwitcher/MusicSwitcher';
 
 interface FSSwitcherProps {
     rootElemClassName: string;
@@ -34,6 +35,7 @@ export const FullScreenSwitcher: React.FC<FSSwitcherProps> = memo(
                 >
                     {isFullScreen ? 'Exit full screen mode' : 'Full screen'}
                 </Button>
+                <MusicSwitcher />
             </div>
         );
     },
