@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState } from 'react';
+import React, { memo, useCallback, useEffect, useState } from 'react';
 import {
     RATING_FIELD_NAME,
     useSendScoreMutation,
@@ -22,9 +22,17 @@ export const SnakeGame: React.FC<SnakeGameProps> = memo(
         const [sendScoreApi] = useSendScoreMutation();
         const [gameState, setGameState] = useState<TGameState>('starting');
 
+        const handleGameOver = useCallback(
+            (score?: number) => {
+                setGameState('finished');
+                onGameOver(score);
+            },
+            [onGameOver],
+        );
+
         const { canvasRef, score, resetGame } = useSnakeGame({
             gameState,
-            onGameOver,
+            onGameOver: handleGameOver,
             backgroundUrl,
         });
         const [countdown, setCountdown] = useState<number | null>(5);

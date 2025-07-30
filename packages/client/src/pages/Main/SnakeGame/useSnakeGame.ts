@@ -575,7 +575,6 @@ export const useSnakeGame = ({
 
 			/*––– ИГРОК vs БОТ –––*/
 			if (checkPlayerCollisionWithBot()) {
-				resetGame();
 				if (typeof onGameOver === 'function')
 					onGameOver(localScoreRef.current);
 				return true; // прерываем цикл – игра окончена
@@ -583,7 +582,6 @@ export const useSnakeGame = ({
 
 			/*––– СТЕНЫ –––*/
 			if (checkWallCollision()) {
-				resetGame();
 				if (typeof onGameOver === 'function')
 					onGameOver(localScoreRef.current);
 				return true; // игра окончена – остановим кадр

@@ -14,7 +14,6 @@ export const Main = memo(() => {
     const [isOver, setIsOver] = useState(false);
     const { play } = useMusic();
     const [bg, setBg] = useState<BackgroundId>(BackgroundId.Sahara);
-    const [score, setScore] = useState(0);
 
     // const score = 100500;
 
@@ -30,7 +29,7 @@ export const Main = memo(() => {
         setIsPlaying(false);
     };
 
-    if (isPlaying) {
+    if (isPlaying || isOver) {
         return (
             <SnakeGame
                 onExit={() => setIsPlaying(false)}
@@ -42,7 +41,7 @@ export const Main = memo(() => {
             />
         );
     }
-
+    /*
     if (isOver) {
         return (
             <GameOver
@@ -52,6 +51,7 @@ export const Main = memo(() => {
             />
         );
     }
+    */
 
     const backgroundSelect = (
         <>
