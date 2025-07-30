@@ -7,6 +7,7 @@ import { useSendCode } from 'hooks/useSendCode';
 import { useLazySetUserQuery } from 'api/auth/oAuthApi';
 import { useLazyGetAuthUserQuery } from 'api/auth/authApi';
 import { useTheme } from './providers/ThemeProvider';
+import { MusicControls } from '../components/MusicControls/MusicControls';
 
 const App = () => {
     const dispatch = useAppDispatch();
@@ -43,6 +44,7 @@ const App = () => {
             <Suspense fallback={<div>Loading...</div>}>
                 <div className="content-page">
                     <FullScreenSwitcher rootElemClassName="content-page" />
+                    <MusicControls />
                     <AppRouter />
                 </div>
             </Suspense>

@@ -1,43 +1,64 @@
 import { createContext, useContext, useEffect, useRef, useState } from 'react';
 
-const MusicCtx = createContext<{
+const playlist = [
+    '/music/bg1.mp3',
+    '/music/bg2.mp3',
+    '/music/bg3.mp3',
+] as const;
+
+type Ctx = {
     playing: boolean;
     toggle: () => void;
-} | null>(null);
+    next: () => void;
+    prev: () => void;
+};
+const MusicCtx = createContext<Ctx | null>(null);
 
 export const MusicProvider: React.FC<{ children: React.ReactNode }> = ({
     children,
 }) => {
     const audioRef = useRef<HTMLAudioElement | null>(null);
+    const [index, setIndex] = useState(0);
     const [playing, setPlaying] = useState(false);
 
-    // 1) создаём Audio только один раз
     useEffect(() => {
-        audioRef.current = new Audio('/music/bg.mp3');
-        audioRef.current.loop = true;
+        audioRef.current = new Audio(playlist[0]);
         audioRef.current.volume = 0.5;
     }, []);
 
-    // 2) реагируем на переключение
     useEffect(() => {
         const a = audioRef.current;
         if (!a) return;
 
+        a.src = playlist[index];
+        if (playing) a.play().catch(console.error);
+
+        const onEnded = () => setIndex((i) => (i + 1) % playlist.length);
+        a.addEventListener('ended', onEnded);
+        return () => a.removeEventListener('ended', onEnded);
+    }, [index, playing]);
+
+    useEffect(() => {
+        const a = audioRef.current;
+        if (!a) return;
         playing ? a.play().catch(console.error) : a.pause();
     }, [playing]);
 
+    const next = () => setIndex((i) => (i + 1) % playlist.length);
+    const prev = () =>
+        setIndex((i) => (i - 1 + playlist.length) % playlist.length);
+
     return (
         <MusicCtx.Provider
-            value={{ playing, toggle: () => setPlaying((p) => !p) }}
+            value={{ playing, toggle: () => setPlaying((p) => !p), next, prev }}
         >
             {children}
         </MusicCtx.Provider>
     );
 };
 
-// удобный хук
-export function useMusic() {
+export const useMusic = () => {
     const ctx = useContext(MusicCtx);
-    if (!ctx) throw new Error('useMusic must be used inside <MusicProvider>');
+    if (!ctx) throw new Error('useMusic must be inside <MusicProvider>');
     return ctx;
-}
+};
