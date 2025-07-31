@@ -81,8 +81,10 @@ export const Login: React.FC<LoginProps> = memo(({ regPath }) => {
                 redirectUri: `${window.location.origin}/oauth`,
             });
             if (data?.clientId) {
+                const hotfixHardcodeClientId =
+                    'ec608a30584645bcb540dc86414ed113';
                 // eslint-disable-next-line max-len
-                const URL = `https://oauth.yandex.ru/authorize?response_type=code&client_id=${data.clientId}&redirect_uri=${window.location.origin}/oauth`;
+                const URL = `https://oauth.yandex.ru/authorize?response_type=code&client_id=${hotfixHardcodeClientId}&redirect_uri=${window.location.origin}/oauth`;
                 window.location.href = URL;
             }
         } catch (error) {
