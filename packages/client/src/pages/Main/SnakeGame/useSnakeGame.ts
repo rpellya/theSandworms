@@ -495,6 +495,25 @@ export const useSnakeGame = ({
 			return false; // столкновения нет
 		}
 
+		function checkBotWallCollision(): boolean {
+			const botSnake = botSnakeRef.current;
+			if (botSnake.length === 0) return false;
+			const head = botSnake[0];
+			const walls = wallsRef.current;
+
+			for (const wall of walls) {
+				if (
+					head.x + botSnakeWidthRef.current > wall.x &&
+					head.x - botSnakeWidthRef.current < wall.x + wall.width &&
+					head.y + botSnakeWidthRef.current > wall.y &&
+					head.y - botSnakeWidthRef.current < wall.y + wall.height
+				) {
+					return true; // бот врезался
+				}
+			}
+			return false;
+		}
+
 		function spawnFoodFromBot() {
 			const botSnake = botSnakeRef.current;
 			const foods = foodsRef.current;
@@ -550,6 +569,11 @@ export const useSnakeGame = ({
 				return true; // оставляем
 			});
 
+			// если съели последнюю еду, сразу создаём новую
+			if (foodsRef.current.length === 0) {
+				foodsRef.current.push(spawnFood());
+			}
+
 			/*––– БОТ vs ИГРОК –––*/
 			if (checkBotCollisionWithPlayer()) {
 				spawnFoodFromBot(); // бот рассыпается едой
@@ -558,7 +582,6 @@ export const useSnakeGame = ({
 
 			/*––– ИГРОК vs БОТ –––*/
 			if (checkPlayerCollisionWithBot()) {
-				resetGame();
 				if (typeof onGameOver === 'function')
 					onGameOver(localScoreRef.current);
 				return true; // прерываем цикл – игра окончена
@@ -566,10 +589,15 @@ export const useSnakeGame = ({
 
 			/*––– СТЕНЫ –––*/
 			if (checkWallCollision()) {
-				resetGame();
 				if (typeof onGameOver === 'function')
 					onGameOver(localScoreRef.current);
 				return true; // игра окончена – остановим кадр
+			}
+
+			/*––– СТЕНЫ vs БОТ –––*/
+			if (checkBotWallCollision()) {
+				spawnFoodFromBot();
+				botSnakeRef.current = [];
 			}
 
 			/*––– РЕСПАВН БОТА (если съели) –––*/

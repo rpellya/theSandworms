@@ -12,14 +12,16 @@ import { BackgroundId } from 'consts/backgrounds';
 export const Main = memo(() => {
     const [isPlaying, setIsPlaying] = useState(false);
     const [isOver, setIsOver] = useState(false);
-    const { play } = useMusic();
     const [bg, setBg] = useState<BackgroundId>(BackgroundId.Sahara);
+    const { playing, userMuted, play } = useMusic();
 
-    const score = 100500;
+    // const score = 100500;
 
     const handlePlayClick = () => {
         console.log('Начинаем игру!');
-        play();
+        if (!playing && !userMuted) {
+            play();
+        }
         setIsOver(false);
         setIsPlaying(true);
     };
@@ -29,10 +31,10 @@ export const Main = memo(() => {
         setIsPlaying(false);
     };
 
-    if (isPlaying) {
+    if (isPlaying || isOver) {
         return (
             <SnakeGame
-                onExit={() => setIsPlaying(false)}
+                onExit={handleHome}
                 onGameOver={() => {
                     setIsPlaying(false);
                     setIsOver(true);
@@ -41,7 +43,7 @@ export const Main = memo(() => {
             />
         );
     }
-
+    /*
     if (isOver) {
         return (
             <GameOver
@@ -51,6 +53,7 @@ export const Main = memo(() => {
             />
         );
     }
+    */
 
     const backgroundSelect = (
         <>
