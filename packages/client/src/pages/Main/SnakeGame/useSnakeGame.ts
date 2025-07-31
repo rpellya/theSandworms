@@ -451,25 +451,6 @@ export const useSnakeGame = ({
 			return dist + botSnakeWidthRef.current > arenaRadius;
 		}
 
-		function checkBotWallCollision(): boolean {
-			const botSnake = botSnakeRef.current;
-			if (botSnake.length === 0) return false;
-			const head = botSnake[0];
-			const walls = wallsRef.current;
-
-			for (const wall of walls) {
-				if (
-					head.x + botSnakeWidthRef.current > wall.x &&
-					head.x - botSnakeWidthRef.current < wall.x + wall.width &&
-					head.y + botSnakeWidthRef.current > wall.y &&
-					head.y - botSnakeWidthRef.current < wall.y + wall.height
-				) {
-					return true; // бот врезался
-				}
-			}
-			return false;
-		}
-
 		function spawnFoodFromBot() {
 			const botSnake = botSnakeRef.current;
 			const foods = foodsRef.current;
